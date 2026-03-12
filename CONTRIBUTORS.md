@@ -2,7 +2,9 @@
 
 We would like to thank all the individuals who have contributed to this project:
 
-* TBD
+## Core Team
+
+* [Tschebbischeff](https://github.com/Tschebbischeff) - Lead maintainer and architect.
 
 ## How to be added
 
