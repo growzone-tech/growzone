@@ -22,6 +22,7 @@ type: ''
  
 ## Related Issues
  
-<!--- - [Issue this PR solves](url) -->
-<!--- - [Issue this PR solves](url) -->
+<!--- - Closes #<ISSUE_NUMBER> -->
+<!--- - Fixes #<ISSUE_NUMBER> -->
+<!--- - Resolves #<ISSUE_NUMBER> -->
 <!--- - ... -->
