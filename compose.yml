@@ -1,0 +1,92 @@
+name: ${APP_NAME_HOST}
+
+networks:
+  internal:
+    name: ${APP_NAME_HOST}_internal
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
+volumes:
+  nginx-proxy-manager:
+  letsencrypt:
+  tailscale:
+
+secrets:
+  TS_AUTHKEY:
+    file: ${SECRETS_DIR}/TS_AUTHKEY
+
+
+services:
+
+  nginx-proxy-manager:
+    image: docker.io/jc21/nginx-proxy-manager:latest
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_nginx-proxy-manager
+    restart: always
+    expose:
+      - "80"
+      - "81"
+      - "443"
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/nginx-proxy-manager.env
+        required: false
+    environment:
+      INITIAL_ADMIN_EMAIL: "root@localhost.com"
+      INITIAL_ADMIN_PASSWORD: "root"
+    volumes:
+      - nginx-proxy-manager:/data
+      - letsencrypt:/etc/letsencrypt
+    networks:
+      internal:
+        ipv4_address: '172.18.0.2'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:81"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  tailscale:
+    build:
+      context: ./tailscale
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_tailscale
+    restart: always
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/tailscale.env
+        required: false
+    environment:
+      TS_STATE_DIR: "/var/lib/tailscale"
+      TS_USERSPACE: "true"
+      TS_HOSTNAME: "${APP_NAME_HOST}"
+      TS_ACCEPT_DNS: "false"
+      TS_SERVE_CONFIG: "/config/serve-config.json"
+      TS_ENABLE_HEALTH_CHECK: "true"
+      TS_LOCAL_ADDR_PORT: "127.0.0.1:41234"
+      TS_AUTH_ONCE: "true"
+      TS_AUTHKEY_FILE: /run/secrets/TS_AUTHKEY
+    secrets:
+      - TS_AUTHKEY
+    volumes:
+      - tailscale:/var/lib/tailscale
+      - ./tailscale/config:/config
+    networks:
+      internal:
+        ipv4_address: '172.18.0.3'
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:41234/healthz" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    depends_on:
+      nginx-proxy-manager:
+        condition: service_healthy
