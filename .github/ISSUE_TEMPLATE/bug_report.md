@@ -1,8 +1,8 @@
 ---
 name: Bug report
-about: Create a report to help us improve
+about: File a bug report.
 title: ''
-labels: bug
+labels: []
 assignees: Tschebbischeff
 type: Bug
 
