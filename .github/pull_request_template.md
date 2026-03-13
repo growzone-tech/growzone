@@ -1,13 +1,3 @@
----
-name: Pull request
-about: Create a pull request
-title: ''
-labels: []
-assignees: Tschebbischeff
-type: ''
-
----
-
 ## What
  
 <!-- A brief description of the changes in this PR. -->
