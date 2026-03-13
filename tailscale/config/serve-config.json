@@ -1,0 +1,30 @@
+{
+    "Web": {
+        "${TS_CERT_DOMAIN}:80": {
+            "Handlers": {
+                "/": {
+                    "Proxy": "http://127.0.0.1:80"
+                }
+            }
+        },
+        "${TS_CERT_DOMAIN}:81": {
+            "Handlers": {
+                "/": {
+                    "Proxy": "http://127.0.0.1:81"
+                }
+            }
+        },
+        "${TS_CERT_DOMAIN}:443": {
+            "Handlers": {
+                "/": {
+                    "Proxy": "http://127.0.0.1:443"
+                }
+            }
+        }
+    },
+    "AllowFunnel": {
+        "${TS_CERT_DOMAIN}:80": false,
+        "${TS_CERT_DOMAIN}:81": false,
+        "${TS_CERT_DOMAIN}:443": false
+    }
+}
