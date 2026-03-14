@@ -37,7 +37,7 @@ services:
         required: false
     environment:
       INITIAL_ADMIN_EMAIL: "root@localhost.com"
-      INITIAL_ADMIN_PASSWORD: "root"
+      INITIAL_ADMIN_PASSWORD: "rootroot"
     volumes:
       - nginx-proxy-manager:/data
       - letsencrypt:/etc/letsencrypt
