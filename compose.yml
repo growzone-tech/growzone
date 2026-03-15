@@ -12,6 +12,9 @@ volumes:
   nginx-proxy-manager:
   letsencrypt:
   tailscale:
+  mosquitto-config:
+  mosquitto-data:
+  mosquitto-logs:
 
 secrets:
   TS_AUTHKEY:
@@ -90,3 +93,31 @@ services:
     depends_on:
       nginx-proxy-manager:
         condition: service_healthy
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_mosquitto
+    restart: always
+    expose:
+      - "1883"
+      - "9001"
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/mosquitto.env
+        required: false
+    volumes:
+      - mosquitto-config:/mosquitto/config
+      - mosquitto-data:/mosquitto/data
+      - mosquitto-logs:/mosquitto/log
+    networks:
+      internal:
+        ipv4_address: '172.18.0.4'
+    healthcheck:
+      test: [ "CMD", "mosquitto_sub", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
