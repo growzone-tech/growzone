@@ -60,7 +60,8 @@ services:
 #       start_period: 15s
 
   traefik:
-    image: traefik:latest
+    build:
+      context: ./traefik
     pull_policy: always
     container_name: ${APP_NAME_HOST}_traefik
     restart: always
@@ -77,7 +78,7 @@ services:
       - PORKBUN_API_KEY
       - PORKBUN_API_SECRET_KEY
     volumes:
-      - ./traefik:/etc/traefik
+      - ./traefik/config:/etc/traefik
       - traefik-certs:/etc/traefik-certs
     networks:
       internal:
