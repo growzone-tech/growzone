@@ -19,7 +19,7 @@ certificatesResolvers:
   porkbun-api:
     acme:
       email: info@growzone.tech
-      storage: /etc/traefik/acme.json
+      storage: /etc/traefik-certs/acme.json
       dnschallenge:
         provider: porkbun
         propagation:
