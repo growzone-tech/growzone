@@ -116,8 +116,31 @@ services:
       internal:
         ipv4_address: '172.18.0.4'
     healthcheck:
-      test: [ "CMD", "mosquitto_sub", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]
+      test: [ "CMD", "mosquitto_sub", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]  # Source: https://github.com/eclipse-mosquitto/mosquitto/issues/1270#issuecomment-1476038461
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 20s
+
+  mqttx:
+    image: emqx/mqttx-web:latest
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_mqttx
+    restart: always
+    expose:
+      - "80"
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/mqttx.env
+        required: false
+    networks:
+      internal:
+        ipv4_address: '172.18.0.5'
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:80" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
