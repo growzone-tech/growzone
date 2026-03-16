@@ -9,8 +9,10 @@ networks:
         - subnet: 172.18.0.0/16
 
 volumes:
-  nginx-proxy-manager:
-  letsencrypt:
+  # nginx-proxy-manager:
+  # letsencrypt:
+  traefik-config:
+  traefik-certs:
   tailscale:
   mosquitto-config:
   mosquitto-data:
@@ -19,40 +21,70 @@ volumes:
 secrets:
   TS_AUTHKEY:
     file: ${SECRETS_DIR}/TS_AUTHKEY
+  PORKBUN_API_KEY:
+    file: ${SECRETS_DIR}/PORKBUN_API_KEY
+  PORKBUN_SECRET_KEY:
+    file: ${SECRETS_DIR}/PORKBUN_SECRET_KEY
 
 
 services:
 
-  nginx-proxy-manager:
-    image: docker.io/jc21/nginx-proxy-manager:latest
+#   nginx-proxy-manager:
+#     image: docker.io/jc21/nginx-proxy-manager:latest
+#     pull_policy: always
+#     container_name: ${APP_NAME_HOST}_nginx-proxy-manager
+#     restart: always
+#     expose:
+#       - "80"
+#       - "81"
+#       - "443"
+#     env_file:
+#       - ./.env
+#       - path: ${ENV_DIR}/.env
+#         required: false
+#       - path: ${ENV_DIR}/nginx-proxy-manager.env
+#         required: false
+#     environment:
+#       INITIAL_ADMIN_EMAIL: "root@localhost.com"
+#       INITIAL_ADMIN_PASSWORD: "rootroot"
+#     volumes:
+#       - nginx-proxy-manager:/data
+#       - letsencrypt:/etc/letsencrypt
+#     networks:
+#       internal:
+#         ipv4_address: '172.18.0.2'
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:81"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+#       start_period: 15s
+
+  traefik:
+    image: traefik:latest
     pull_policy: always
-    container_name: ${APP_NAME_HOST}_nginx-proxy-manager
+    container_name: ${APP_NAME_HOST}_traefik
     restart: always
-    expose:
+    port:
       - "80"
-      - "81"
       - "443"
     env_file:
       - ./.env
       - path: ${ENV_DIR}/.env
         required: false
-      - path: ${ENV_DIR}/nginx-proxy-manager.env
+      - path: ${ENV_DIR}/traefik.env
         required: false
-    environment:
-      INITIAL_ADMIN_EMAIL: "root@localhost.com"
-      INITIAL_ADMIN_PASSWORD: "rootroot"
     volumes:
-      - nginx-proxy-manager:/data
-      - letsencrypt:/etc/letsencrypt
+      - ./traefik:/etc/traefik
     networks:
       internal:
         ipv4_address: '172.18.0.2'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:81"]
-      interval: 10s
-      timeout: 5s
+      test: [ "CMD", "mosquitto_sub", "-V", "5", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]  # Source: https://github.com/eclipse-mosquitto/mosquitto/issues/1270#issuecomment-1476038461
+      interval: 30s
+      timeout: 10s
       retries: 5
-      start_period: 15s
+      start_period: 20s
 
   tailscale:
     build:
@@ -112,6 +144,9 @@ services:
       - ./mosquitto/config:/mosquitto/config:ro
       - mosquitto-data:/mosquitto/data
       - mosquitto-logs:/mosquitto/log
+    secrets:
+      - PORKBUN_API_KEY
+      - PORKBUN_SECRET_KEY
     networks:
       internal:
         ipv4_address: '172.18.0.4'

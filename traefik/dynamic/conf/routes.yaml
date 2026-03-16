@@ -1,0 +1,52 @@
+# Documentation:
+# https://doc.traefik.io/traefik/reference/routing-configuration/dynamic-configuration-methods/
+# https://doc.traefik.io/traefik/reference/routing-configuration/http/tls/overview/
+
+http:
+  services:
+    svc_moquitto:
+      loadBalancer:
+        servers:
+          - url: "http://growzone_mosquitto:9001"
+    svc_mqttx:
+      loadBalancer:
+        servers:
+          - url: "http://growzone_mqttx:80"
+  routers:
+    traefik-dashboard:
+      rule: "Host(`traefik-dashboard.otto420.growzone.tech`)"
+      service: api@internal
+      entryPoints: ["websecure"]
+      tls:
+        certResolver: porkbun-api
+        domains:
+          - main: "otto420.growzone.tech"
+            sans:
+              - "*.otto420.growzone.tech"
+    mosquitto:
+      rule: "Host(`mosquitto.otto420.growzone.tech`)"
+      service: svc_moquitto
+      entryPoints: ["websecure"]
+      tls:
+        certResolver: porkbun-api
+    mqttx:
+      rule: "Host(`mqttx.otto420.growzone.tech`)"
+      service: svc_mqttx
+      entryPoints: ["websecure"]
+      tls:
+        certResolver: porkbun-api
+
+tcp:
+  services:
+    svc_mosquitto:
+      loadBalancer:
+        servers:
+          - address: "growzone_mosquitto:1883"
+  routers:
+    mosquitto:
+      rule: "HostSNI(`mosquitto.otto420.growzone.tech`)"
+      service: svc_mosquitto
+      entryPoints: ["mqtt"]
+      tls:
+        passthrough: false
+        certResolver: porkbun-api

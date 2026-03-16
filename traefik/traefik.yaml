@@ -1,0 +1,32 @@
+# Documentation: https://doc.traefik.io/traefik/reference/install-configuration/configuration-options/
+
+api:
+  dashboard: true
+
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+  websecure:
+    address: ":443"
+  mqtt:
+    address: ":1883"
+
+certificatesResolvers:
+  porkbun-api:
+    acme:
+      email: info@growzone.tech
+      storage: /etc/traefik/acme.json
+      dnschallenge:
+        provider: porkbun
+        propagation:
+          delaybeforechecks: 60
+
+providers:
+  file:
+    directory: "/path/to/dynamic/conf"
