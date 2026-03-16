@@ -65,7 +65,7 @@ services:
     pull_policy: always
     container_name: ${APP_NAME_HOST}_traefik
     restart: always
-    port:
+    expose:
       - "80"
       - "443"
     env_file:

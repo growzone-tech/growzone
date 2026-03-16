@@ -23,13 +23,13 @@ http:
           - main: "otto420.growzone.tech"
             sans:
               - "*.otto420.growzone.tech"
-    mosquitto:
+    mosquitto-9001:
       rule: "Host(`mosquitto.otto420.growzone.tech`)"
       service: svc_moquitto
       entryPoints: ["websecure"]
       tls:
         certResolver: porkbun-api
-    mqttx:
+    mqttx-80:
       rule: "Host(`mqttx.otto420.growzone.tech`)"
       service: svc_mqttx
       entryPoints: ["websecure"]
@@ -43,10 +43,10 @@ tcp:
         servers:
           - address: "growzone_mosquitto:1883"
   routers:
-    mosquitto:
+    mosquitto-1883:
       rule: "HostSNI(`mosquitto.otto420.growzone.tech`)"
       service: svc_mosquitto
-      entryPoints: ["mqtt"]
+      entryPoints: ["websecure"]
       tls:
         passthrough: false
         certResolver: porkbun-api

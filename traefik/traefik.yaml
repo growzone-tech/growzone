@@ -14,8 +14,6 @@ entryPoints:
           permanent: true
   websecure:
     address: ":443"
-  mqtt:
-    address: ":1883"
 
 certificatesResolvers:
   porkbun-api:
