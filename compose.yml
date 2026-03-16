@@ -83,11 +83,11 @@ services:
       internal:
         ipv4_address: '172.18.0.2'
     healthcheck:
-      test: [ "CMD", "mosquitto_sub", "-V", "5", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]  # Source: https://github.com/eclipse-mosquitto/mosquitto/issues/1270#issuecomment-1476038461
-      interval: 30s
-      timeout: 10s
+      test: [ "CMD", "traefik", "healthcheck", "--ping"]
+      interval: 10s
+      timeout: 5s
       retries: 5
-      start_period: 20s
+      start_period: 15s
 
   tailscale:
     build:
