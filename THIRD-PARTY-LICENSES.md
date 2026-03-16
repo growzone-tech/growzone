@@ -42,6 +42,15 @@ The date used in the copyright notices in this file represents the year of initi
 * **License:** [MIT](https://github.com/NginxProxyManager/nginx-proxy-manager/blob/master/LICENSE)
 * **Copyright Notice:** Copyright (c) 2017 NginxProxyManager
 
+## Traefik
+
+* **Project:** https://traefik.io/traefik
+* **Version:** Latest
+* **In use since:** March 2026
+* **Source Code:** https://github.com/traefik/traefik-library-image
+* **License:** [Apache-2.0](https://github.com/traefik/traefik-library-image/blob/master/LICENSE)
+* **Copyright Notice:** Copyright (c) 2017 Containus, Copyright (c) 2020 Traefik Labs
+
 ## Eclipse Mosquitto
 
 * **Project:** https://mosquitto.org/
