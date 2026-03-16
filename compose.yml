@@ -23,8 +23,8 @@ secrets:
     file: ${SECRETS_DIR}/TS_AUTHKEY
   PORKBUN_API_KEY:
     file: ${SECRETS_DIR}/PORKBUN_API_KEY
-  PORKBUN_SECRET_KEY:
-    file: ${SECRETS_DIR}/PORKBUN_SECRET_KEY
+  PORKBUN_API_SECRET_KEY:
+    file: ${SECRETS_DIR}/PORKBUN_API_SECRET_KEY
 
 
 services:
@@ -74,6 +74,9 @@ services:
         required: false
       - path: ${ENV_DIR}/traefik.env
         required: false
+    secrets:
+      - PORKBUN_API_KEY
+      - PORKBUN_API_SECRET_KEY
     volumes:
       - ./traefik:/etc/traefik
     networks:
@@ -144,9 +147,6 @@ services:
       - ./mosquitto/config:/mosquitto/config:ro
       - mosquitto-data:/mosquitto/data
       - mosquitto-logs:/mosquitto/log
-    secrets:
-      - PORKBUN_API_KEY
-      - PORKBUN_SECRET_KEY
     networks:
       internal:
         ipv4_address: '172.18.0.4'
