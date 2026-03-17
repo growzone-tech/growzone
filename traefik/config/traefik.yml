@@ -1,5 +1,8 @@
 # Documentation: https://doc.traefik.io/traefik/reference/install-configuration/configuration-options/
 
+log:
+  level: INFO
+
 ping:
   entryPoint: traefik
 
