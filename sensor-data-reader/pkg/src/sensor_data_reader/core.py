@@ -1,6 +1,6 @@
 import threading
-# import board
-# import adafruit_dht
+import board
+import adafruit_dht
 import paho.mqtt.client as mqtt
 import gpiod
 import os
@@ -14,7 +14,7 @@ GPIO_PIN_FAN = int(os.environ.get("GPIO_PIN_FAN"))
 class Main:
     def __init__(self):
         self.__terminate = threading.Event()
-        # self.__dht22 = adafruit_dht.DHT22(board.D26)
+        self.__dht22 = adafruit_dht.DHT22(board.D26)
         self.__mqttClient = mqtt.Client()
 
     def connect_mqtt(self):
@@ -60,24 +60,24 @@ class Main:
     def main(self):
         self.test_lamp()
         self.test_fan()
+        print("Reading sensors and sending to MQTT...")
         self.connect_mqtt()
         while not self.__terminate.is_set():
             try:
-                pass
-                # temperature = self.__dht22.temperature
-                # humidity = self.__dht22.humidity
-                # if temperature is not None:
-                #     self.__mqttClient.publish("sensor/dht22/inside/temperature", f"{temperature:.2f}", retain=True)
-                # if humidity is not None:
-                #     self.__mqttClient.publish("sensor/dht22/inside/humidity", f"{humidity:.2f}", retain=True)
-            except RuntimeError as error:
-                # This library throws a RuntimeError for almost every missed pulse.
-                # We just print and keep going.
-                # print(f"Failed reading DHT22 at PIN 26: {error.args[0]}")
-                self.__terminate.wait(2.0)
-                continue
+                try:
+                    temperature = self.__dht22.temperature
+                    if temperature is not None:
+                        self.__mqttClient.publish("sensor/dht22/inside/temperature", f"{temperature:.2f}", retain=True)
+                except RuntimeError as error:
+                    print(f"Failed reading temperature from DHT22 at GPIO 26: {error.args[0]}")
+                try:
+                    humidity = self.__dht22.humidity
+                    if humidity is not None:
+                        self.__mqttClient.publish("sensor/dht22/inside/humidity", f"{humidity:.2f}", retain=True)
+                except RuntimeError as error:
+                    print(f"Failed reading humidity from DHT22 at GPIO 26: {error.args[0]}")
             except Exception as error:
-                # self.__dht22.exit()
+                self.__dht22.exit()
                 raise error
             self.__terminate.wait(10.0)
 
