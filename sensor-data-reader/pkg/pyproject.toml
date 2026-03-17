@@ -12,6 +12,7 @@ description = "Reads sensor data via GPIO and pushes it to a MQTT broker."
 requires-python = ">=3.8"
 dependencies = [
     "paho-mqtt",
+    "gpiod",
     "RPi.GPIO",
     "adafruit-circuitpython-dht",
 ]
