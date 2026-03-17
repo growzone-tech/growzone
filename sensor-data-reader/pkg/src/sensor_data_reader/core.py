@@ -5,7 +5,7 @@ import paho.mqtt.client as mqtt
 import os
 
 MQTT_HOST = os.environ.get("MQTT_HOST")
-MQTT_PORT = os.environ.get("MQTT_PORT")
+MQTT_PORT = os.environ.get(int("MQTT_PORT"))
 
 class Main:
     def __init__(self):
