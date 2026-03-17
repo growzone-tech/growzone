@@ -2,11 +2,12 @@ import threading
 # import board
 # import adafruit_dht
 import paho.mqtt.client as mqtt
-import RPi.GPIO as GPIO
+import gpiod
 import os
 
 MQTT_HOST = os.environ.get("MQTT_HOST")
 MQTT_PORT = int(os.environ.get("MQTT_PORT"))
+GPIO_CHIP_PATH = "/dev/gpiochip0"
 GPIO_PIN_LIGHT = int(os.environ.get("GPIO_PIN_LIGHT"))
 GPIO_PIN_FAN = int(os.environ.get("GPIO_PIN_FAN"))
 
@@ -23,18 +24,38 @@ class Main:
             raise e
 
     def test_lamp(self):
-        print("Turning on light.")
-        GPIO.output(GPIO_PIN_LIGHT, GPIO.HIGH)
-        self.__terminate.wait(10.0)
-        print("Turning off light.")
-        GPIO.output(GPIO_PIN_LIGHT, GPIO.LOW)
+        with gpiod.request_lines(
+            GPIO_CHIP_PATH,
+            consumer="relay-test",
+            config={
+                GPIO_PIN_LIGHT: gpiod.LineSettings(
+                    direction=gpiod.line.Direction.OUTPUT,
+                    output_value=gpiod.line.Value.INACTIVE
+                )
+            },
+        ) as request:
+            print("Turning on light.")
+            request.set_value(GPIO_PIN_LIGHT, gpiod.line.Value.ACTIVE)
+            self.__terminate.wait(10.0)
+            print("Turning off light.")
+            request.set_value(GPIO_PIN_LIGHT, gpiod.line.Value.INACTIVE)
 
     def test_fan(self):
-        print("Turning on fan.")
-        GPIO.output(GPIO_PIN_FAN, GPIO.HIGH)
-        self.__terminate.wait(10.0)
-        print("Turning off fan.")
-        GPIO.output(GPIO_PIN_FAN, GPIO.LOW)
+        with gpiod.request_lines(
+            GPIO_CHIP_PATH,
+            consumer="relay-test",
+            config={
+                GPIO_PIN_FAN: gpiod.LineSettings(
+                    direction=gpiod.line.Direction.OUTPUT,
+                    output_value=gpiod.line.Value.INACTIVE
+                )
+            },
+        ) as request:
+            print("Turning on fan.")
+            request.set_value(GPIO_PIN_FAN, gpiod.line.Value.ACTIVE)
+            self.__terminate.wait(10.0)
+            print("Turning off fan.")
+            request.set_value(GPIO_PIN_FAN, gpiod.line.Value.INACTIVE)
 
     def main(self):
         self.test_lamp()
@@ -62,12 +83,5 @@ class Main:
 
 
 def main():
-    try:
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
-        GPIO.setup(GPIO_PIN_LIGHT, GPIO.OUT)
-        GPIO.setup(GPIO_PIN_FAN, GPIO.OUT)
-        main = Main()
-        main.main()
-    finally:
-        GPIO.cleanup()
+    main = Main()
+    main.main()
