@@ -23,6 +23,7 @@ class Main:
         self.connect_mqtt()
         while not self.__terminate.is_set():
             try:
+                pass
                 # temperature = self.__dht22.temperature
                 # humidity = self.__dht22.humidity
                 # if temperature is not None:
