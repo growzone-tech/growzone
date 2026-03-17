@@ -202,6 +202,8 @@ services:
       - "/dev/gpiomem:/dev/gpiomem"
       - "/dev/gpiochip0:/dev/gpiochip0"
       - "/dev/gpiochip1:/dev/gpiochip1"
+    security_opt:
+      - "unmaskedpaths=/sys/firmware/devicetree"
     networks:
       internal:
         ipv4_address: '172.18.0.6'
