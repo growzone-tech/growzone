@@ -15,7 +15,9 @@ class Main:
     def __init__(self):
         self.__terminate = threading.Event()
         self.__dht22 = adafruit_dht.DHT22(board.D26)
-        self.__mqttClient = mqtt.Client()
+        self.__mqttClient = mqtt.Client(
+            protocol=mqtt.MQTTv5
+        )
 
     def connect_mqtt(self):
         try:
