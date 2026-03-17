@@ -202,19 +202,8 @@ services:
       - "/dev/gpiomem:/dev/gpiomem"
       - "/dev/gpiochip0:/dev/gpiochip0"
       - "/dev/gpiochip1:/dev/gpiochip1"
-    security_opt:
-      - "maskedpaths=/proc/asound"
-      - "maskedpaths=/proc/acpi"
-      - "maskedpaths=/proc/interrupts"
-      - "maskedpaths=/proc/kcore"
-      - "maskedpaths=/proc/keys"
-      - "maskedpaths=/proc/latency_stats"
-      - "maskedpaths=/proc/timer_list"
-      - "maskedpaths=/proc/timer_stats"
-      - "maskedpaths=/proc/sched_debug"
-      - "maskedpaths=/proc/scsi"
-      # - "maskedpaths=/sys/firmware"
-      - "maskedpaths=/sys/devices/virtual/powercap"
+    cap_add:
+      - SYS_RAWIO
     networks:
       internal:
         ipv4_address: '172.18.0.6'
