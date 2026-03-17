@@ -18,7 +18,7 @@ RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
     gcc \
     libc6-dev \
-    piod \
+    gpiod \
     libgpiod-dev
 RUN rm -rf /var/lib/apt/lists/*
 
