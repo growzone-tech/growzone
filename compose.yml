@@ -195,13 +195,17 @@ services:
         required: false
     environment:
       MQTT_HOST: "${APP_NAME_HOST}_mosquitto"
-    networks:
-      internal:
-        ipv4_address: '172.18.0.6'
+    volumes:
+      - "/proc/device-tree:/proc/device-tree:ro"
+      - "/proc/cpuinfo:/proc/cpuinfo:ro"
+      - "/sys:/sys:ro"
     devices:
       - "/dev/gpiomem:/dev/gpiomem"
       - "/dev/gpiochip0:/dev/gpiochip0"
       - "/dev/gpiochip1:/dev/gpiochip1"
+    networks:
+      internal:
+        ipv4_address: '172.18.0.6'
     # healthcheck:
     #   test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:80" ]
     #   interval: 10s
