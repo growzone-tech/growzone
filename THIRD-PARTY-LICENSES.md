@@ -33,6 +33,7 @@ The date used in the copyright notices in this file represents the year of initi
 * **License:** [BSD-3-Clause](https://github.com/tailscale/tailscale/blob/main/LICENSE)
 * **Copyright Notice:** Copyright (c) 2020 Tailscale Inc & contributors
 
+<!--
 ## Nginx Proxy Manager
 
 * **Project:** https://nginxproxymanager.com/
@@ -41,6 +42,7 @@ The date used in the copyright notices in this file represents the year of initi
 * **Source Code:** https://github.com/NginxProxyManager/nginx-proxy-manager
 * **License:** [MIT](https://github.com/NginxProxyManager/nginx-proxy-manager/blob/master/LICENSE)
 * **Copyright Notice:** Copyright (c) 2017 NginxProxyManager
+-->
 
 ## Traefik
 
