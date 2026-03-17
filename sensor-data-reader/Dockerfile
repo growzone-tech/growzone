@@ -18,7 +18,8 @@ RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
     gcc \
     libc6-dev \
-    libgpiod
+    piod \
+    libgpiod-dev
 RUN rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /build/dist/*.whl .
