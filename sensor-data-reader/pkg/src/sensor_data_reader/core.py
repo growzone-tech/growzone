@@ -31,6 +31,7 @@ class Main:
             consumer="relay-test",
             config={
                 GPIO_PIN_LIGHT: gpiod.LineSettings(
+                    active_low=True,
                     direction=gpiod.line.Direction.OUTPUT,
                     output_value=gpiod.line.Value.INACTIVE
                 )
@@ -48,6 +49,7 @@ class Main:
             consumer="relay-test",
             config={
                 GPIO_PIN_FAN: gpiod.LineSettings(
+                    active_low=True,
                     direction=gpiod.line.Direction.OUTPUT,
                     output_value=gpiod.line.Value.INACTIVE
                 )
