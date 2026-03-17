@@ -196,9 +196,8 @@ services:
     environment:
       MQTT_HOST: "${APP_NAME_HOST}_mosquitto"
     volumes:
-      - "/sys/firmware/devicetree/base:/proc/device-tree:ro"
+      - "/sys/firmware/devicetree/base:/sys/firmware/devicetree/base:ro"
       - "/proc/cpuinfo:/proc/cpuinfo:ro"
-      - "/sys:/sys:ro"
     devices:
       - "/dev/gpiomem:/dev/gpiomem"
       - "/dev/gpiochip0:/dev/gpiochip0"
