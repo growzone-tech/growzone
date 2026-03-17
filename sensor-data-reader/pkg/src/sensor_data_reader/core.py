@@ -39,7 +39,7 @@ class Main:
         ) as request:
             print("Turning on light.")
             request.set_value(GPIO_PIN_LIGHT, gpiod.line.Value.ACTIVE)
-            self.__terminate.wait(10.0)
+            self.__terminate.wait(60.0)
             print("Turning off light.")
             request.set_value(GPIO_PIN_LIGHT, gpiod.line.Value.INACTIVE)
 
