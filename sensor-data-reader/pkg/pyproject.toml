@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sensor_data_reader"
+version = "0.1.0"
+authors = [
+  { name="GrowzoneTech", email="info@growzone.tech" },
+]
+description = "Reads sensor data via GPIO and pushes it to a MQTT broker."
+requires-python = ">=3.8"
+dependencies = [
+    "paho-mqtt",
+    "RPi.GPIO",
+    "adafruit-circuitpython-dht",
+]
+
+[project.scripts]
+sensor-data-reader = "sensor_data_reader.core:main"

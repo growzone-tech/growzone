@@ -180,3 +180,30 @@ services:
       timeout: 5s
       retries: 5
       start_period: 5s
+
+  sensor-data-reader:
+    build:
+      context: ./sensor-data-reader
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_sensor-data-reader
+    restart: always
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/sensor-data-reader.env
+        required: false
+    environment:
+      MQTT_HOST: "${APP_NAME_HOST}_mosquitto"
+    networks:
+      internal:
+        ipv4_address: '172.18.0.6'
+    # healthcheck:
+    #   test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:80" ]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+    #   start_period: 5s
+    depends_on:
+      mosquitto:
+        condition: service_healthy
