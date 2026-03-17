@@ -200,7 +200,8 @@ services:
         ipv4_address: '172.18.0.6'
     devices:
       - "/dev/gpiomem:/dev/gpiomem"
-      - "/dev/gpiochip26:/dev/gpiochip26"
+      - "/dev/gpiochip0:/dev/gpiochip0"
+      - "/dev/gpiochip1:/dev/gpiochip1"
     # healthcheck:
     #   test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:80" ]
     #   interval: 10s
