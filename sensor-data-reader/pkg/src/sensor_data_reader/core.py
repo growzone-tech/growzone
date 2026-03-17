@@ -1,11 +1,14 @@
 import threading
-# import board
-# import adafruit_dht
+import board
+import adafruit_dht
 import paho.mqtt.client as mqtt
+import RPi.GPIO as GPIO
 import os
 
 MQTT_HOST = os.environ.get("MQTT_HOST")
 MQTT_PORT = int(os.environ.get("MQTT_PORT"))
+GPIO_PIN_LIGHT = int(os.environ.get("GPIO_PIN_LIGHT"))
+GPIO_PIN_FAN = int(os.environ.get("GPIO_PIN_FAN"))
 
 class Main:
     def __init__(self):
@@ -19,7 +22,23 @@ class Main:
         except Exception as e:
             raise e
 
+    def test_lamp(self):
+        print("Turning on light.")
+        GPIO.output(GPIO_PIN_LIGHT, GPIO.HIGH)
+        self.__terminate.wait(10.0)
+        print("Turning off light.")
+        GPIO.output(GPIO_PIN_LIGHT, GPIO.LOW)
+
+    def test_fan(self):
+        print("Turning on fan.")
+        GPIO.output(GPIO_PIN_FAN, GPIO.HIGH)
+        self.__terminate.wait(10.0)
+        print("Turning off fan.")
+        GPIO.output(GPIO_PIN_FAN, GPIO.LOW)
+
     def main(self):
+        self.test_lamp()
+        self.test_fan()
         self.connect_mqtt()
         while not self.__terminate.is_set():
             try:
@@ -43,5 +62,12 @@ class Main:
 
 
 def main():
-    main = Main()
-    main.main()
+    try:
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setup(GPIO_PIN_LIGHT, GPIO.OUT)
+        GPIO.setup(GPIO_PIN_FAN, GPIO.OUT)
+        main = Main()
+        main.main()
+    finally:
+        GPIO.cleanup()
