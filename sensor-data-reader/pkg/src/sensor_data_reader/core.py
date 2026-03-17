@@ -1,6 +1,6 @@
 import threading
-import board
-import adafruit_dht
+# import board
+# import adafruit_dht
 import paho.mqtt.client as mqtt
 import RPi.GPIO as GPIO
 import os
