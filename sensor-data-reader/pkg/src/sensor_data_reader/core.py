@@ -1,34 +1,38 @@
 import threading
-import board
 import adafruit_dht
 import paho.mqtt.client as mqtt
 import gpiod
 import os
+import pwmio
 
 MQTT_HOST = os.environ.get("MQTT_HOST")
 MQTT_PORT = int(os.environ.get("MQTT_PORT"))
+MQTT_TIMEOUT = 60
 GPIO_CHIP_PATH = "/dev/gpiochip0"
 GPIO_PIN_LIGHT = int(os.environ.get("GPIO_PIN_LIGHT"))
 GPIO_PIN_FAN = int(os.environ.get("GPIO_PIN_FAN"))
+GPIO_PIN_FAN_PWM = int(os.environ.get("GPIO_PIN_FAN_PWM"))
+GPIO_PIN_DHT = int(os.environ.get("GPIO_PIN_DHT"))
+FAN_FREQUENCY = 25000
 
 class Main:
     def __init__(self):
         self.__terminate = threading.Event()
-        self.__dht22 = adafruit_dht.DHT22(board.D26)
+        self.__dht22 = adafruit_dht.DHT22(GPIO_PIN_DHT)
         self.__mqttClient = mqtt.Client(
             protocol=mqtt.MQTTv5
         )
 
     def connect_mqtt(self):
         try:
-            self.__mqttClient.connect(MQTT_HOST, MQTT_PORT, 60)
+            self.__mqttClient.connect(MQTT_HOST, MQTT_PORT, MQTT_TIMEOUT)
         except Exception as e:
             raise e
 
     def test_lamp(self):
         with gpiod.request_lines(
             GPIO_CHIP_PATH,
-            consumer="relay-test",
+            consumer="light-test",
             config={
                 GPIO_PIN_LIGHT: gpiod.LineSettings(
                     active_low=True,
@@ -39,14 +43,14 @@ class Main:
         ) as request:
             print("Turning on light.")
             request.set_value(GPIO_PIN_LIGHT, gpiod.line.Value.ACTIVE)
-            self.__terminate.wait(60.0)
+            self.__terminate.wait(10.0)
             print("Turning off light.")
             request.set_value(GPIO_PIN_LIGHT, gpiod.line.Value.INACTIVE)
 
     def test_fan(self):
         with gpiod.request_lines(
             GPIO_CHIP_PATH,
-            consumer="relay-test",
+            consumer="fan-test",
             config={
                 GPIO_PIN_FAN: gpiod.LineSettings(
                     active_low=True,
@@ -57,15 +61,18 @@ class Main:
         ) as request:
             print("Turning on fan.")
             request.set_value(GPIO_PIN_FAN, gpiod.line.Value.ACTIVE)
-            self.__terminate.wait(10.0)
-            print("Turning off fan.")
-            request.set_value(GPIO_PIN_FAN, gpiod.line.Value.INACTIVE)
+            pwm = pwmio.PWMOut(GPIO_PIN_FAN_PWM, frequency=FAN_FREQUENCY, duty_cycle=0)
+            try:
+                for i in range(0, 10):
+                    pwm.duty_cycle = int((65535 * (i / 10)))
+                    self.__terminate.wait(3.0)
+            finally:
+                print("Turning off fan.")
+                pwm.duty_cycle = 0
+                pwm.deinit()
+                request.set_value(GPIO_PIN_FAN, gpiod.line.Value.INACTIVE)
 
-    def main(self):
-        self.test_lamp()
-        self.test_fan()
-        print("Reading sensors and sending to MQTT...")
-        self.connect_mqtt()
+    def send_data_loop(self):
         while not self.__terminate.is_set():
             try:
                 try:
@@ -84,6 +91,13 @@ class Main:
                 self.__dht22.exit()
                 raise error
             self.__terminate.wait(10.0)
+
+    def main(self):
+        self.test_lamp()
+        self.test_fan()
+        print("Reading sensors and sending to MQTT...")
+        self.connect_mqtt()
+        self.send_data_loop()
 
 
 def main():
