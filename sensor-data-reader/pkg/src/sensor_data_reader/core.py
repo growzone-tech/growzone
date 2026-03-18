@@ -2,6 +2,7 @@ import threading
 import adafruit_dht
 import paho.mqtt.client as mqtt
 import gpiod
+import board
 import os
 import pwmio
 
@@ -18,7 +19,7 @@ FAN_FREQUENCY = 25000
 class Main:
     def __init__(self):
         self.__terminate = threading.Event()
-        self.__dht22 = adafruit_dht.DHT22(GPIO_PIN_DHT)
+        self.__dht22 = adafruit_dht.DHT22(getattr(board, f"D{GPIO_PIN_DHT}"))
         self.__mqttClient = mqtt.Client(
             protocol=mqtt.MQTTv5
         )
@@ -61,7 +62,7 @@ class Main:
         ) as request:
             print("Turning on fan.")
             request.set_value(GPIO_PIN_FAN, gpiod.line.Value.ACTIVE)
-            pwm = pwmio.PWMOut(GPIO_PIN_FAN_PWM, frequency=FAN_FREQUENCY, duty_cycle=0)
+            pwm = pwmio.PWMOut(getattr(board, f"D{GPIO_PIN_FAN_PWM}"), frequency=FAN_FREQUENCY, duty_cycle=0)
             try:
                 for i in range(0, 10):
                     pwm.duty_cycle = int((65535 * (i / 10)))
