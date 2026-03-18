@@ -44,7 +44,7 @@ class Main:
         ) as request:
             print("Turning on light.")
             request.set_value(GPIO_PIN_LIGHT, gpiod.line.Value.ACTIVE)
-            self.__terminate.wait(10.0)
+            self.__terminate.wait(60.0)
             print("Turning off light.")
             request.set_value(GPIO_PIN_LIGHT, gpiod.line.Value.INACTIVE)
 
@@ -64,9 +64,10 @@ class Main:
             request.set_value(GPIO_PIN_FAN, gpiod.line.Value.ACTIVE)
             pwm = pwmio.PWMOut(getattr(board, f"D{GPIO_PIN_FAN_PWM}"), frequency=FAN_FREQUENCY, duty_cycle=0)
             try:
-                for i in range(0, 10):
+                for i in range(1, 11):
+                    print(f"Fan: {i*10}%")
                     pwm.duty_cycle = int((65535 * (i / 10)))
-                    self.__terminate.wait(3.0)
+                    self.__terminate.wait(6.0)
             finally:
                 print("Turning off fan.")
                 pwm.duty_cycle = 0
