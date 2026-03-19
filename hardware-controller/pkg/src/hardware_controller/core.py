@@ -6,6 +6,7 @@ import board
 import gpiod
 import paho.mqtt.client as mqtt
 import pwmio
+import RPi.GPIO
 
 MQTT_HOST = os.environ.get("MQTT_HOST", "localhost")
 MQTT_PORT = int(os.environ.get("MQTT_PORT", "1883"))

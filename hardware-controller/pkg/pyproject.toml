@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sensor_data_reader"
+name = "hardware_controller"
 version = "0.1.0"
 authors = [
   { name="GrowzoneTech", email="info@growzone.tech" },
@@ -22,4 +22,4 @@ dev = [
 ]
 
 [project.scripts]
-sensor-data-reader = "sensor_data_reader.core:main"
+hardware-controller = "hardware_controller.core:main"

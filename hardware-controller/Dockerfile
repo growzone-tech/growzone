@@ -24,4 +24,4 @@ COPY --from=builder /build/dist/*.whl .
 RUN pip install --no-cache-dir *.whl
 RUN rm *.whl
 
-CMD ["sensor-data-reader"]
+CMD ["hardware-controller"]
