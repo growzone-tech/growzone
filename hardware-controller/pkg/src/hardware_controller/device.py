@@ -15,7 +15,7 @@ MQTT_TIMEOUT = 60
 class HardwareDevice(metaclass=abc.ABCMeta):
 
     def __init__(self, *pinLabels: str) -> None:
-        self._pins: tuple[microcontroller.Pin, ...] = tuple[Pin, ...](map[Pin](self.__resolvePinLabel, pinLabels))
+        self._pins: tuple[microcontroller.Pin, ...] = tuple[Pin, ...](map(self.__resolvePinLabel, pinLabels))
         self._pinLabels: tuple[str, ...] = pinLabels
         self.__thread: Thread = Thread(target=self.run)
         self._terminate: Event = Event()
