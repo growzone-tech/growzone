@@ -14,14 +14,19 @@ MQTT_TIMEOUT = 60
 
 class HardwareDevice(metaclass=abc.ABCMeta):
 
+    @property
+    @abc.abstractmethod
+    def DEVICE_NAME(self) -> str: ...
+
     def __init__(self, *pinLabels: str) -> None:
         self._pins: tuple[microcontroller.Pin, ...] = tuple[Pin, ...](map(self.__resolvePinLabel, pinLabels))
-        self._pinLabels: tuple[str, ...] = pinLabels
+        self.__pinLabels: tuple[str, ...] = pinLabels
         self.__thread: Thread = Thread(target=self.run)
         self._terminate: Event = Event()
         self.__running: bool = False
+        self._clientId: str = f"Hardware_Device__{'_'.join(pinLabels)}"
         self._mqttClient: mqtt.Client = mqtt.Client(
-            client_id=f"Hardware_Device__{'_'.join(pinLabels)}",
+            client_id=self._clientId,
             protocol=mqtt.MQTTv5
         )
 
@@ -61,6 +66,9 @@ class HardwareDevice(metaclass=abc.ABCMeta):
         self._terminate.set()
         self.__thread.join()
         self._afterStop()
+
+    def _log(self, message: str) -> None:
+        print(f"[{self.DEVICE_NAME} @ {', '.join(self.__pinLabels)}] {message}")
 
     def isRunning(self) -> bool:
         return self.__running
