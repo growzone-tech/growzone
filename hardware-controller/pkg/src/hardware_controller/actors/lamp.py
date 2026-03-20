@@ -43,6 +43,7 @@ class Lamp(Actor):
             },
         )
         chip.close()
+        _ = self._mqttClient.loop_start()
 
     @override
     def _run(self) -> None:
@@ -59,6 +60,7 @@ class Lamp(Actor):
     @override
     def _deinit(self) -> None:
         try:
+            _ = self._mqttClient.loop_stop()
             self.__gpioRequest.set_value(
                 line=self.__line,
                 value=gpiod.line.Value.INACTIVE

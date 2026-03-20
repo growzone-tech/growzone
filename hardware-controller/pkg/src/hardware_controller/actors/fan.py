@@ -52,6 +52,7 @@ class Fan(Actor):
             },
         )
         chip.close()
+        _ = self._mqttClient.loop_start()
 
     @override
     def _run(self) -> None:
@@ -75,6 +76,7 @@ class Fan(Actor):
     @override
     def _deinit(self) -> None:
         try:
+            _ = self._mqttClient.loop_stop()
             self.__pwm.duty_cycle = 0
             self.__gpioRequest.set_value(
                 line=self.__line,
