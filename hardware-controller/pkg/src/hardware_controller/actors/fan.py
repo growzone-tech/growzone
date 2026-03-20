@@ -62,7 +62,7 @@ class Fan(Actor):
         while not self._terminate.is_set():
             if self.__targetValueChanged.wait(timeout=5.0):
                 self.__targetValueChanged.clear()
-                self._log(f"Changing state to '{(self.__targetValue * 100):.2f}'%.")
+                self._log(f"Changing state to '{(self.__targetValue * 100):.2f}%'.")
                 if self.__targetValue > 0:
                     self.__gpioRequest.set_value(
                         line=self.__line,
