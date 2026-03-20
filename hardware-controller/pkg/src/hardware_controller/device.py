@@ -6,6 +6,7 @@ import board
 import microcontroller
 import paho.mqtt.client as mqtt
 from microcontroller import Pin
+from paho.mqtt.enums import CallbackAPIVersion
 
 MQTT_HOST: str = os.environ.get("MQTT_HOST", "localhost")
 MQTT_PORT: int = int(os.environ.get("MQTT_PORT", "1883"))
@@ -26,6 +27,7 @@ class HardwareDevice(metaclass=abc.ABCMeta):
         self.__running: bool = False
         self._clientId: str = f"Hardware_Device__{'_'.join(pinLabels)}"
         self._mqttClient: mqtt.Client = mqtt.Client(
+            callback_api_version=CallbackAPIVersion.VERSION2,
             client_id=self._clientId,
             protocol=mqtt.MQTTv5
         )

@@ -5,6 +5,8 @@ import gpiod
 import paho.mqtt.client as mqtt
 import pwmio
 from microcontroller import Pin
+from paho.mqtt.properties import Properties
+from paho.mqtt.reasoncodes import ReasonCode
 
 from .actor import Actor
 
@@ -94,8 +96,8 @@ class Fan(Actor):
     def _afterStop(self) -> None:
         pass
 
-    def __onConnect(self, client: mqtt.Client, _userdata: Any, _flags: dict[str, int], resultCode: int) -> None:  # pyright: ignore[reportExplicitAny, reportAny]
-        self._log(f"Connected to MQTT with result code {resultCode}")
+    def __onConnect(self, client: mqtt.Client, _userdata: Any, _flags: mqtt.ConnectFlags, reasonCode: ReasonCode, _properties: Properties | None) -> None:  # pyright: ignore[reportExplicitAny, reportAny]
+        self._log(f"Connected to MQTT with reason code {reasonCode}")
         _ = client.subscribe(
             topic=MQTT_TOPIC
         )
