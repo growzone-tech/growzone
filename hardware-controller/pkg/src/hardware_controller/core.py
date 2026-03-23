@@ -6,7 +6,7 @@ from .device import HardwareDevice
 from .sensors.dht22 import DHT22
 
 STATIC_CONFIG: dict[type[HardwareDevice], tuple[str, ...]] = {
-    Lamp: ("D22",),
+    # Lamp: ("D22",),
     Fan: ("D27", "D12"),
     DHT22: ("D26",)
 }
