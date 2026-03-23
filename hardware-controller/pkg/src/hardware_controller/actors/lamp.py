@@ -31,10 +31,10 @@ class Lamp(Actor):
     @override
     def _init(self) -> None:
         self.__line: int = self._pins[0].id  # pyright: ignore[reportAttributeAccessIssue, reportUnknownMemberType]
-        self.__targetValue: bool = False
+        self.__targetValue: bool | None = False
         self.__targetValueChanged: Event = Event()
-        chip: gpiod.chip.Chip = gpiod.Chip(path=GPIO_CHIP_PATH)
-        self.__gpioRequest: gpiod.line_request.LineRequest = chip.request_lines(
+        self.__chip: gpiod.chip.Chip = gpiod.Chip(path=GPIO_CHIP_PATH)
+        self.__gpioRequest: gpiod.line_request.LineRequest = self.__chip.request_lines(
             consumer=self._clientId,
             config={
                 self.__line: gpiod.LineSettings(  # pyright: ignore[reportUnknownMemberType]
@@ -44,7 +44,6 @@ class Lamp(Actor):
                 )
             },
         )
-        chip.close()
         _ = self._mqttClient.loop_start()
 
     @override
@@ -53,11 +52,29 @@ class Lamp(Actor):
         while not self._terminate.is_set():
             if self.__targetValueChanged.wait(timeout=5.0):
                 self.__targetValueChanged.clear()
-                self._log(f"Changing state to '{'On' if self.__targetValue else 'Off'}'.")
-                self.__gpioRequest.set_value(
-                    line=self.__line,
-                    value=gpiod.line.Value.ACTIVE if self.__targetValue else gpiod.line.Value.INACTIVE
-                )
+                self._log(f"Changing state to '{'Hanging' if self.__targetValue is None else ('On' if self.__targetValue else 'Off')}'.")
+                if self.__targetValue is None:
+                    if self.__chip.get_line_info(self.__line).direction == gpiod.line.Direction.OUTPUT:
+                        self.__gpioRequest.reconfigure_lines(
+                            config={
+                                self.__line: gpiod.LineSettings(direction=gpiod.line.Direction.INPUT)
+                            }
+                        )
+                else:
+                    if self.__chip.get_line_info(self.__line).direction == gpiod.line.Direction.INPUT:
+                        self.__gpioRequest.reconfigure_lines(
+                            config={
+                                self.__line: gpiod.LineSettings(
+                                    active_low=True,
+                                    direction=gpiod.line.Direction.OUTPUT,
+                                    output_value=gpiod.line.Value.INACTIVE
+                                )
+                            }
+                        )
+                    self.__gpioRequest.set_value(
+                        line=self.__line,
+                        value=gpiod.line.Value.ACTIVE if self.__targetValue else gpiod.line.Value.INACTIVE
+                    )
 
     @override
     def _deinit(self) -> None:
@@ -91,6 +108,9 @@ class Lamp(Actor):
             self.__targetValueChanged.set()
         elif payload.lower() in ("false", "no", "off", "0"):
             self.__targetValue = False
+            self.__targetValueChanged.set()
+        elif payload.lower() in ("hanging"):
+            self.__targetValue = None
             self.__targetValueChanged.set()
         else:
             self._log(f"Received invalid command: {payload}")
