@@ -1,0 +1,17 @@
+# Documentation:
+# https://doc.traefik.io/traefik/reference/routing-configuration/dynamic-configuration-methods/
+# https://doc.traefik.io/traefik/reference/routing-configuration/http/tls/overview/
+
+http:
+  services:
+    svc_grafana-3000:
+      loadBalancer:
+        servers:
+          - url: "http://{{ env "APP_NAME_HOST" }}_grafana:3000"
+  routers:
+    grafana-3000:
+      rule: "Host(`grafana.{{ env "APP_HOST" }}`)"
+      service: svc_grafana-3000
+      entryPoints: ["websecure"]
+      tls:
+        certResolver: porkbun-api
