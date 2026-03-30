@@ -13,5 +13,7 @@ http:
       rule: "Host(`mqttx.{{ env "APP_HOST" }}`)"
       service: svc_mqttx-80
       entryPoints: ["websecure"]
+      middlewares:
+        - "auth-proxy"
       tls:
         certResolver: porkbun-api

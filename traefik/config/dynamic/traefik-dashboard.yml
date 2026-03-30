@@ -8,6 +8,8 @@ http:
       rule: "Host(`traefik-dashboard.{{ env "APP_HOST" }}`)"
       service: api@internal
       entryPoints: ["websecure"]
+      middlewares:
+        - "auth-proxy"
       tls:
         certResolver: porkbun-api
         domains:

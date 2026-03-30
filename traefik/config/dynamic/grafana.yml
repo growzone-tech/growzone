@@ -13,5 +13,7 @@ http:
       rule: "Host(`grafana.{{ env "APP_HOST" }}`)"
       service: svc_grafana-3000
       entryPoints: ["websecure"]
+      middlewares:
+        - "auth-proxy"
       tls:
         certResolver: porkbun-api

@@ -1,0 +1,23 @@
+http:
+  middlewares:
+    auth-proxy:
+      forwardAuth:
+        address: "http://{{ env "APP_NAME_HOST" }}_authelia:9091/api/authz/forward-auth"
+        trustForwardHeader: true
+        authResponseHeaders:
+          - "Remote-User"
+          - "Remote-Groups"
+          - "Remote-Name"
+          - "Remote-Email"
+  services:
+    svc_authelia-9091:
+      loadBalancer:
+        servers:
+          - url: "http://{{ env "APP_NAME_HOST" }}_authelia:9091"
+  routers:
+    authelia-9091:
+      rule: "Host(`authelia.{{ env "APP_HOST" }}`)"
+      service: svc_authelia-9091
+      entryPoints: ["websecure"]
+      tls:
+        certResolver: porkbun-api

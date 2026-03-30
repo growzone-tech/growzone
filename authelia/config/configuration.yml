@@ -1,0 +1,39 @@
+server:
+  address: 'tcp://:9091/'
+  endpoints:
+    authz:
+      forward-auth:
+        implementation: 'ForwardAuth'
+
+log:
+  level: info
+
+session:
+  name: authelia_session
+  domain: '{{ env "APP_HOST" }}'
+  same_site: lax
+  expiration: 1h
+  inactivity: 5m
+  cookies:
+    domain: '{{ env "APP_HOST" }}'
+    authelia_url: 'https://authelia.{{ env "APP_HOST" }}'
+
+authentication_backend:
+  file:
+    path: /config/users.yml
+
+storage:
+  local:
+    path: /data/db.sqlite3
+
+notifier:
+  filesystem:
+    filename: /data/notification.txt
+
+access_control:
+  default_policy: deny
+  rules:
+    - domain: 'authelia.{{ env "APP_HOST" }}'
+      policy: bypass
+    - domain: '*.{{ env "APP_HOST" }}'
+      policy: one_factor

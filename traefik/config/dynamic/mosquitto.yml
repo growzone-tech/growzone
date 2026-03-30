@@ -13,6 +13,8 @@ http:
       rule: "Host(`mosquitto.{{ env "APP_HOST" }}`)"
       service: svc_moquitto-9001
       entryPoints: ["websecure"]
+      middlewares:
+        - "auth-proxy"
       tls:
         certResolver: porkbun-api
 
@@ -27,6 +29,8 @@ tcp:
       rule: "HostSNI(`mosquitto.{{ env "APP_HOST" }}`)"
       service: svc_mosquitto-1883
       entryPoints: ["websecure"]
+      middlewares:
+        - "auth-proxy"
       tls:
         passthrough: false
         certResolver: porkbun-api
