@@ -16,6 +16,8 @@ volumes:
   mosquitto-config:
   mosquitto-data:
   mosquitto-logs:
+  grafana-data:
+
 
 secrets:
   TS_AUTHKEY:
@@ -25,39 +27,38 @@ secrets:
   PORKBUN_API_SECRET_KEY:
     file: ${SECRETS_DIR}/PORKBUN_API_SECRET_KEY
 
-
 services:
 
-#   nginx-proxy-manager:
-#     image: docker.io/jc21/nginx-proxy-manager:latest
-#     pull_policy: always
-#     container_name: ${APP_NAME_HOST}_nginx-proxy-manager
-#     restart: always
-#     expose:
-#       - "80"
-#       - "81"
-#       - "443"
-#     env_file:
-#       - ./.env
-#       - path: ${ENV_DIR}/.env
-#         required: false
-#       - path: ${ENV_DIR}/nginx-proxy-manager.env
-#         required: false
-#     environment:
-#       INITIAL_ADMIN_EMAIL: "root@localhost.com"
-#       INITIAL_ADMIN_PASSWORD: "rootroot"
-#     volumes:
-#       - nginx-proxy-manager:/data
-#       - letsencrypt:/etc/letsencrypt
-#     networks:
-#       internal:
-#         ipv4_address: '172.18.0.2'
-#     healthcheck:
-#       test: ["CMD", "curl", "-f", "http://localhost:81"]
-#       interval: 10s
-#       timeout: 5s
-#       retries: 5
-#       start_period: 15s
+  #   nginx-proxy-manager:
+  #     image: docker.io/jc21/nginx-proxy-manager:latest
+  #     pull_policy: always
+  #     container_name: ${APP_NAME_HOST}_nginx-proxy-manager
+  #     restart: always
+  #     expose:
+  #       - "80"
+  #       - "81"
+  #       - "443"
+  #     env_file:
+  #       - ./.env
+  #       - path: ${ENV_DIR}/.env
+  #         required: false
+  #       - path: ${ENV_DIR}/nginx-proxy-manager.env
+  #         required: false
+  #     environment:
+  #       INITIAL_ADMIN_EMAIL: "root@localhost.com"
+  #       INITIAL_ADMIN_PASSWORD: "rootroot"
+  #     volumes:
+  #       - nginx-proxy-manager:/data
+  #       - letsencrypt:/etc/letsencrypt
+  #     networks:
+  #       internal:
+  #         ipv4_address: '172.18.0.2'
+  #     healthcheck:
+  #       test: ["CMD", "curl", "-f", "http://localhost:81"]
+  #       interval: 10s
+  #       timeout: 5s
+  #       retries: 5
+  #       start_period: 15s
 
   traefik:
     build:
@@ -84,7 +85,7 @@ services:
       internal:
         ipv4_address: '172.18.0.2'
     healthcheck:
-      test: [ "CMD", "traefik", "healthcheck", "--ping"]
+      test: [ "CMD", "traefik", "healthcheck", "--ping" ]
       interval: 30s
       timeout: 5s
       retries: 5
@@ -152,7 +153,7 @@ services:
       internal:
         ipv4_address: '172.18.0.4'
     healthcheck:
-      test: [ "CMD", "mosquitto_sub", "-V", "5", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]  # Source: https://github.com/eclipse-mosquitto/mosquitto/issues/1270#issuecomment-1476038461
+      test: [ "CMD", "mosquitto_sub", "-V", "5", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3" ] # Source: https://github.com/eclipse-mosquitto/mosquitto/issues/1270#issuecomment-1476038461
       interval: 30s
       timeout: 10s
       retries: 5
@@ -216,3 +217,28 @@ services:
     depends_on:
       mosquitto:
         condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:latest
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_grafana
+    restart: always
+    expose:
+      - "3000"
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/grafana.env
+        required: false
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      internal:
+        ipv4_address: '172.18.0.7'
+    healthcheck:
+      test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:3000/api/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
