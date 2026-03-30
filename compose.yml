@@ -92,6 +92,9 @@ services:
       timeout: 5s
       retries: 5
       start_period: 15s
+    depends_on:
+      authelia:
+        condition: service_healthy
 
   tailscale:
     build:
