@@ -68,7 +68,7 @@ class Fan(Actor):
                         line=self.__line,
                         value=gpiod.line.Value.ACTIVE
                     )
-                self.__pwm.duty_cycle = int((65535 * self.__targetValue))
+                self.__pwm.duty_cycle = int((65535 * self.__targetValue))  # Steps of 328?
                 if self.__targetValue == 0:
                     self.__gpioRequest.set_value(
                         line=self.__line,
