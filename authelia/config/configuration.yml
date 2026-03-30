@@ -10,13 +10,12 @@ log:
 
 session:
   name: authelia_session
-  domain: '{{ env "APP_HOST" }}'
   same_site: lax
   expiration: 1h
   inactivity: 5m
   cookies:
-    domain: '{{ env "APP_HOST" }}'
-    authelia_url: 'https://authelia.{{ env "APP_HOST" }}'
+    - domain: '{{ env "APP_HOST" }}'
+      authelia_url: 'https://authelia.{{ env "APP_HOST" }}'
 
 authentication_backend:
   file:
