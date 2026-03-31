@@ -25,6 +25,12 @@ for subDir in "user-configs" "group-configs" "user-schemas" "group-schemas"; do
     )
 done
 
-/app/bootstrap.sh
+(
+    "$@" &
+    lldapPid="$!"
+    /app/bootstrap.sh
+    kill -SIGTERM "$lldapPid"
+    wait "$lldapPid"
+)
 touch "/data/.bootstrapped"
 exit 0
