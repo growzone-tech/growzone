@@ -6,7 +6,7 @@ server:
         implementation: 'ForwardAuth'
 
 log:
-  level: trace
+  level: info
 
 session:
   name: authelia_session
