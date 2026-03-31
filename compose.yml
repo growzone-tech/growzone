@@ -357,6 +357,7 @@ services:
       TZ: "${TIMEZONE}"
       LLDAP_JWT_SECRET_FILE: "/run/secrets/LLDAP_JWT_SECRET"
       LLDAP_KEY_SEED: "/run/secrets/LLDAP_KEY_SEED"
+      LLDAP_KEY_FILE: ""
       LLDAP_LDAP_USER_DN: "admin"
       LLDAP_LDAP_USER_EMAIL: "admin@${APP_HOST}"
       LLDAP_LDAP_USER_PASS_FILE: "/run/secrets/LLDAP_ADMIN_PASSWORD"
