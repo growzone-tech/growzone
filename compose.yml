@@ -254,8 +254,8 @@ services:
       GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
       GF_AUTH_GENERIC_OAUTH_NAME: "Authelia"
       GF_AUTH_GENERIC_OAUTH_ICON: "signin"
-      GF_AUTH_GENERIC_OAUTH_CLIENT_ID: "$$__file{/run/secrets/GRAFANA_OAUTH_CLIENT_ID}"
-      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: "$$__file{/run/secrets/GRAFANA_OAUTH_CLIENT_SECRET}"
+      GF_AUTH_GENERIC_OAUTH_CLIENT_ID__FILE: "/run/secrets/GRAFANA_OAUTH_CLIENT_ID"
+      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET__FILE: "/run/secrets/GRAFANA_OAUTH_CLIENT_SECRET"
       GF_AUTH_GENERIC_OAUTH_SCOPES: "openid profile email groups"
       GF_AUTH_GENERIC_OAUTH_EMPTY_SCOPES: "false"
       GF_AUTH_GENERIC_OAUTH_AUTH_URL: "https://authelia.${APP_HOST}/api/oidc/authorization"
@@ -271,8 +271,16 @@ services:
       GF_AUTH_GENERIC_OAUTH_AUTO_LOGIN: "true"
       GF_AUTH_GENERIC_OAUTH_ALLOW_ASSIGN_GRAFANA_ADMIN: "true"
     secrets:
-      - GRAFANA_OAUTH_CLIENT_ID
-      - GRAFANA_OAUTH_CLIENT_SECRET
+      - source: GRAFANA_OAUTH_CLIENT_ID
+        target: GRAFANA_OAUTH_CLIENT_ID
+        uid: "472"
+        gid: "472"
+        mode: 0400
+      - source: GRAFANA_OAUTH_CLIENT_SECRET
+        target: GRAFANA_OAUTH_CLIENT_SECRET
+        uid: "472"
+        gid: "472"
+        mode: 0400
     volumes:
       - grafana-data:/var/lib/grafana
     networks:
