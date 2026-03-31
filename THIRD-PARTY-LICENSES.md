@@ -70,3 +70,21 @@ The date used in the copyright notices in this file represents the year of initi
 * **Source Code:** https://github.com/emqx/MQTTX
 * **License:** [Apache-2.0](https://github.com/emqx/MQTTX/blob/main/LICENSE)
 * **Copyright Notice:** Copyright (c) 2019, EMQ Technologies Inc.
+
+## Grafana OSS
+
+* **Project:** https://grafana.com/oss/grafana/
+* **Version:** Latest
+* **In use since:** March 2026
+* **Source Code:** https://github.com/grafana/grafana
+* **License:** [AGPL-3.0](https://github.com/grafana/grafana/blob/main/LICENSE)
+* **Copyright Notice:** Copyright (c) 2014, Grafana Labs
+
+## Authelia
+
+* **Project:** https://www.authelia.com/
+* **Version:** Latest
+* **In use since:** March 2026
+* **Source Code:** https://github.com/authelia/authelia
+* **License:** [Apache-2.0](https://github.com/authelia/authelia/blob/master/LICENSE)
+* **Copyright Notice:** Copyright (c) 2019, Clément Michaud
