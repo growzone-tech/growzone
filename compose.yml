@@ -249,9 +249,7 @@ services:
         required: false
     environment:
       GF_SERVER_ROOT_URL: "https://grafana.${APP_HOST}"
-      # GF_AUTH_ANONYMOUS_ENABLED: "true"
-      # GF_AUTH_ANONYMOUS_ORG_NAME: "Main Org."
-      # GF_AUTH_ANONYMOUS_ORG_ROLE: "Viewer"
+      GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: "true"
       GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
       GF_AUTH_GENERIC_OAUTH_NAME: "Authelia"
       GF_AUTH_GENERIC_OAUTH_ICON: "signin"
