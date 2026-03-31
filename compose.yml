@@ -369,6 +369,7 @@ services:
       - LLDAP_ADMIN_PASSWORD
     volumes:
       - lldap_data:/data
+      - ./lldap/bootstrap:/bootstrap:ro
     networks:
       internal:
         ipv4_address: '172.18.0.9'
