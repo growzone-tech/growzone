@@ -3,7 +3,9 @@
 set -e
 set -o pipefail
 
-[ -f "/data/.bootstrapped" ] && exit 0
+BOOTSTRAP_VERSION="1"
+
+[ -f "/data/.bootstrapped" ] && [ "$(cat /data/.bootstrapped)" == "$BOOTSTRAP_VERSION" ] && { echo "Bootstrapping already done for current version '$BOOTSTRAP_VERSION'."; exit 0; }
 
 tmpBootstrapDir="$(mktemp -d)"
 trap 'rm -rf "$tmpBootstrapDir"' EXIT
@@ -25,12 +27,6 @@ for subDir in "user-configs" "group-configs" "user-schemas" "group-schemas"; do
     )
 done
 
-(
-    "$@" &
-    lldapPid="$!"
-    /app/bootstrap.sh
-    kill -SIGTERM "$lldapPid"
-    wait "$lldapPid"
-)
-touch "/data/.bootstrapped"
+/app/bootstrap.sh
+printf '%s' "$BOOTSTRAP_VERSION" >"/data/.bootstrapped"
 exit 0
