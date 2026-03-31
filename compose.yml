@@ -271,16 +271,8 @@ services:
       GF_AUTH_GENERIC_OAUTH_AUTO_LOGIN: "true"
       GF_AUTH_GENERIC_OAUTH_ALLOW_ASSIGN_GRAFANA_ADMIN: "true"
     secrets:
-      - source: GRAFANA_OAUTH_CLIENT_ID
-        target: GRAFANA_OAUTH_CLIENT_ID
-        uid: "472"
-        gid: "472"
-        mode: 0400
-      - source: GRAFANA_OAUTH_CLIENT_SECRET
-        target: GRAFANA_OAUTH_CLIENT_SECRET
-        uid: "472"
-        gid: "472"
-        mode: 0400
+      - GRAFANA_OAUTH_CLIENT_ID
+      - GRAFANA_OAUTH_CLIENT_SECRET
     volumes:
       - grafana-data:/var/lib/grafana
     networks:
