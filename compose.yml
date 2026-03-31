@@ -19,6 +19,7 @@ volumes:
   grafana-data:
   authelia-secrets:
   authelia-data:
+  lldap_data:
 
 
 secrets:
@@ -38,6 +39,12 @@ secrets:
     file: ${SECRETS_DIR}/GRAFANA_OAUTH_CLIENT_SECRET
   GRAFANA_OAUTH_CLIENT_SECRET_HASHED_PBKDF2:
     file: ${SECRETS_DIR}/GRAFANA_OAUTH_CLIENT_SECRET_HASHED_PBKDF2
+  LLDAP_JWT_SECRET:
+    file: ${SECRETS_DIR}/LLDAP_JWT_SECRET
+  LLDAP_KEY_SEED:
+    file: ${SECRETS_DIR}/LLDAP_KEY_SEED
+  LLDAP_ADMIN_PASSWORD:
+    file: ${SECRETS_DIR}/LLDAP_ADMIN_PASSWORD
 
 services:
 
@@ -305,11 +312,13 @@ services:
       AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: "/secrets/storage_key"
       X_AUTHELIA_CONFIG_FILTERS: "template"
       X_AUTHELIA_HEALTHCHECK: "true"
+      # LLDAP_LDAP_BASE_DN: "//** Generated from APP_HOST in entrypoint-hook.sh **//"
     secrets:
       - AUTHELIA_OIDC_HMAC_SECRET
       - AUTHELIA_OIDC_JWKS_KEY_PRIVATE
       - GRAFANA_OAUTH_CLIENT_ID
       - GRAFANA_OAUTH_CLIENT_SECRET_HASHED_PBKDF2
+      - LLDAP_ADMIN_PASSWORD
     volumes:
       - ./authelia/config:/config:ro
       - authelia-secrets:/secrets
@@ -319,6 +328,46 @@ services:
         ipv4_address: '172.18.0.8'
     healthcheck:
       test: [ "CMD", "./healthcheck.sh" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  lldap:
+    build:
+      context: ./lldap
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_lldap
+    restart: always
+    expose:
+      - "3890"
+      - "17170"
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/lldap.env
+        required: false
+    environment:
+      TZ: "${TIMEZONE}"
+      LLDAP_JWT_SECRET_FILE: "/run/secrets/LLDAP_JWT_SECRET"
+      LLDAP_KEY_SEED: "/run/secrets/LLDAP_KEY_SEED"
+      LLDAP_LDAP_USER_DN: "admin"
+      LLDAP_LDAP_USER_EMAIL: "admin@${APP_HOST}"
+      LLDAP_LDAP_USER_PASS_FILE: "/run/secrets/LLDAP_ADMIN_PASSWORD"
+      LLDAP_FORCE_LDAP_USER_PASS_RESET: "always"
+      # LLDAP_LDAP_BASE_DN: "//** Generated from APP_HOST in entrypoint-hook.sh **//"
+    secrets:
+      - LLDAP_JWT_SECRET
+      - LLDAP_KEY_SEED
+      - LLDAP_ADMIN_PASSWORD
+    volumes:
+      - lldap_data:/data
+    networks:
+      internal:
+        ipv4_address: '172.18.0.9'
+    healthcheck:
+      test: [ "CMD", "/app/lldap", "healthcheck", "--config-file", "/data/lldap_config.toml" ]
       interval: 30s
       timeout: 5s
       retries: 5

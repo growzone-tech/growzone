@@ -6,7 +6,7 @@ If you find any issues regarding these licensing notices (dead URLs, project lic
 
 **General Information**
 
-A version of "Latest" indicates an auto-updating component, for example the most recent stable release of a docker image.
+A version containing "Latest" indicates an auto-updating component, for example the most recent stable release of a docker image.
 
 Copyright notices should generally be included within the license(s) in the deployed source code and automatically updated therein when the respective source is updated. \
 Declaring copyright is the responsibility of the image maintainer. \
@@ -88,3 +88,12 @@ The date used in the copyright notices in this file represents the year of initi
 * **Source Code:** https://github.com/authelia/authelia
 * **License:** [Apache-2.0](https://github.com/authelia/authelia/blob/master/LICENSE)
 * **Copyright Notice:** Copyright (c) 2019, Clément Michaud
+
+## LLDAP
+
+* **Project:** https://github.com/lldap/lldap
+* **Version:** Latest Stable
+* **In use since:** March 2026
+* **Source Code:** https://github.com/lldap/lldap
+* **License:** [GPL-3.0](https://github.com/lldap/lldap/blob/main/LICENSE)
+* **Copyright Notice:** Copyright (c) 2021, LLDAP
