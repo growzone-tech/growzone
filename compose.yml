@@ -20,8 +20,8 @@ volumes:
   authelia-secrets:
   authelia-data:
   lldap-data:
-  influxdb3-data:
-  influxdb3-plugins:
+  influxdb-data:
+  influxdb-plugins:
 
 
 secrets:
