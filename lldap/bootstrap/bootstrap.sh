@@ -18,14 +18,12 @@ export GROUP_SCHEMAS_DIR="$tmpBootstrapDir/group-schemas"
 export DO_CLEANUP="false"
 
 for subDir in "user-configs" "group-configs" "user-schemas" "group-schemas"; do
-    [ -d "$tmpBootstrapDir/$subDir" ] || mkdir -p "$tmpBootstrapDir/$subDir"
     [ -d "/bootstrap/$subDir" ] && (
+        mkdir -p "$tmpBootstrapDir/$subDir"
         cd /bootstrap
         find $subDir -type f -exec sh -c 'envsubst < "$1" > "$2/$1"' _ {} "$tmpBootstrapDir" \;
     )
 done
-
-cat "$tmpBootstrapDir/user-configs/admin.json"
 
 /app/bootstrap.sh
 touch "/data/.bootstrapped"

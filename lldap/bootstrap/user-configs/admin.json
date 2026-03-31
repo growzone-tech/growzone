@@ -1,7 +1,7 @@
 {
   "id": "${LLDAP_ADMIN_USERNAME}",
   "email": "${LLDAP_ADMIN_USERNAME}@${APP_HOST}",
-  "password_file": "${LLDAP_ADMIN_PASSWORD}",
+  "password": "${LLDAP_ADMIN_PASSWORD}",
   "displayName": "Administrator",
   "firstName": "Admin",
   "groups": [
