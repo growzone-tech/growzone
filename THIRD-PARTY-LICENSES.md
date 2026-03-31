@@ -11,7 +11,7 @@ A version containing "Latest" indicates an auto-updating component, for example 
 Copyright notices should generally be included within the license(s) in the deployed source code and automatically updated therein when the respective source is updated. \
 Declaring copyright is the responsibility of the image maintainer. \
 Therefore any copyright notices declared in this file are included solely for documentation purposes and goodwill. \
-The date used in the copyright notices in this file represents the year of initial publication. For auto-updating components, protection extends through the current year of the deployed version.
+The date used in the copyright notices in this file represents the year indicated in the license or of initial publication. For auto-updating components, protection extends through the current year of the deployed version.
 
 <!--
 ## <PROJECT_NAME>
@@ -97,3 +97,21 @@ The date used in the copyright notices in this file represents the year of initi
 * **Source Code:** https://github.com/lldap/lldap
 * **License:** [GPL-3.0](https://github.com/lldap/lldap/blob/main/LICENSE)
 * **Copyright Notice:** Copyright (c) 2021, LLDAP
+
+## InfluxDB 3 Core
+
+* **Project:** https://www.influxdata.com/products/influxdb/
+* **Version:** Latest InfluxDB 3 Core
+* **In use since:** March 2026
+* **Source Code:** https://github.com/influxdata/influxdb
+* **License:** [MIT](https://github.com/influxdata/influxdb/blob/main/LICENSE-MIT)
+* **Copyright Notice:** Copyright (c) 2020 InfluxData Inc.
+
+## Telegraf
+
+* **Project:** https://www.influxdata.com/time-series-platform/telegraf/
+* **Version:** Latest
+* **In use since:** March 2026
+* **Source Code:** https://github.com/influxdata/telegraf
+* **License:** [MIT](https://github.com/influxdata/telegraf/blob/master/LICENSE)
+* **Copyright Notice:** Copyright (c) 2015 InfluxData Inc.
