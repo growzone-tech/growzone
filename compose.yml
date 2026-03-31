@@ -407,6 +407,7 @@ services:
       INFLUXDB3_NUM_IO_THREADS: "2"
       INFLUXDB3_DATAFUSION_NUM_THREADS: "2"
       INFLUXDB3_ADMIN_TOKEN_FILE: "/run/secrets/INFLUXDB_ADMIN_TOKEN" # [ ! -d "./influxdb3-admin-token" ] && mkdir -p ./influxdb3-admin-token && { docker run --user "$(id -u):$(id -g)" --rm -v "./influxdb3-admin-token:/admin-token" influxdb:3-core influxdb3 create token --admin --name "admin-token" --offline --output-file /admin-token/admin-token.json >/dev/null; [ ! -f "./influxdb3-admin-token/admin-token.json" ] || cat "./influxdb3-admin-token/admin-token.json"; } && rm -rf ./influxdb3-admin-token
+      INFLUXDB3_DISABLE_AUTHZ: "health"
     secrets:
       - INFLUXDB_ADMIN_TOKEN
     volumes:
