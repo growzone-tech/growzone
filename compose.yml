@@ -28,6 +28,16 @@ secrets:
     file: ${SECRETS_DIR}/PORKBUN_API_KEY
   PORKBUN_API_SECRET_KEY:
     file: ${SECRETS_DIR}/PORKBUN_API_SECRET_KEY
+  AUTHELIA_OIDC_HMAC_SECRET:
+    file: ${SECRETS_DIR}/AUTHELIA_OIDC_HMAC_SECRET
+  AUTHELIA_OIDC_JWKS_KEY_PRIVATE:
+    file: ${SECRETS_DIR}/AUTHELIA_OIDC_JWKS_KEY_PRIVATE
+  GRAFANA_OAUTH_CLIENT_ID:
+    file: ${SECRETS_DIR}/GRAFANA_OAUTH_CLIENT_ID
+  GRAFANA_OAUTH_CLIENT_SECRET:
+    file: ${SECRETS_DIR}/GRAFANA_OAUTH_CLIENT_SECRET
+  GRAFANA_OAUTH_CLIENT_SECRET_HASHED_PBKDF2:
+    file: ${SECRETS_DIR}/GRAFANA_OAUTH_CLIENT_SECRET_HASHED_PBKDF2
 
 services:
 
@@ -236,6 +246,33 @@ services:
         required: false
       - path: ${ENV_DIR}/grafana.env
         required: false
+    environment:
+      GF_SERVER_ROOT_URL: "https://grafana.${APP_HOST}"
+      # GF_AUTH_ANONYMOUS_ENABLED: "true"
+      # GF_AUTH_ANONYMOUS_ORG_NAME: "Main Org."
+      # GF_AUTH_ANONYMOUS_ORG_ROLE: "Viewer"
+      GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
+      GF_AUTH_GENERIC_OAUTH_NAME: "Authelia"
+      GF_AUTH_GENERIC_OAUTH_ICON: "signin"
+      GF_AUTH_GENERIC_OAUTH_CLIENT_ID: "$__file{/run/secrets/GRAFANA_OAUTH_CLIENT_ID}"
+      GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: "$__file{/run/secrets/GRAFANA_OAUTH_CLIENT_SECRET}"
+      GF_AUTH_GENERIC_OAUTH_SCOPES: "openid profile email groups"
+      GF_AUTH_GENERIC_OAUTH_EMPTY_SCOPES: "false"
+      GF_AUTH_GENERIC_OAUTH_AUTH_URL: "https://authelia.${APP_HOST}/api/oidc/authorization"
+      GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "https://authelia.${APP_HOST}/api/oidc/token"
+      GF_AUTH_GENERIC_OAUTH_API_URL: "https://authelia.${APP_HOST}/api/oidc/userinfo"
+      GF_AUTH_GENERIC_OAUTH_LOGIN_ATTRIBUTE_PATH: ""
+      GF_AUTH_GENERIC_OAUTH_GROUPS_ATTRIBUTE_PATH: "groups"
+      GF_AUTH_GENERIC_OAUTH_NAME_ATTRIBUTE_PATH: "name"
+      GF_AUTH_GENERIC_OAUTH_USE_PKCE: "true"
+      GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(groups[*], 'admin') && 'GrafanaAdmin' || contains(groups[*], 'grafana_admin') && 'Admin' || contains(groups[*], 'grafana_editor') && 'Editor' || 'Viewer'"
+      GF_AUTH_GENERIC_OAUTH_AUTH_STYLE: "InHeader"
+      GF_AUTH_GENERIC_OAUTH_ALLOW_SIGN_UP: "true"
+      GF_AUTH_GENERIC_OAUTH_AUTO_LOGIN: "true"
+      GF_AUTH_GENERIC_OAUTH_ALLOW_ASSIGN_GRAFANA_ADMIN: "true"
+    secrets:
+      - GRAFANA_OAUTH_CLIENT_ID
+      - GRAFANA_OAUTH_CLIENT_SECRET
     volumes:
       - grafana-data:/var/lib/grafana
     networks:
@@ -267,6 +304,11 @@ services:
       AUTHELIA_SESSION_SECRET_FILE: "/secrets/session"
       AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: "/secrets/storage_key"
       X_AUTHELIA_CONFIG_FILTERS: "template"
+    secrets:
+      - AUTHELIA_OIDC_HMAC_SECRET
+      - AUTHELIA_OIDC_JWKS_KEY_PRIVATE
+      - GRAFANA_OAUTH_CLIENT_ID
+      - GRAFANA_OAUTH_CLIENT_SECRET_HASHED_PBKDF2
     volumes:
       - ./authelia/config:/config:ro
       - authelia-secrets:/secrets
