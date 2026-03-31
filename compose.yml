@@ -240,6 +240,7 @@ services:
     restart: always
     expose:
       - "3000"
+    user: "root"
     env_file:
       - ./.env
       - path: ${ENV_DIR}/.env
@@ -304,6 +305,7 @@ services:
       AUTHELIA_SESSION_SECRET_FILE: "/secrets/session"
       AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: "/secrets/storage_key"
       X_AUTHELIA_CONFIG_FILTERS: "template"
+      X_AUTHELIA_HEALTHCHECK: "true"
     secrets:
       - AUTHELIA_OIDC_HMAC_SECRET
       - AUTHELIA_OIDC_JWKS_KEY_PRIVATE
@@ -317,7 +319,7 @@ services:
       internal:
         ipv4_address: '172.18.0.8'
     healthcheck:
-      test: [ "CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:9091/api/health" ]
+      test: [ "CMD", "./healthcheck.sh" ]
       interval: 30s
       timeout: 5s
       retries: 5

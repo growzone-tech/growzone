@@ -13,6 +13,4 @@ if [ ! -f "/secrets/storage_key" ]; then
     head -c 64 /dev/urandom | base64 > /secrets/storage_key
 fi
 
-while :; do sleep 1; done
-
 exec "$@"
