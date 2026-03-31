@@ -20,7 +20,7 @@ session:
 authentication_backend:
   ldap:
     implementation: 'lldap'
-    address: 'ldap://{{ env "APP_NAME_HOST" }}:3890'
+    address: 'ldap://{{ env "APP_NAME_HOST" }}_lldap:3890'
     base_dn: '{{ env "LLDAP_LDAP_BASE_DN" }}'
     user: 'UID=admin,OU=people,{{ env "LLDAP_LDAP_BASE_DN" }}'
     password: '{{ secret "/run/secrets/LLDAP_ADMIN_PASSWORD" }}'
