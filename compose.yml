@@ -427,7 +427,8 @@ services:
       start_period: 30s
 
   telegraf:
-    image: telegraf:latest
+    build:
+      context: ./telegraf
     pull_policy: always
     container_name: ${APP_NAME_HOST}_telegraf
     restart: always
