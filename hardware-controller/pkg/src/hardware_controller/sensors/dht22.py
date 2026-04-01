@@ -4,8 +4,8 @@ import adafruit_dht
 
 from .sensor import Sensor
 
-MQTT_TOPIC_TEMPERATURE = "sensor/dht22/inside/temperature"
-MQTT_TOPIC_HUMIDITY = "sensor/dht22/inside/humidity"
+MQTT_TOPIC_TEMPERATURE = "v1/sensors/dht22/inside/temperature"
+MQTT_TOPIC_HUMIDITY = "v1/sensors/dht22/inside/humidity"
 
 
 class DHT22(Sensor):
