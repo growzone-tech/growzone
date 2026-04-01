@@ -441,7 +441,7 @@ services:
     secrets:
       - INFLUXDB_ADMIN_TOKEN
     volumes:
-      - ./telegraf/config/telegraf.con:/etc/telegraf/telegraf.conf:ro
+      - ./telegraf/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     networks:
       internal:
         ipv4_address: '172.18.0.11'
