@@ -111,7 +111,7 @@ The date used in the copyright notices in this file represents the year indicate
 
 * **Project:** https://www.influxdata.com/time-series-platform/telegraf/
 * **Version:** Latest
-* **In use since:** March 2026
+* **In use since:** April 2026
 * **Source Code:** https://github.com/influxdata/telegraf
 * **License:** [MIT](https://github.com/influxdata/telegraf/blob/master/LICENSE)
 * **Copyright Notice:** Copyright (c) 2015 InfluxData Inc.

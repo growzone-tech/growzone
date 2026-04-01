@@ -47,6 +47,8 @@ secrets:
     file: ${SECRETS_DIR}/LLDAP_KEY_SEED
   LLDAP_ADMIN_PASSWORD:
     file: ${SECRETS_DIR}/LLDAP_ADMIN_PASSWORD
+  INFLUXDB_ADMIN_TOKEN_JSON:
+    file: ${SECRETS_DIR}/INFLUXDB_ADMIN_TOKEN_JSON
   INFLUXDB_ADMIN_TOKEN:
     file: ${SECRETS_DIR}/INFLUXDB_ADMIN_TOKEN
 
@@ -399,7 +401,7 @@ services:
       - path: ${ENV_DIR}/influxdb.env
         required: false
     environment:
-      # https://docs.influxdata.com/influxdb3/core/reference/config-options/#datafusion
+      # https://docs.influxdata.com/influxdb3/core/reference/config-options/
       INFLUXDB3_NODE_IDENTIFIER_PREFIX: "node0"
       INFLUXDB3_OBJECT_STORE: "file"
       INFLUXDB3_DB_DIR: "/var/lib/influxdb3/data"
@@ -407,10 +409,10 @@ services:
       INFLUXDB3_LOG_FILTER: "info"
       INFLUXDB3_NUM_IO_THREADS: "2"
       INFLUXDB3_NUM_DATAFUSION_THREADS: "2"
-      INFLUXDB3_ADMIN_TOKEN_FILE: "/run/secrets/INFLUXDB_ADMIN_TOKEN" # [ ! -d "./influxdb3-admin-token" ] && mkdir -p ./influxdb3-admin-token && { docker run --user "$(id -u):$(id -g)" --rm -v "./influxdb3-admin-token:/admin-token" influxdb:3-core influxdb3 create token --admin --name "admin-token" --offline --output-file /admin-token/admin-token.json >/dev/null; [ ! -f "./influxdb3-admin-token/admin-token.json" ] || cat "./influxdb3-admin-token/admin-token.json"; } && rm -rf ./influxdb3-admin-token
+      INFLUXDB3_ADMIN_TOKEN_FILE: "/run/secrets/INFLUXDB_ADMIN_TOKEN_JSON" # [ ! -d "./influxdb3-admin-token" ] && mkdir -p ./influxdb3-admin-token && { docker run --user "$(id -u):$(id -g)" --rm -v "./influxdb3-admin-token:/admin-token" influxdb:3-core influxdb3 create token --admin --name "admin-token" --offline --output-file /admin-token/admin-token.json >/dev/null; [ ! -f "./influxdb3-admin-token/admin-token.json" ] || cat "./influxdb3-admin-token/admin-token.json"; } && rm -rf ./influxdb3-admin-token
       INFLUXDB3_DISABLE_AUTHZ: "health"
     secrets:
-      - INFLUXDB_ADMIN_TOKEN
+      - INFLUXDB_ADMIN_TOKEN_JSON
     volumes:
       - influxdb-data:/var/lib/influxdb3/data
       - influxdb-plugins:/var/lib/influxdb3/plugins
@@ -423,3 +425,34 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
+
+  telegraf:
+    image: telegraf:latest
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_telegraf
+    restart: always
+    user: "root"
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/telegraf.env
+        required: false
+    secrets:
+      - INFLUXDB_ADMIN_TOKEN
+    volumes:
+      - ./telegraf/config/telegraf.con:/etc/telegraf/telegraf.conf:ro
+    networks:
+      internal:
+        ipv4_address: '172.18.0.11'
+    healthcheck:
+      test: [ "CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:8080/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+      influxdb:
+        condition: service_healthy
