@@ -290,7 +290,7 @@ services:
       - INFLUXDB_ADMIN_TOKEN
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/config:/etc/grafana/provisioning
+      - ./grafana/provisioning:/etc/grafana/provisioning
     networks:
       internal:
         ipv4_address: '172.18.0.7'
