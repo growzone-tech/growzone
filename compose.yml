@@ -497,7 +497,7 @@ services:
         required: false
     environment:
       # IMAGES: "1"
-      # CONTAINERS: "1"
+      CONTAINERS: "1"
       # SERVICES: "1"
       # NETWORKS: "1"
       # VOLUMES: "1"
