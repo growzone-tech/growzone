@@ -489,7 +489,7 @@ services:
     pull_policy: always
     container_name: ${APP_NAME_HOST}_socket-proxy
     restart: always
-    privileged: true
+    user: "root"
     env_file:
       - ./.env
       - path: ${ENV_DIR}/.env
