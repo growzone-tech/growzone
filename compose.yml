@@ -22,6 +22,7 @@ volumes:
   lldap-data:
   influxdb-data:
   influxdb-plugins:
+  dbgate-data:
 
 
 secrets:
@@ -442,10 +443,24 @@ services:
         required: false
       - path: ${ENV_DIR}/telegraf.env
         required: false
+    environment:
+      # HOST_ETC: '/hostfs/etc'
+      HOST_PROC: '/hostfs/proc'
+      HOST_SYS: '/hostfs/sys'
+      # HOST_VAR: '/hostfs/var'
+      HOST_RUN: '/hostfs/run'
+      HOST_MOUNT_PREFIX: '/hostfs'
     secrets:
       - INFLUXDB_ADMIN_TOKEN
     volumes:
       - ./telegraf/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      # - /etc:/hostfs/etc:ro
+      - /proc:/hostfs/proc:ro
+      - /sys:/hostfs/sys:ro
+      # - /var:/hostfs/var:ro
+      # - /run:/hostfs/run:ro
+      - /run/udev:/hostfs/run/udev:ro
+      # - /etc/os-release:/etc/os-release:ro
     networks:
       internal:
         ipv4_address: '172.18.0.11'
@@ -460,3 +475,33 @@ services:
         condition: service_healthy
       influxdb:
         condition: service_healthy
+      socket-proxy:
+        condition: service_healthy
+
+  socket-proxy:
+    image: ghcr.io/tecnativa/docker-socket-proxy:master
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_socket-proxy
+    restart: always
+    user: "root"
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/socket-proxy.env
+        required: false
+    environment:
+      CONTAINERS: "1"
+      SERVICES: "1"
+      NETWORKS: "1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      internal:
+        ipv4_address: '172.18.0.12'
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "127.0.0.1", "2375" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 15s

@@ -1,7 +1,0 @@
-users:
-  admin:
-    displayname: "Admin"
-    password: "$argon2id$v=19$m=65536,t=3,p=4$4sB2+B4aUcnqCIdghDFBfA$yDpYKm8LBCtTG9nanIAbBOkqjrQJ6lUANH1QHOP/OJI"
-    email: 'admin@localhost'
-    groups:
-      - admins

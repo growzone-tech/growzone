@@ -115,3 +115,12 @@ The date used in the copyright notices in this file represents the year indicate
 * **Source Code:** https://github.com/influxdata/telegraf
 * **License:** [MIT](https://github.com/influxdata/telegraf/blob/master/LICENSE)
 * **Copyright Notice:** Copyright (c) 2015 InfluxData Inc.
+
+## Docker Socket Proxy
+
+* **Project:** https://github.com/Tecnativa/docker-socket-proxy
+* **Version:** Latest
+* **In use since:** April 2026
+* **Source Code:** https://github.com/Tecnativa/docker-socket-proxy
+* **License:** [Apache-2.0](https://github.com/Tecnativa/docker-socket-proxy/blob/master/LICENSE.txt)
+* **Copyright Notice:** Copyright (c) 2017 Tecnativa
