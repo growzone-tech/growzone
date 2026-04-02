@@ -465,6 +465,7 @@ services:
       # - /var:/hostfs/var:ro
       # - /run:/hostfs/run:ro
       - /run/udev:/hostfs/run/udev:ro
+      - /dev:/hostfs/dev:ro
       # - /etc/os-release:/etc/os-release:ro
     networks:
       internal:
