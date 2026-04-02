@@ -283,11 +283,14 @@ services:
       GF_AUTH_GENERIC_OAUTH_AUTO_LOGIN: "true"
       GF_AUTH_GENERIC_OAUTH_ALLOW_ASSIGN_GRAFANA_ADMIN: "true"
       GF_AUTH_GENERIC_OAUTH_SIGNOUT_REDIRECT_URL: "https://authelia.${APP_HOST}/logout?rd=https%3A%2F%2Fgrafana.${APP_HOST}%2F"
+      GF_PROVISIONING_INFLUXDB_TOKEN__FILE: "/run/secrets/INFLUXDB_ADMIN_TOKEN"
     secrets:
       - GRAFANA_OAUTH_CLIENT_ID
       - GRAFANA_OAUTH_CLIENT_SECRET
+      - INFLUXDB_ADMIN_TOKEN
     volumes:
       - grafana-data:/var/lib/grafana
+      - ./grafana/config:/etc/grafana/provisioning
     networks:
       internal:
         ipv4_address: '172.18.0.7'
