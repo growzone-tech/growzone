@@ -1,0 +1,4 @@
+{
+    "name": "metrics",
+    "retention": "30d"
+}

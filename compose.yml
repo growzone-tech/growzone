@@ -391,7 +391,8 @@ services:
       start_period: 10s
 
   influxdb:
-    image: influxdb:3-core
+    build:
+      context: ./influxdb
     pull_policy: always
     container_name: ${APP_NAME_HOST}_influxdb
     restart: always
@@ -410,6 +411,7 @@ services:
       INFLUXDB3_OBJECT_STORE: "file"
       INFLUXDB3_DB_DIR: "/var/lib/influxdb3/data"
       INFLUXDB3_PLUGIN_DIR: "/var/lib/influxdb3/plugins"
+      INFLUXDB3_PROVISIONING_DIR: "/var/lib/influxdb3/provisioning"
       INFLUXDB3_LOG_FILTER: "info"
       INFLUXDB3_NUM_IO_THREADS: "2"
       INFLUXDB3_NUM_DATAFUSION_THREADS: "2"
@@ -417,9 +419,11 @@ services:
       INFLUXDB3_DISABLE_AUTHZ: "health"
     secrets:
       - INFLUXDB_ADMIN_TOKEN_JSON
+      - INFLUXDB_ADMIN_TOKEN
     volumes:
       - influxdb-data:/var/lib/influxdb3/data
       - influxdb-plugins:/var/lib/influxdb3/plugins
+      - ./influxdb/provisioning:/var/lib/influxdb3/provisioning
     networks:
       internal:
         ipv4_address: '172.18.0.10'
@@ -483,7 +487,7 @@ services:
     pull_policy: always
     container_name: ${APP_NAME_HOST}_socket-proxy
     restart: always
-    user: "root"
+    privileged: true
     env_file:
       - ./.env
       - path: ${ENV_DIR}/.env
