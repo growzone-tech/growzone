@@ -391,8 +391,9 @@ services:
       start_period: 10s
 
   influxdb:
-    build:
-      context: ./influxdb
+    image: influxdb:3-core
+    # build:
+    #   context: ./influxdb
     pull_policy: always
     container_name: ${APP_NAME_HOST}_influxdb
     restart: always
