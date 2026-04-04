@@ -28,15 +28,16 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "red",
-            "mode": "fixed"
+            "fixedColor": "green",
+            "mode": "thresholds",
+            "seriesBy": "last"
           },
           "custom": {
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
-            "axisLabel": "Total",
-            "axisPlacement": "left",
+            "axisLabel": "Cores",
+            "axisPlacement": "right",
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
@@ -49,7 +50,7 @@
             },
             "insertNulls": 1800000,
             "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -62,24 +63,20 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "dashed"
             }
           },
           "decimals": 0,
-          "displayName": "Total",
+          "displayName": "Cores",
           "mappings": [],
-          "max": 400,
+          "max": 100,
           "min": 0,
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
+                "color": "#5795f233",
                 "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -95,25 +92,6 @@
               {
                 "id": "displayName",
                 "value": "Core 0"
-              },
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "Cores"
-              },
-              {
-                "id": "max",
-                "value": 100
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#f2495c1a",
-                  "mode": "fixed"
-                }
               }
             ]
           },
@@ -126,25 +104,6 @@
               {
                 "id": "displayName",
                 "value": "Core 1"
-              },
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "Cores"
-              },
-              {
-                "id": "max",
-                "value": 100
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#f2495c1a",
-                  "mode": "fixed"
-                }
               }
             ]
           },
@@ -157,25 +116,6 @@
               {
                 "id": "displayName",
                 "value": "Core 2"
-              },
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "Cores"
-              },
-              {
-                "id": "max",
-                "value": 100
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#f2495c1a",
-                  "mode": "fixed"
-                }
               }
             ]
           },
@@ -188,25 +128,58 @@
               {
                 "id": "displayName",
                 "value": "Core 3"
-              },
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "T"
+            },
+            "properties": [
               {
-                "id": "custom.axisPlacement",
-                "value": "right"
+                "id": "displayName",
+                "value": "Total"
               },
               {
                 "id": "custom.axisLabel",
-                "value": "Cores"
+                "value": "Total"
               },
               {
                 "id": "max",
-                "value": 100
+                "value": 400
               },
               {
-                "id": "color",
+                "id": "thresholds",
                 "value": {
-                  "fixedColor": "#f2495c1a",
-                  "mode": "fixed"
+                  "mode": "percentage",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 75
+                    },
+                    {
+                      "color": "orange",
+                      "value": 85
+                    },
+                    {
+                      "color": "red",
+                      "value": 95
+                    }
+                  ]
                 }
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 1
               }
             ]
           }
@@ -234,16 +207,6 @@
       },
       "pluginVersion": "12.4.2",
       "targets": [
-        {
-          "datasource": {
-            "name": "Expression",
-            "type": "__expr__",
-            "uid": "__expr__"
-          },
-          "expression": "$C0+$C1+$C2+$C3",
-          "refId": "T",
-          "type": "math"
-        },
         {
           "dataset": "iox",
           "datasource": {
@@ -393,6 +356,16 @@
               }
             ]
           }
+        },
+        {
+          "datasource": {
+            "name": "Expression",
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "expression": "$C0+$C1+$C2+$C3",
+          "refId": "T",
+          "type": "math"
         }
       ],
       "title": "CPU",
@@ -418,7 +391,7 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 15,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -437,7 +410,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "dashed"
@@ -455,7 +428,7 @@
                 "value": 0
               },
               {
-                "color": "#EAB839",
+                "color": "yellow",
                 "value": 75
               },
               {
@@ -464,7 +437,7 @@
               },
               {
                 "color": "red",
-                "value": 99
+                "value": 100
               }
             ]
           },
@@ -507,58 +480,6 @@
                     {
                       "color": "transparent",
                       "value": 0
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "free"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Free"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "thresholds",
-                  "seriesBy": "last"
-                }
-              },
-              {
-                "id": "custom.fillOpacity",
-                "value": 15
-              },
-              {
-                "id": "custom.lineWidth",
-                "value": 0
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "percentage",
-                  "steps": [
-                    {
-                      "color": "red",
-                      "value": 0
-                    },
-                    {
-                      "color": "orange",
-                      "value": 1
-                    },
-                    {
-                      "color": "yellow",
-                      "value": 15
-                    },
-                    {
-                      "color": "green",
-                      "value": 25
                     }
                   ]
                 }
@@ -607,6 +528,7 @@
           },
           "editorMode": "code",
           "format": "table",
+          "hide": true,
           "rawQuery": true,
           "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"free\") AS \"free\" FROM \"disk\" WHERE \"device\" = '$mainDisk' AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "F",
@@ -754,7 +676,7 @@
         "defaults": {
           "color": {
             "fixedColor": "green",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
           "custom": {
             "axisBorderShow": false,
@@ -802,6 +724,14 @@
                 "value": 0
               },
               {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "orange",
+                "value": 85
+              },
+              {
                 "color": "red",
                 "value": 100
               }
@@ -824,12 +754,24 @@
                 "id": "color",
                 "value": {
                   "fixedColor": "transparent",
-                  "mode": "fixed"
+                  "mode": "thresholds"
                 }
               },
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "percentage",
+                  "steps": [
+                    {
+                      "color": "transparent",
+                      "value": 0
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -1012,7 +954,7 @@
         "defaults": {
           "color": {
             "fixedColor": "green",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
           "custom": {
             "axisBorderShow": false,
@@ -1060,6 +1002,14 @@
                 "value": 0
               },
               {
+                "color": "yellow",
+                "value": 25
+              },
+              {
+                "color": "orange",
+                "value": 50
+              },
+              {
                 "color": "red",
                 "value": 100
               }
@@ -1082,12 +1032,24 @@
                 "id": "color",
                 "value": {
                   "fixedColor": "transparent",
-                  "mode": "fixed"
+                  "mode": "thresholds"
                 }
               },
               {
                 "id": "custom.fillOpacity",
                 "value": 0
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "transparent",
+                      "value": 0
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -1271,6 +1233,237 @@
       ],
       "title": "Swap",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "transparent",
+            "mode": "fixed",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "Amount",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": 1800000,
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "fieldMinMax": false,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "#5795f233",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "running"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Running"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "paused"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Paused"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "stopped"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Stopped"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_stopped\") AS \"stopped\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "refId": "S",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_paused\") AS \"paused\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "refId": "P",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_running\") AS \"running\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "refId": "R",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Docker: Container Status",
+      "type": "timeseries"
     }
   ],
   "preload": false,
@@ -1313,6 +1506,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 3,
+  "version": 6,
   "weekStart": ""
 }
