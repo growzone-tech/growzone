@@ -21,6 +21,19 @@
   "links": [],
   "panels": [
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 6,
+      "panels": [],
+      "title": "Host",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb_metrics"
@@ -189,7 +202,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 1
       },
       "id": 1,
       "options": {
@@ -492,7 +505,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 1
       },
       "id": 2,
       "options": {
@@ -781,7 +794,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 9
       },
       "id": 3,
       "options": {
@@ -1059,7 +1072,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 9
       },
       "id": 4,
       "options": {
@@ -1235,6 +1248,19 @@
       "type": "timeseries"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 7,
+      "panels": [],
+      "title": "Docker",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "influxdb",
         "uid": "influxdb_metrics"
@@ -1359,7 +1385,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 18
       },
       "id": 5,
       "options": {
@@ -1464,6 +1490,151 @@
       ],
       "title": "Docker: Container Status",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": [
+                "countAll"
+              ]
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.footer.reducers",
+                "value": [
+                  "uniqueValues"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 8,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": false,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Status"
+          }
+        ]
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT `com.docker.compose.service` AS \"Service\", selector_last(\"container_status\", \"time\")['value'] AS \"Status\" FROM \"docker_container_status\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY `com.docker.compose.service` ORDER BY \"Service\" ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "\"com.docker.compose.service\"",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "container_status",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "88b99a9b-0123-4456-b89a-b19d561f2f23",
+                  "properties": {
+                    "field": "time",
+                    "fieldSrc": "field",
+                    "operator": "equal",
+                    "value": [
+                      null
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "text"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "9988b998-0123-4456-b89a-b19d561bdc57",
+              "type": "group"
+            }
+          },
+          "table": "docker_container_status"
+        }
+      ],
+      "title": "",
+      "type": "table"
     }
   ],
   "preload": false,
@@ -1506,6 +1677,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 6,
+  "version": 9,
   "weekStart": ""
 }
