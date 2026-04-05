@@ -511,3 +511,29 @@ services:
       timeout: 5s
       retries: 5
       start_period: 15s
+
+  glance:
+    image: glanceapp/glance:latest
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_glance
+    restart: always
+    expose:
+      - "8080"
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/glance.env
+        required: false
+    volumes:
+      - ./glance/config:/app/config
+      - ./glance/assets:/app/assets
+    networks:
+      internal:
+        ipv4_address: '172.18.0.13'
+    healthcheck:
+      test: [ "CMD-SHELL", "wget --spider -q http://localhost:8080/api/healthz" ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s

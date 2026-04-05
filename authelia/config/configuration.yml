@@ -42,6 +42,8 @@ access_control:
       policy: bypass
     - domain: '*.{{ env "APP_HOST" }}'
       policy: one_factor
+    - domain: '{{ env "APP_HOST" }}'
+      policy: one_factor
 
 identity_providers:
   oidc: # https://www.authelia.com/integration/openid-connect/frequently-asked-questions/#how-do-i-generate-a-client-identifier-or-client-secret

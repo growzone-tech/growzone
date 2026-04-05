@@ -27,7 +27,7 @@ The date used in the copyright notices in this file represents the year indicate
 ## Tailscale
 
 * **Project:** https://tailscale.com/
-* **Version:** Latest
+* **Version:** Latest Stable
 * **In use since:** March 2026
 * **Source Code:** https://github.com/tailscale/tailscale
 * **License:** [BSD-3-Clause](https://github.com/tailscale/tailscale/blob/main/LICENSE)
@@ -124,3 +124,12 @@ The date used in the copyright notices in this file represents the year indicate
 * **Source Code:** https://github.com/Tecnativa/docker-socket-proxy
 * **License:** [Apache-2.0](https://github.com/Tecnativa/docker-socket-proxy/blob/master/LICENSE.txt)
 * **Copyright Notice:** Copyright (c) 2017 Tecnativa
+
+## Glance
+
+* **Project:** https://github.com/glanceapp/glance
+* **Version:** Latest
+* **In use since:** April 2026
+* **Source Code:** https://github.com/glanceapp/glance
+* **License:** [AGPL-3.0](https://github.com/glanceapp/glance/blob/main/LICENSE)
+* **Copyright Notice:** Copyright (c) 2024 Glanceapp
