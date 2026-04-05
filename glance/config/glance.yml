@@ -37,7 +37,7 @@ pages:
                   - title: Grafana
                     url: https://grafana.${APP_HOST}
                     check-url: https://grafana.${APP_HOST}
-                    icon: /assets/logo/grafana.svg
+                    icon: /assets/icons/grafana.svg
                   - title: "MQTTX"
                     url: https://mqttx.${APP_HOST}
                     check-url: https://mqttx.${APP_HOST}
