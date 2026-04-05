@@ -63,7 +63,7 @@
             },
             "insertNulls": 1800000,
             "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineWidth": 5,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -229,7 +229,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"usage_user\" + \"usage_system\") AS \"usage_core_0\" FROM \"cpu\" WHERE \"core_id\" = 0 AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"usage_user\" + \"usage_system\") AS \"usage_core_0\" FROM \"cpu\" WHERE \"core_id\" = 0 AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "C0",
           "sql": {
             "columns": [
@@ -295,7 +295,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"usage_user\" + \"usage_system\") AS \"usage_core_1\" FROM \"cpu\" WHERE \"core_id\" = 1 AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"usage_user\" + \"usage_system\") AS \"usage_core_1\" FROM \"cpu\" WHERE \"core_id\" = 1 AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "C1",
           "sql": {
             "columns": [
@@ -323,7 +323,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"usage_user\" + \"usage_system\") AS \"usage_core_2\" FROM \"cpu\" WHERE \"core_id\" = 2 AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"usage_user\" + \"usage_system\") AS \"usage_core_2\" FROM \"cpu\" WHERE \"core_id\" = 2 AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "C2",
           "sql": {
             "columns": [
@@ -351,7 +351,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"usage_user\" + \"usage_system\") AS \"usage_core_3\" FROM \"cpu\" WHERE \"core_id\" = 3 AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"usage_user\" + \"usage_system\") AS \"usage_core_3\" FROM \"cpu\" WHERE \"core_id\" = 3 AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "C3",
           "sql": {
             "columns": [
@@ -543,7 +543,7 @@
           "format": "table",
           "hide": true,
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"free\") AS \"free\" FROM \"disk\" WHERE \"device\" = '$mainDisk' AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"free\") AS \"free\" FROM \"disk\" WHERE \"device\" = '$mainDisk' AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "F",
           "sql": {
             "columns": [
@@ -614,7 +614,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"total\") AS \"total\" FROM \"disk\" WHERE \"device\" = '$mainDisk' AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"total\") AS \"total\" FROM \"disk\" WHERE \"device\" = '$mainDisk' AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "T",
           "sql": {
             "columns": [
@@ -821,7 +821,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"used\") AS \"used\" FROM \"mem\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"used\") AS \"used\" FROM \"mem\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "U",
           "sql": {
             "columns": [
@@ -892,7 +892,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"total\") AS \"total\" FROM \"mem\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"total\") AS \"total\" FROM \"mem\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "T",
           "sql": {
             "columns": [
@@ -1110,7 +1110,7 @@
           "format": "table",
           "hide": true,
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"swap_free\") AS \"free\" FROM \"mem\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"swap_free\") AS \"free\" FROM \"mem\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "F",
           "sql": {
             "columns": [
@@ -1181,7 +1181,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"swap_total\") AS \"total\" FROM \"mem\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"swap_total\") AS \"total\" FROM \"mem\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "T",
           "sql": {
             "columns": [
@@ -1412,7 +1412,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_stopped\") AS \"stopped\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_stopped\") AS \"stopped\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "S",
           "sql": {
             "columns": [
@@ -1440,7 +1440,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_paused\") AS \"paused\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_paused\") AS \"paused\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "P",
           "sql": {
             "columns": [
@@ -1468,7 +1468,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_running\") AS \"running\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_running\") AS \"running\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "R",
           "sql": {
             "columns": [
@@ -1635,6 +1635,175 @@
       ],
       "title": "",
       "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "palette-classic",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": 1800000,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "#5795f233",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 26
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"service\",\n  \"usage\"\nFROM\n  (\n    SELECT\n      date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\",\n      `com.docker.compose.service` AS \"service\",\n      AVG(\"usage_percent\") AS \"usage\"\n    FROM\n      \"docker_container_cpu\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"service\",\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "time",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "name": "AVG",
+                "parameters": [
+                  {
+                    "name": "usage_percent",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "\"com.docker.compose.service\"",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "name": "\"com.docker.compose.service\"",
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          },
+          "table": "docker_container_cpu"
+        }
+      ],
+      "title": "CPU",
+      "transformations": [
+        {
+          "id": "prepareTimeSeries",
+          "options": {
+            "format": "multi"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "usage (.*)",
+            "renamePattern": "$1"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [],
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        }
+      ],
+      "type": "timeseries"
     }
   ],
   "preload": false,
@@ -1677,6 +1846,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 9,
+  "version": 10,
   "weekStart": ""
 }
