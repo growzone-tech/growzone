@@ -22,43 +22,37 @@ theme:
   positive-color: 115 54 76
   negative-color: 347 70 65
 pages:
-  # - name: Apps
-  #   slug: apps
-  #   center-vertically: true
-  #   columns:
-  #     - size: full
-  #       widgets:
-  #         - type: split-column
-  #           max-columns: 3
-  #           widgets:
-  #             - type: monitor
-  #               cache: 10s
-  #               title: Artificial Intelligence
-  #               sites:
-  #                 - title: ${APP_NAME_LABEL} AI
-  #                   url: https://ai.${APP_HOST}
-  #                   check-url: http://open-webui:8080
-  #                   icon: /assets/logo/lutra-logo-bw-256.png
-  #                 - title: "${APP_NAME_LABEL} ComfyUI"
-  #                   url: https://comfyui.${APP_HOST}
-  #                   check-url: http://comfyui:8188
-  #                   icon: /assets/icons/si/comfyui.svg
-  #                 - title: "${APP_NAME_LABEL} TTS: Kokoro"
-  #                   url: https://kokoro.${APP_HOST}/web
-  #                   check-url: http://kokoro:8880/web
-  #                   icon: /assets/icons/si/audiomack.svg
-  #                 - title: "${APP_NAME_LABEL} TTS: Speaches"
-  #                   url: https://speaches.${APP_HOST}
-  #                   check-url: http://speaches:8000
-  #                   icon: /assets/icons/si/audiomack.svg
-  #             - type: monitor
-  #               cache: 10s
-  #               title: Maintenance
-  #               sites:
-  #                 - title: NGINX Proxy Manager
-  #                   url: https://nginxpm.${APP_HOST}
-  #                   check-url: http://nginx-proxy-manager:81
-  #                   icon: /assets/icons/si/nginx-proxy-manager.svg
+  - name: Apps
+    slug: apps
+    center-vertically: true
+    columns:
+      - size: full
+        widgets:
+          - type: split-column
+            max-columns: 3
+            widgets:
+              - type: monitor
+                cache: 10s
+                sites:
+                  - title: Grafana
+                    url: https://grafana.${APP_HOST}
+                    check-url: https://grafana.${APP_HOST}
+                    icon: /assets/logo/grafana.png
+                  - title: "MQTTX"
+                    url: https://mqttx.${APP_HOST}
+                    check-url: https://mqttx.${APP_HOST}
+                    icon: /assets/icons/si/mqtt.svg
+                  - title: "Traefik Dashboard"
+                    url: https://traefik.${APP_HOST}
+                    check-url: https://traefik.${APP_HOST}
+                    icon: /assets/icons/si/traefik-proxy.svg
+              - type: monitor
+                cache: 10s
+                sites:
+                  - title: LLDAP
+                    url: https://lldap.${APP_HOST}
+                    check-url: http://lldap.${APP_HOST}
+                    icon: /assets/icons/si/lldap-dark.svg
   #     - size: small
   #       widgets:
   #         - type: monitor
