@@ -13,6 +13,7 @@ from .actor import Actor
 GPIO_CHIP_PATH = "/dev/gpiochip0"
 FAN_FREQUENCY = 25000
 MQTT_TOPIC = "actors/fan"
+MQTT_TOPIC_CONTROL = "v1/actors/fan/inside/duty_cycle"
 
 
 class Fan(Actor):
@@ -42,6 +43,11 @@ class Fan(Actor):
             frequency=FAN_FREQUENCY,
             duty_cycle=0
         )
+        _ = self._mqttClient.publish(
+            topic=MQTT_TOPIC_CONTROL,
+            payload=f"0.0",
+            retain=True
+        )
         chip: gpiod.chip.Chip = gpiod.Chip(path=GPIO_CHIP_PATH)
         self.__gpioRequest: gpiod.line_request.LineRequest = chip.request_lines(
             consumer=self._clientId,
@@ -69,6 +75,11 @@ class Fan(Actor):
                         value=gpiod.line.Value.ACTIVE
                     )
                 self.__pwm.duty_cycle = int((65535 * self.__targetValue))  # Steps of 328?
+                _ = self._mqttClient.publish(
+                    topic=MQTT_TOPIC_CONTROL,
+                    payload=float(self.__pwm.duty_cycle),
+                    retain=True
+                )
                 if self.__targetValue == 0:
                     self.__gpioRequest.set_value(
                         line=self.__line,
@@ -80,6 +91,11 @@ class Fan(Actor):
         try:
             _ = self._mqttClient.loop_stop()
             self.__pwm.duty_cycle = 0
+            _ = self._mqttClient.publish(
+                topic=MQTT_TOPIC_CONTROL,
+                payload=f"0.0",
+                retain=True
+            )
             self.__gpioRequest.set_value(
                 line=self.__line,
                 value=gpiod.line.Value.INACTIVE
