@@ -37,7 +37,6 @@
             "axisColorMode": "series",
             "axisLabel": "Temperature",
             "axisPlacement": "left",
-            "axisSoftMax": 50,
             "axisSoftMin": 0,
             "barAlignment": 0,
             "barWidthFactor": 0.6,
@@ -73,6 +72,7 @@
           "displayName": "Temperature",
           "fieldMinMax": false,
           "mappings": [],
+          "max": 50,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -107,10 +107,6 @@
                 "id": "custom.axisLabel"
               },
               {
-                "id": "custom.axisSoftMax",
-                "value": 100
-              },
-              {
                 "id": "color",
                 "value": {
                   "fixedColor": "blue",
@@ -120,6 +116,10 @@
               {
                 "id": "displayName",
                 "value": "Humidity (Rel.)"
+              },
+              {
+                "id": "max",
+                "value": 100
               }
             ]
           },
@@ -142,10 +142,6 @@
                 "value": "Humidity"
               },
               {
-                "id": "custom.axisSoftMax",
-                "value": 18
-              },
-              {
                 "id": "color",
                 "value": {
                   "fixedColor": "semi-dark-blue",
@@ -155,6 +151,10 @@
               {
                 "id": "displayName",
                 "value": "Humidity (Abs.)"
+              },
+              {
+                "id": "max",
+                "value": 18
               }
             ]
           }
@@ -191,7 +191,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minutes', \"time\") AS \"time_bin\", AVG(\"value\") AS \"temperature\" FROM \"temperature\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC ",
+          "rawSql": "SELECT date_bin(COALESCE($interval, '$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\", AVG(\"value\") AS \"temperature\" FROM \"temperature\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC ",
           "refId": "T",
           "sql": {
             "columns": [
@@ -247,7 +247,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '1 minute', \"time\") AS \"time_bin\", AVG(\"value\") AS \"humidity\" FROM \"humidity\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\", AVG(\"value\") AS \"humidity\" FROM \"humidity\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "RH",
           "sql": {
             "columns": [
@@ -331,7 +331,21 @@
   "schemaVersion": 42,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "NULL",
+          "value": "NULL"
+        },
+        "label": "Window Size",
+        "name": "interval",
+        "options": [],
+        "query": "Auto : NULL, 15s : '15 seconds', 30s : '30 seconds', 1m : '1 minutes', 5m : '5 minutes', 10m : '10 minutes', 30m : '30 minutes', 1h : '1 hours'",
+        "type": "custom",
+        "valuesFormat": "csv"
+      }
+    ]
   },
   "time": {
     "from": "now-24h",
@@ -341,6 +355,6 @@
   "timezone": "browser",
   "title": "Test Dashboard",
   "uid": "test-dashboard",
-  "version": 2,
+  "version": 8,
   "weekStart": ""
 }
