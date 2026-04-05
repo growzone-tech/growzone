@@ -48,7 +48,7 @@
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": 1800000,
+            "insertNulls": 3600000,
             "lineInterpolation": "linear",
             "lineStyle": {
               "fill": "solid"
@@ -167,6 +167,7 @@
         "y": 0
       },
       "id": 1,
+      "interval": "15s",
       "options": {
         "legend": {
           "calcs": [],
@@ -355,6 +356,6 @@
   "timezone": "browser",
   "title": "Test Dashboard",
   "uid": "test-dashboard",
-  "version": 8,
+  "version": 9,
   "weekStart": ""
 }
