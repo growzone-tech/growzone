@@ -1288,7 +1288,7 @@
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": 1800000,
+            "insertNulls": 3600000,
             "lineInterpolation": "stepAfter",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1388,6 +1388,7 @@
         "y": 18
       },
       "id": 5,
+      "interval": "15s",
       "options": {
         "legend": {
           "calcs": [],
@@ -1412,7 +1413,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_stopped\") AS \"stopped\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\", AVG(\"n_containers_stopped\") AS \"stopped\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "S",
           "sql": {
             "columns": [
@@ -1440,7 +1441,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_paused\") AS \"paused\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\", AVG(\"n_containers_paused\") AS \"paused\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "P",
           "sql": {
             "columns": [
@@ -1468,7 +1469,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"n_containers_running\") AS \"running\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
+          "rawSql": "SELECT date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\", AVG(\"n_containers_running\") AS \"running\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
           "refId": "R",
           "sql": {
             "columns": [
@@ -1664,7 +1665,7 @@
               "tooltip": false,
               "viz": false
             },
-            "insertNulls": 1800000,
+            "insertNulls": 3600000,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1706,11 +1707,12 @@
         "y": 26
       },
       "id": 9,
+      "interval": "5m",
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -1730,7 +1732,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"service\",\n  \"usage\"\nFROM\n  (\n    SELECT\n      date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\",\n      `com.docker.compose.service` AS \"service\",\n      AVG(\"usage_percent\") AS \"usage\"\n    FROM\n      \"docker_container_cpu\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"service\",\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"service\",\n  \"usage\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      `com.docker.compose.service` AS \"service\",\n      AVG(\"usage_percent\") AS \"usage\"\n    FROM\n      \"docker_container_cpu\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"service\",\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1804,6 +1806,178 @@
         }
       ],
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "palette-classic",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": 3600000,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "dashed"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "#5795f233",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 34
+      },
+      "id": 10,
+      "interval": "15s",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"service\",\n  \"usage\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      `com.docker.compose.service` AS \"service\",\n      AVG(\"usage\") AS \"usage\"\n    FROM\n      \"docker_container_mem\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"service\",\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "time",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "name": "AVG",
+                "parameters": [
+                  {
+                    "name": "usage_percent",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "\"com.docker.compose.service\"",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "name": "\"com.docker.compose.service\"",
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          },
+          "table": "docker_container_cpu"
+        }
+      ],
+      "title": "Memory",
+      "transformations": [
+        {
+          "id": "prepareTimeSeries",
+          "options": {
+            "format": "multi"
+          }
+        },
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "usage (.*)",
+            "renamePattern": "$1"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [],
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        }
+      ],
+      "type": "timeseries"
     }
   ],
   "preload": false,
@@ -1835,6 +2009,19 @@
         "regexApplyTo": "value",
         "sort": 1,
         "type": "query"
+      },
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "NULL",
+          "value": "NULL"
+        },
+        "label": "Window Size",
+        "name": "interval",
+        "options": [],
+        "query": "Auto : NULL, 15s : '15 seconds', 30s : '30 seconds', 1m : '1 minutes', 5m : '5 minutes', 10m : '10 minutes', 30m : '30 minutes', 1h : '1 hours'",
+        "type": "custom",
+        "valuesFormat": "csv"
       }
     ]
   },
@@ -1846,6 +2033,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 10,
+  "version": 14,
   "weekStart": ""
 }
