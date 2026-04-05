@@ -13,7 +13,7 @@ from .actor import Actor
 GPIO_CHIP_PATH = "/dev/gpiochip0"
 FAN_FREQUENCY = 25000
 MQTT_TOPIC = "actors/fan"
-MQTT_TOPIC_CONTROL = "v1/actors/fan/inside/duty_cycle"
+MQTT_TOPIC_CONTROL = "v1/get/actors/fan/inside/duty_cycle"
 
 
 class Fan(Actor):
