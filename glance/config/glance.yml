@@ -3,6 +3,7 @@
 # di-prefix icons: https://github.com/homarr-labs/dashboard-icons/blob/main/ICONS.md
 server:
   assets-path: /app/assets
+  proxied: true
 branding:
   custom-footer: |
     <p>Copyright (c) <a href="https://github.com/growzone-tech/growzone">${APP_OWNER}</a></p>
