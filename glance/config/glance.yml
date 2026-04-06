@@ -43,8 +43,8 @@ pages:
                     check-url: https://mqttx.${APP_HOST}
                     icon: /assets/icons/si/mqtt.svg
                   - title: "Traefik Dashboard"
-                    url: https://traefik.${APP_HOST}
-                    check-url: https://traefik.${APP_HOST}
+                    url: https://traefik-dashboard.${APP_HOST}
+                    check-url: https://traefik-dashboard.${APP_HOST}
                     icon: /assets/icons/si/traefik-proxy.svg
               - type: monitor
                 cache: 10s
@@ -86,6 +86,8 @@ pages:
           - type: releases
             cache: 1d # Also see: https://github.com/glanceapp/glance/blob/main/docs/configuration.md#token
             show-source-icon: true
+            collapse-after: -1
+            limit: 100
             repositories:
               - growzone-tech/growzone
               - dockerhub:traefik:latest
@@ -103,8 +105,8 @@ pages:
       - size: full
         widgets:
           - type: iframe
-            source: 'https://grafana.otto420.growzone.tech/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-24h&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&panelId=panel-8&__feature.dashboardScene=true'
-            height: 200
+            source: 'https://grafana.otto420.growzone.tech/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-1m&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&panelId=panel-8&__feature.dashboardScene=true'
+            height: 540
 
 
       - size: small
