@@ -36,22 +36,22 @@ pages:
                 sites:
                   - title: Grafana
                     url: https://grafana.${APP_HOST}
-                    check-url: https://grafana.${APP_HOST}
+                    check-url: http://${APP_HOST_NAME}_grafana:3000
                     icon: /assets/icons/si/grafana.svg
                   - title: "MQTTX"
                     url: https://mqttx.${APP_HOST}
-                    check-url: https://mqttx.${APP_HOST}
+                    check-url: http://${APP_HOST_NAME}_mqttx:80
                     icon: /assets/icons/si/mqtt.svg
                   - title: "Traefik Dashboard"
                     url: https://traefik-dashboard.${APP_HOST}
-                    check-url: https://traefik-dashboard.${APP_HOST}
+                    check-url: http://${APP_HOST_NAME}_traefik-dashboard:80
                     icon: /assets/icons/si/traefik-proxy.svg
               - type: monitor
                 cache: 10s
                 sites:
                   - title: LLDAP
                     url: https://lldap.${APP_HOST}
-                    check-url: http://lldap.${APP_HOST}
+                    check-url: https://${APP_HOST_NAME}_lldap:17170
                     icon: /assets/icons/si/lldap-dark.svg
   #     - size: small
   #       widgets:
