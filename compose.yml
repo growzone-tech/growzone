@@ -264,10 +264,13 @@ services:
         required: false
     environment:
       GF_SERVER_ROOT_URL: "https://grafana.${APP_HOST}"
+      GF_SERVER_PROTOCOL: "http"
+      GF_SERVER_ENFORCE_DOMAIN: "true"
       GF_SECURITY_DISABLE_INITIAL_ADMIN_CREATION: "true"
       GF_SECURITY_COOKIE_SECURE: "true"
-      GF_SECURITY_ALLOW_EMBEDDING: "true"
       GF_SECURITY_COOKIE_SAMESITE: "lax"
+      GF_SECURITY_ALLOW_EMBEDDING: "true"
+      GF_SECURITY_STRICT_TRANSPORT_SECURITY: "true"
       GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
       GF_AUTH_GENERIC_OAUTH_NAME: "Authelia"
       GF_AUTH_GENERIC_OAUTH_ICON: "signin"
