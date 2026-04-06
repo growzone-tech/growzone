@@ -51,7 +51,7 @@ pages:
                 sites:
                   - title: LLDAP
                     url: https://lldap.${APP_HOST}
-                    check-url: https://${APP_HOST_NAME}_lldap:17170
+                    check-url: http://${APP_HOST_NAME}_lldap:17170
                     icon: /assets/icons/si/lldap-dark.svg
   #     - size: small
   #       widgets:
