@@ -30,6 +30,7 @@ tcp:
       service: svc_mosquitto-1883
       entryPoints: ["websecure"]
       middlewares:
+        - "cors-policy"
         - "auth-proxy"
       tls:
         passthrough: false

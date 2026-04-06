@@ -9,6 +9,7 @@ http:
       service: api@internal
       entryPoints: ["websecure"]
       middlewares:
+        - "cors-policy"
         - "auth-proxy"
       tls:
         certResolver: porkbun-api

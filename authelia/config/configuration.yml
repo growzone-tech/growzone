@@ -40,6 +40,8 @@ access_control:
   rules:
     - domain: 'authelia.{{ env "APP_HOST" }}'
       policy: bypass
+    - domain: 'lldap.{{ env "APP_HOST" }}'
+      policy: bypass
     - domain: '*.{{ env "APP_HOST" }}'
       policy: one_factor
     - domain: '{{ env "APP_HOST" }}'

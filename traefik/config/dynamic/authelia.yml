@@ -13,5 +13,7 @@ http:
       rule: "Host(`authelia.{{ env "APP_HOST" }}`)"
       service: svc_authelia-9091
       entryPoints: ["websecure"]
+      middlewares:
+        - "cors-policy"
       tls:
         certResolver: porkbun-api
