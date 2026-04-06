@@ -1,15 +1,8 @@
+# Documentation:
+# https://doc.traefik.io/traefik/reference/routing-configuration/dynamic-configuration-methods/
+# https://doc.traefik.io/traefik/reference/routing-configuration/http/tls/overview/
+
 http:
-  middlewares:
-    auth-proxy:
-      forwardAuth:
-        address: "http://{{ env "APP_NAME_HOST" }}_authelia:9091/api/authz/forward-auth"
-        trustForwardHeader: true
-        maxResponseBodySize: 1048576 # 1MiB
-        authResponseHeaders:
-          - "Remote-User"
-          - "Remote-Groups"
-          - "Remote-Name"
-          - "Remote-Email"
   services:
     svc_authelia-9091:
       loadBalancer:
