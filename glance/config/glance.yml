@@ -1,6 +1,6 @@
 # Documentation: https://github.com/glanceapp/glance/blob/main/docs/configuration.md
 # si-prefix icons: https://simpleicons.org/ (externally loaded!)
-# di-prefix icons: https://github.com/homarr-labs/dashboard-icons/blob/main/ICONS.md
+# di-prefix icons: https://dashboardicons.com/
 server:
   assets-path: /app/assets
   proxied: true
@@ -33,26 +33,28 @@ pages:
             widgets:
               - type: monitor
                 cache: 10s
+                title: "Data"
                 sites:
                   - title: Grafana
                     url: https://grafana.${APP_HOST}
                     check-url: http://${APP_NAME_HOST}_grafana:3000
-                    icon: /assets/icons/si/grafana.svg
+                    icon: /assets/icons/di/grafana.svg
                   - title: "MQTTX"
                     url: https://mqttx.${APP_HOST}
                     check-url: http://${APP_NAME_HOST}_mqttx:80
-                    icon: /assets/icons/si/mqtt.svg
+                    icon: /assets/icons/di/emqx.svg
                   - title: "Traefik Dashboard"
                     url: https://traefik-dashboard.${APP_HOST}
                     check-url: http://${APP_NAME_HOST}_traefik:8080
-                    icon: /assets/icons/si/traefik-proxy.svg
+                    icon: /assets/icons/di/traefik-proxy.svg
               - type: monitor
                 cache: 10s
+                title: "User Management"
                 sites:
                   - title: LLDAP
                     url: https://lldap.${APP_HOST}
                     check-url: http://${APP_NAME_HOST}_lldap:17170
-                    icon: /assets/icons/si/lldap-dark.svg
+                    icon: /assets/icons/di/lldap-dark.svg
   #     - size: small
   #       widgets:
   #         - type: monitor
