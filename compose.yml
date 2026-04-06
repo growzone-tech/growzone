@@ -479,7 +479,7 @@ services:
       internal:
         ipv4_address: '172.18.0.11'
     healthcheck:
-      test: [ "CMD", "wget", "--quiet", "--spider", "http://127.0.0.1:8080/health" ]
+      test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:8080/health" ]
       interval: 30s
       timeout: 5s
       retries: 5
@@ -539,8 +539,42 @@ services:
       internal:
         ipv4_address: '172.18.0.13'
     healthcheck:
-      test: [ "CMD-SHELL", "wget --spider -q http://localhost:8080/api/healthz" ]
+      test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:8080/api/healthz" ]
       interval: 30s
       timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  mediamtx:
+    image: bluenviron/mediamtx:latest-ffmpeg
+    pull_policy: always
+    container_name: ${APP_NAME_HOST}_mediamtx
+    restart: always
+    expose:
+      - '8554' # RTSP
+      - '1935' # RTMP
+      - '8888' # HLS
+      - '8889' # WebRTC
+      - '8189/udp' # WebRTC local UDP
+      - '8890/udp' # SRT
+      - '9997' # API
+    env_file:
+      - ./.env
+      - path: ${ENV_DIR}/.env
+        required: false
+      - path: ${ENV_DIR}/mediamtx.env
+        required: false
+    environment:
+      MTX_RTSPTRANSPORTS: 'tcp'
+      MTX_WEBRTCADDITIONALHOSTS: '172.18.x.x'
+    volumes:
+      - ./mediamtx/config/mediamtx.yml:/mediamtx.yml
+    networks:
+      internal:
+        ipv4_address: '172.18.0.14'
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-o", "/dev/null", "http://127.0.0.1:9997/v3/info" ]
+      interval: 30s
+      timeout: 10s
       retries: 5
       start_period: 10s

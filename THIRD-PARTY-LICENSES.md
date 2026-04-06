@@ -133,3 +133,12 @@ The date used in the copyright notices in this file represents the year indicate
 * **Source Code:** https://github.com/glanceapp/glance
 * **License:** [AGPL-3.0](https://github.com/glanceapp/glance/blob/main/LICENSE)
 * **Copyright Notice:** Copyright (c) 2024 Glanceapp
+
+## Media MTX
+
+* **Project:** https://mediamtx.org/
+* **Version:** Latest
+* **In use since:** April 2026
+* **Source Code:** https://github.com/bluenviron/mediamtx
+* **License:** [MIT](https://github.com/bluenviron/mediamtx/blob/main/LICENSE)
+* **Copyright Notice:** Copyright (c) 2019 aler9
