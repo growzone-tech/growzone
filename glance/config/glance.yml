@@ -44,7 +44,7 @@ pages:
                     icon: /assets/icons/si/mqtt.svg
                   - title: "Traefik Dashboard"
                     url: https://traefik-dashboard.${APP_HOST}
-                    check-url: http://${APP_NAME_HOST}_traefik-dashboard:80
+                    check-url: http://${APP_NAME_HOST}_traefik:8080
                     icon: /assets/icons/si/traefik-proxy.svg
               - type: monitor
                 cache: 10s

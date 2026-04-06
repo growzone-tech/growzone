@@ -95,6 +95,7 @@ services:
     expose:
       - "80"
       - "443"
+      - "8080"
     env_file:
       - ./.env
       - path: ${ENV_DIR}/.env
