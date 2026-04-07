@@ -2,11 +2,3 @@
     aspect-ratio: 16 / 9;
     height: auto !important;
 }
-
-.grafana-iframe iframe div.css-xofl3i-panel-header {
-    display: none;
-}
-
-.grafana-iframe iframe div[class$="-button-panel-menu"] {
-    display: none;
-}

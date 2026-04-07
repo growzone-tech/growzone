@@ -122,11 +122,16 @@ pages:
                 title: 'Cam 2'
                 source: 'https://mediamtx-webrtc.${APP_HOST}/cam2'
                 css-class: 'aspect-ratio-16-9'
-          - type: iframe
+          - type: html
+            source: |
+              <iframe
+                src="https://grafana.${APP_HOST}/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-24h&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&tab=queries&showCategory=Legend&panelId=panel-5&__feature.dashboardScene=true"
+                sandbox="allow-forms allow-scripts allow-same-origin"
+                frameborder="0"
+                width="100%"
+                height="576"> <!-- 108 + 36 * services -->
+              </iframe>
             title: 'Container Status'
-            source: 'https://grafana.${APP_HOST}/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-24h&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&tab=queries&showCategory=Legend&panelId=panel-5&__feature.dashboardScene=true&kiosk'
-            height: 576  # 108 + 36 * services
-            css-class: 'grafana-iframe'
       - size: small
         widgets:
           - type: weather
