@@ -3,7 +3,7 @@
     height: auto !important;
 }
 
-.grafana-iframe iframe div[class$="-panel-title"] {
+.grafana-iframe iframe div.css-xofl3i-panel-header {
     display: none;
 }
 
