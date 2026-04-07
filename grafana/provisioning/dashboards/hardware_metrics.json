@@ -416,161 +416,6 @@
             ]
           },
           "table": "disk"
-        },
-        {
-          "datasource": {
-            "name": "Expression",
-            "type": "__expr__",
-            "uid": "__expr__"
-          },
-          "expression": "$T-$F",
-          "hide": true,
-          "refId": "U",
-          "type": "math"
-        },
-        {
-          "dataset": "iox",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb_metrics"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": true,
-          "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"free\") AS \"free\" FROM \"disk\" WHERE \"device\" = '$mainDisk' AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
-          "refId": "F",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [
-                  {
-                    "name": "time",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              },
-              {
-                "parameters": [
-                  {
-                    "name": "free",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "whereJsonTree": {
-              "children1": [
-                {
-                  "id": "8b8899aa-89ab-4cde-b012-319d50e2a5de",
-                  "properties": {
-                    "field": "device",
-                    "fieldSrc": "field",
-                    "operator": "equal",
-                    "value": [
-                      "$mainDisk"
-                    ],
-                    "valueError": [
-                      null
-                    ],
-                    "valueSrc": [
-                      "value"
-                    ],
-                    "valueType": [
-                      "text"
-                    ]
-                  },
-                  "type": "rule"
-                }
-              ],
-              "id": "b9b898bb-0123-4456-b89a-b19d50b632f7",
-              "type": "group"
-            },
-            "whereString": "device = '$mainDisk'"
-          },
-          "table": "disk"
-        },
-        {
-          "dataset": "iox",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb_metrics"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": true,
-          "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"total\") AS \"total\" FROM \"disk\" WHERE \"device\" = '$mainDisk' AND \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
-          "refId": "T",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [
-                  {
-                    "name": "time",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              },
-              {
-                "parameters": [
-                  {
-                    "name": "total",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "whereJsonTree": {
-              "children1": [
-                {
-                  "id": "aa98b898-cdef-4012-b456-719d50e517c7",
-                  "properties": {
-                    "field": "device",
-                    "fieldSrc": "field",
-                    "operator": "equal",
-                    "value": [
-                      "$mainDisk"
-                    ],
-                    "valueError": [
-                      null
-                    ],
-                    "valueSrc": [
-                      "value"
-                    ],
-                    "valueType": [
-                      "text"
-                    ]
-                  },
-                  "type": "rule"
-                }
-              ],
-              "id": "b9b898bb-0123-4456-b89a-b19d50b632f7",
-              "type": "group"
-            },
-            "whereString": "device = '$mainDisk'"
-          },
-          "table": "disk"
         }
       ],
       "title": "Disk Space",
@@ -708,150 +553,6 @@
       },
       "pluginVersion": "12.4.2",
       "targets": [
-        {
-          "dataset": "iox",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb_metrics"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": true,
-          "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"used\") AS \"used\" FROM \"mem\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
-          "refId": "U",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [
-                  {
-                    "name": "time",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              },
-              {
-                "parameters": [
-                  {
-                    "name": "free",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "whereJsonTree": {
-              "children1": [
-                {
-                  "id": "8b8899aa-89ab-4cde-b012-319d50e2a5de",
-                  "properties": {
-                    "field": "device",
-                    "fieldSrc": "field",
-                    "operator": "equal",
-                    "value": [
-                      "$mainDisk"
-                    ],
-                    "valueError": [
-                      null
-                    ],
-                    "valueSrc": [
-                      "value"
-                    ],
-                    "valueType": [
-                      "text"
-                    ]
-                  },
-                  "type": "rule"
-                }
-              ],
-              "id": "b9b898bb-0123-4456-b89a-b19d50b632f7",
-              "type": "group"
-            },
-            "whereString": "device = '$mainDisk'"
-          },
-          "table": "disk"
-        },
-        {
-          "dataset": "iox",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb_metrics"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "hide": true,
-          "rawQuery": true,
-          "rawSql": "SELECT date_bin(INTERVAL '5 minutes', \"time\") AS \"time_bin\", AVG(\"total\") AS \"total\" FROM \"mem\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
-          "refId": "T",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [
-                  {
-                    "name": "time",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              },
-              {
-                "parameters": [
-                  {
-                    "name": "total",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "whereJsonTree": {
-              "children1": [
-                {
-                  "id": "aa98b898-cdef-4012-b456-719d50e517c7",
-                  "properties": {
-                    "field": "device",
-                    "fieldSrc": "field",
-                    "operator": "equal",
-                    "value": [
-                      "$mainDisk"
-                    ],
-                    "valueError": [
-                      null
-                    ],
-                    "valueSrc": [
-                      "value"
-                    ],
-                    "valueType": [
-                      "text"
-                    ]
-                  },
-                  "type": "rule"
-                }
-              ],
-              "id": "b9b898bb-0123-4456-b89a-b19d50b632f7",
-              "type": "group"
-            },
-            "whereString": "device = '$mainDisk'"
-          },
-          "table": "disk"
-        },
         {
           "dataset": "iox",
           "datasource": {
@@ -1160,7 +861,7 @@
               "mode": "off"
             }
           },
-          "decimals": 0,
+          "decimals": 2,
           "fieldMinMax": false,
           "mappings": [],
           "min": 0,
@@ -1179,17 +880,93 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "running"
+              "options": "created"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Running"
+                "value": "Created"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "restarting"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Restarting"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "running_healthy"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Healthy"
               },
               {
                 "id": "color",
                 "value": {
                   "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "running_unhealthy"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Unhealthy"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "removing"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Removing"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
                   "mode": "fixed"
                 }
               }
@@ -1217,17 +994,55 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "stopped"
+              "options": "exited"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Stopped"
+                "value": "Exited"
               },
               {
                 "id": "color",
                 "value": {
                   "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dead"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Dead"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "unknown"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Unknown"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#808080",
                   "mode": "fixed"
                 }
               }
@@ -1253,7 +1068,7 @@
         "tooltip": {
           "hideZeros": false,
           "mode": "multi",
-          "sort": "none"
+          "sort": "desc"
         }
       },
       "pluginVersion": "12.4.2",
@@ -1265,66 +1080,10 @@
             "uid": "influxdb_metrics"
           },
           "editorMode": "code",
-          "format": "table",
+          "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\", AVG(\"n_containers_stopped\") AS \"stopped\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
-          "refId": "S",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ]
-          }
-        },
-        {
-          "dataset": "iox",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb_metrics"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\", AVG(\"n_containers_paused\") AS \"paused\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
-          "refId": "P",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ]
-          }
-        },
-        {
-          "dataset": "iox",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb_metrics"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\", AVG(\"n_containers_running\") AS \"running\" FROM \"docker\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"time_bin\" ORDER BY \"time_bin\" ASC",
-          "refId": "R",
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  SUM(\"created\") AS \"created\",\n  SUM(\"restarting\") AS \"restarting\",\n  SUM(\"running_healthy\") AS \"running_healthy\",\n  SUM(\"running_unhealthy\") AS \"running_unhealthy\",\n  SUM(\"removing\") AS \"removing\",\n  SUM(\"paused\") AS \"paused\",\n  SUM(\"exited\") AS \"exited\",\n  SUM(\"dead\") AS \"dead\",\n  SUM(\"unknown\") AS \"unknown\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      `com.docker.compose.service` AS \"service\",\n      AVG(CASE WHEN \"container_status\" = 'created' THEN 1.0 ELSE 0.0 END) AS \"created\",\n      AVG(CASE WHEN \"container_status\" = 'restarting' THEN 1.0 ELSE 0.0 END) AS \"restarting\",\n      AVG(CASE WHEN \"container_status\" = 'running' AND \"health_status\" = 'healthy' THEN 1.0 ELSE 0.0 END) AS \"running_healthy\",\n      AVG(CASE WHEN \"container_status\" = 'running' AND \"health_status\" != 'healthy' THEN 1.0 ELSE 0.0 END) AS \"running_unhealthy\",\n      AVG(CASE WHEN \"container_status\" = 'removing' THEN 1.0 ELSE 0.0 END) AS \"removing\",\n      AVG(CASE WHEN \"container_status\" = 'paused' THEN 1.0 ELSE 0.0 END) AS \"paused\",\n      AVG(CASE WHEN \"container_status\" = 'exited' THEN 1.0 ELSE 0.0 END) AS \"exited\",\n      AVG(CASE WHEN \"container_status\" = 'dead' THEN 1.0 ELSE 0.0 END) AS \"dead\",\n      AVG(CASE WHEN \"container_status\" NOT IN ('created', 'restarting', 'running', 'removing', 'paused', 'exited', 'dead') THEN 1.0 ELSE 0.0 END) AS \"unknown\"\n    FROM\n      \"docker_container_health\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"service\",\n      \"time_bin\"\n  )\nGROUP BY\n  \"time\"\nORDER BY\n  \"time\" ASC",
+          "refId": "A",
           "sql": {
             "columns": [
               {
@@ -1429,7 +1188,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT `com.docker.compose.service` AS \"Service\", selector_last(\"container_status\", \"time\")['value'] AS \"Status\" FROM \"docker_container_status\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY `com.docker.compose.service` ORDER BY \"Service\" ASC",
+          "rawSql": "SELECT `com.docker.compose.service` AS \"Service\", selector_last(\"container_status\", \"time\")['value'] AS \"Status\", selector_last(\"health_status\", \"time\")['value'] AS \"Health\" FROM \"docker_container_health\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"Service\" ORDER BY \"Service\" ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1887,6 +1646,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 27,
+  "version": 29,
   "weekStart": ""
 }
