@@ -295,7 +295,6 @@
             }
           },
           "decimals": 2,
-          "displayName": "Used",
           "mappings": [],
           "min": 0,
           "thresholds": {
@@ -307,11 +306,11 @@
               },
               {
                 "color": "yellow",
-                "value": 75
+                "value": 25
               },
               {
                 "color": "orange",
-                "value": 85
+                "value": 50
               },
               {
                 "color": "red",
@@ -344,13 +343,6 @@
                 "value": 0
               },
               {
-                "id": "custom.stacking",
-                "value": {
-                  "group": "A",
-                  "mode": "none"
-                }
-              },
-              {
                 "id": "thresholds",
                 "value": {
                   "mode": "percentage",
@@ -372,13 +364,13 @@
         "x": 12,
         "y": 1
       },
-      "id": 2,
+      "id": 4,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -397,7 +389,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"usage\",\n  \"total\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"used\") AS \"usage\",\n      AVG(\"total\") AS \"total\"\n    FROM\n      \"disk\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"free\",\n  \"total\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"swap_free\") AS \"free\",\n      AVG(\"swap_total\") AS \"total\"\n    FROM\n      \"mem\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -414,11 +406,64 @@
                 "type": "groupBy"
               }
             ]
-          },
-          "table": "disk"
+          }
         }
       ],
-      "title": "Disk Space",
+      "title": "Swap",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "used",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "total"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "free"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "time",
+                "total",
+                "used"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "free": 1,
+              "time": 0,
+              "total": 3,
+              "used": 2
+            },
+            "renameByName": {}
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -594,6 +639,346 @@
         "defaults": {
           "color": {
             "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": true,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": 3600000,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "orange",
+                "value": 85
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Read (Total)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Total"
+              },
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Write (Total)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Total"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Read"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Write"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 11,
+      "interval": "15s",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read\",\n  \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"read_bytes\") AS \"read\",\n      AVG(\"write_bytes\") AS \"write\"\n    FROM\n      \"diskio\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"name\" = '$mainDisk'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read_shifted\",\n  \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      AVG(\"read_bytes\") AS \"read_shifted\",\n      AVG(\"write_bytes\") AS \"write_shifted\"\n    FROM\n      \"diskio\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"name\" = '$mainDisk'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Disk I/O ($mainDisk)",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "read_derivative",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "read"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "read_shifted"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "write_derivative",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "write"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "write_shifted"
+                }
+              }
+            },
+            "cumulative": {
+              "field": "write",
+              "reducer": "mean"
+            },
+            "mode": "binary",
+            "reduce": {
+              "include": [
+                "write"
+              ],
+              "reducer": "variance"
+            },
+            "window": {
+              "field": "write",
+              "reducer": "mean",
+              "windowAlignment": "trailing",
+              "windowSize": 0.1,
+              "windowSizeMode": "percentage"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "time",
+                "read",
+                "write",
+                "write_derivative",
+                "read_derivative"
+              ]
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "read": 3,
+              "read_derivative": 1,
+              "time": 0,
+              "write": 4,
+              "write_derivative": 2
+            },
+            "renameByName": {
+              "read": "Read (Total)",
+              "read_derivative": "Read",
+              "write": "Write (Total)",
+              "write_derivative": "Write"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
             "mode": "thresholds"
           },
           "custom": {
@@ -631,6 +1016,7 @@
             }
           },
           "decimals": 2,
+          "displayName": "Used",
           "mappings": [],
           "min": 0,
           "thresholds": {
@@ -642,11 +1028,11 @@
               },
               {
                 "color": "yellow",
-                "value": 25
+                "value": 75
               },
               {
                 "color": "orange",
-                "value": 50
+                "value": 85
               },
               {
                 "color": "red",
@@ -679,6 +1065,13 @@
                 "value": 0
               },
               {
+                "id": "custom.stacking",
+                "value": {
+                  "group": "A",
+                  "mode": "none"
+                }
+              },
+              {
                 "id": "thresholds",
                 "value": {
                   "mode": "percentage",
@@ -697,16 +1090,16 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
-        "y": 9
+        "x": 0,
+        "y": 17
       },
-      "id": 4,
+      "id": 2,
       "options": {
         "legend": {
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": false
         },
         "tooltip": {
           "hideZeros": false,
@@ -725,7 +1118,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"free\",\n  \"total\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"swap_free\") AS \"free\",\n      AVG(\"swap_total\") AS \"total\"\n    FROM\n      \"mem\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"usage\",\n  \"total\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"used\") AS \"usage\",\n      AVG(\"total\") AS \"total\"\n    FROM\n      \"disk\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"device\" = '$mainDisk'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -742,64 +1135,11 @@
                 "type": "groupBy"
               }
             ]
-          }
+          },
+          "table": "disk"
         }
       ],
-      "title": "Swap",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "used",
-            "binary": {
-              "left": {
-                "matcher": {
-                  "id": "byName",
-                  "options": "total"
-                }
-              },
-              "operator": "-",
-              "right": {
-                "matcher": {
-                  "id": "byName",
-                  "options": "free"
-                }
-              }
-            },
-            "mode": "binary",
-            "reduce": {
-              "reducer": "sum"
-            },
-            "replaceFields": false
-          }
-        },
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": [
-                "time",
-                "total",
-                "used"
-              ]
-            }
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {},
-            "includeByName": {},
-            "indexByName": {
-              "free": 1,
-              "time": 0,
-              "total": 3,
-              "used": 2
-            },
-            "renameByName": {}
-          }
-        }
-      ],
+      "title": "Disk Space ($mainDisk)",
       "type": "timeseries"
     },
     {
@@ -808,7 +1148,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 25
       },
       "id": 7,
       "panels": [],
@@ -1057,7 +1397,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 26
       },
       "id": 5,
       "interval": "15s",
@@ -1270,165 +1610,6 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "footer": {
-              "reducers": [
-                "countAll"
-              ]
-            },
-            "inspect": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Status"
-            },
-            "properties": [
-              {
-                "id": "custom.footer.reducers",
-                "value": [
-                  "uniqueValues"
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Health"
-            },
-            "properties": [
-              {
-                "id": "custom.footer.reducers",
-                "value": [
-                  "uniqueValues"
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 16,
-        "w": 12,
-        "x": 12,
-        "y": 18
-      },
-      "id": 8,
-      "options": {
-        "cellHeight": "sm",
-        "enablePagination": false,
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": false,
-            "displayName": "Status"
-          }
-        ]
-      },
-      "pluginVersion": "12.4.2",
-      "targets": [
-        {
-          "dataset": "iox",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb_metrics"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT `com.docker.compose.service` AS \"Service\", selector_last(\"container_status\", \"time\")['value'] AS \"Status\", selector_last(\"health_status\", \"time\")['value'] AS \"Health\" FROM \"docker_container_health\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo GROUP BY \"Service\" ORDER BY \"Service\" ASC",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [
-                  {
-                    "name": "\"com.docker.compose.service\"",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              },
-              {
-                "parameters": [
-                  {
-                    "name": "container_status",
-                    "type": "functionParameter"
-                  }
-                ],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ],
-            "whereJsonTree": {
-              "children1": [
-                {
-                  "id": "88b99a9b-0123-4456-b89a-b19d561f2f23",
-                  "properties": {
-                    "field": "time",
-                    "fieldSrc": "field",
-                    "operator": "equal",
-                    "value": [
-                      null
-                    ],
-                    "valueSrc": [
-                      "value"
-                    ],
-                    "valueType": [
-                      "text"
-                    ]
-                  },
-                  "type": "rule"
-                }
-              ],
-              "id": "9988b998-0123-4456-b89a-b19d561bdc57",
-              "type": "group"
-            }
-          },
-          "table": "docker_container_status"
-        }
-      ],
-      "title": "",
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "influxdb_metrics"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
             "fixedColor": "green",
             "mode": "palette-classic",
             "seriesBy": "last"
@@ -1488,7 +1669,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 26
+        "y": 34
       },
       "id": 9,
       "interval": "5m",
@@ -1660,7 +1841,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 34
+        "y": 42
       },
       "id": 10,
       "interval": "15s",
@@ -1771,21 +1952,22 @@
   "templating": {
     "list": [
       {
+        "allowCustomValue": false,
         "current": {
-          "text": "",
-          "value": ""
+          "text": "mmcblk0p2",
+          "value": "mmcblk0p2"
         },
         "datasource": {
           "type": "influxdb",
           "uid": "influxdb_metrics"
         },
-        "definition": "SELECT DISTINCT \"device\" FROM \"disk\"",
-        "hide": 2,
+        "definition": "SELECT DISTINCT \"device\" FROM \"disk\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
+        "hide": 3,
         "label": "Main Disk",
         "name": "mainDisk",
         "options": [],
         "query": {
-          "query": "SELECT DISTINCT \"device\" FROM \"disk\"",
+          "query": "SELECT DISTINCT \"device\" FROM \"disk\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
           "refId": "InfluxVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -1817,6 +1999,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 34,
+  "version": 37,
   "weekStart": ""
 }
