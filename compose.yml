@@ -577,7 +577,7 @@ services:
       internal:
         ipv4_address: '172.18.0.14'
     healthcheck:
-      test: [ "CMD", "wget", "-q", "-o", "/dev/null", "http://127.0.0.1:9997/v3/info" ]
+      test: [ "CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:9997/v3/info" ]
       interval: 30s
       timeout: 10s
       retries: 5
