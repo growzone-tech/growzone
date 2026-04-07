@@ -238,12 +238,12 @@ services:
     networks:
       internal:
         ipv4_address: '172.18.0.6'
-    # healthcheck:
-    #   test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:80" ]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
-    #   start_period: 5s
+    healthcheck:
+      test: [ "CMD", "true"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
     depends_on:
       mosquitto:
         condition: service_healthy
