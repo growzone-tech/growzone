@@ -18,3 +18,14 @@ http:
         - "auth-proxy"
       tls:
         certResolver: porkbun-api
+
+udp:
+  services:
+    svc_mediamtx-8189:
+      loadBalancer:
+        servers:
+          - url: "http://{{ env "APP_NAME_HOST" }}_mediamtx:8189"
+  routers:
+    mediamtx-8189:
+      service: svc_mediamtx-8189
+      entryPoints: ["mediamtx-webrtc-udp"]
