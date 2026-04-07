@@ -24,7 +24,7 @@ udp:
     svc_mediamtx-8189:
       loadBalancer:
         servers:
-          - address: "http://{{ env "APP_NAME_HOST" }}_mediamtx:8189"
+          - address: "{{ env "APP_NAME_HOST" }}_mediamtx:8189"
   routers:
     mediamtx-8189:
       service: svc_mediamtx-8189
