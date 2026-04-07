@@ -104,6 +104,7 @@ pages:
               - dockerhub:telegraf:latest
               - tecnativa/docker-socket-proxy
               - dockerhub:glanceapp/glance:latest
+              - dockerhub:bluenviron/mediamtx:latest
       - size: full
         widgets:
           - type: group
