@@ -116,7 +116,6 @@ pages:
             source: 'https://grafana.${APP_HOST}/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-1m&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&panelId=panel-8&__feature.dashboardScene=true'
             height: 576  # 108 + 36 * services
 
-
       - size: small
         widgets:
           - type: weather
