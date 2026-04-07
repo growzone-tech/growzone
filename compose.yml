@@ -569,6 +569,9 @@ services:
       MTX_WEBRTCADDITIONALHOSTS: '172.18.x.x'
     volumes:
       - ./mediamtx/config/mediamtx.yml:/mediamtx.yml
+      - /dev:/dev
+    device_cgroup_rules:
+      - 'c 81:* rmw'
     networks:
       internal:
         ipv4_address: '172.18.0.14'

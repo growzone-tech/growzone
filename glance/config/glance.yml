@@ -109,7 +109,7 @@ pages:
           - type: iframe
             title: 'Container Status'
             source: 'https://grafana.otto420.growzone.tech/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-1m&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&panelId=panel-8&__feature.dashboardScene=true'
-            height: 540
+            height: 576  # 108 + 36 * services
 
 
       - size: small
