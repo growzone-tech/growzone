@@ -566,7 +566,7 @@ services:
         required: false
     environment:
       MTX_RTSPTRANSPORTS: 'tcp'
-      MTX_WEBRTCADDITIONALHOSTS: '172.18.x.x'
+      MTX_WEBRTCADDITIONALHOSTS: 'mediamtx-webrtc.${APP_HOST}'
     volumes:
       - ./mediamtx/config/mediamtx.yml:/mediamtx.yml
       - /dev:/dev
