@@ -1065,7 +1065,7 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "right",
+          "placement": "bottom",
           "showLegend": true
         },
         "tooltip": {
@@ -1169,7 +1169,7 @@
         {
           "id": "calculateField",
           "options": {
-            "alias": "unknown",
+            "alias": "unknown_not_null",
             "binary": {
               "left": {
                 "matcher": {
@@ -1181,6 +1181,56 @@
                 "matcher": {
                   "id": "byName",
                   "options": "unknown_status"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "unknown_null",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "unknown_not_null"
+                }
+              },
+              "operator": "/",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "unknown_not_null"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "unknown",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "unknown_null"
+                }
+              },
+              "operator": "*",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "unknown_not_null"
                 }
               }
             },
@@ -1767,6 +1817,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 31,
+  "version": 34,
   "weekStart": ""
 }
