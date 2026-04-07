@@ -108,13 +108,13 @@ pages:
       - size: full
         widgets:
           - type: iframe
-            title: 'Container Status'
-            source: 'https://grafana.${APP_HOST}/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-1m&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&panelId=panel-8&__feature.dashboardScene=true'
-            height: 576  # 108 + 36 * services
-          - type: iframe
             title: 'Video Stream #0'
             source: 'https://mediamtx-webrtc.${APP_HOST}/cam0'
             css-class: 'aspect-ratio-16-9'
+          - type: iframe
+            title: 'Container Status'
+            source: 'https://grafana.${APP_HOST}/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-1m&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&panelId=panel-8&__feature.dashboardScene=true'
+            height: 576  # 108 + 36 * services
 
 
       - size: small
