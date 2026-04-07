@@ -124,7 +124,7 @@ pages:
                 css-class: 'aspect-ratio-16-9'
           - type: iframe
             title: 'Container Status'
-            source: 'https://grafana.${APP_HOST}/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-1m&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&panelId=panel-8&__feature.dashboardScene=true'
+            source: 'https://grafana.${APP_HOST}/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-24h&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&tab=queries&showCategory=Legend&panelId=panel-5&__feature.dashboardScene=true'
             height: 576  # 108 + 36 * services
       - size: small
         widgets:
