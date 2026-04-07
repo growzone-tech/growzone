@@ -104,18 +104,27 @@ pages:
               - dockerhub:telegraf:latest
               - tecnativa/docker-socket-proxy
               - dockerhub:glanceapp/glance:latest
-
       - size: full
         widgets:
-          - type: iframe
-            title: 'Video Stream #0'
-            source: 'https://mediamtx-webrtc.${APP_HOST}/cam0'
-            css-class: 'aspect-ratio-16-9'
+          - type: group
+            title: 'Video Streams'
+            widgets:
+              - type: iframe
+                title: 'Cam 0'
+                source: 'https://mediamtx-webrtc.${APP_HOST}/cam0'
+                css-class: 'aspect-ratio-16-9'
+              - type: iframe
+                title: 'Cam 1'
+                source: 'https://mediamtx-webrtc.${APP_HOST}/cam1'
+                css-class: 'aspect-ratio-16-9'
+              - type: iframe
+                title: 'Cam 2'
+                source: 'https://mediamtx-webrtc.${APP_HOST}/cam2'
+                css-class: 'aspect-ratio-16-9'
           - type: iframe
             title: 'Container Status'
             source: 'https://grafana.${APP_HOST}/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-1m&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&panelId=panel-8&__feature.dashboardScene=true'
             height: 576  # 108 + 36 * services
-
       - size: small
         widgets:
           - type: weather
