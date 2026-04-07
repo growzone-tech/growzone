@@ -1343,7 +1343,7 @@
           }
         }
       ],
-      "title": "Docker: Container Status",
+      "title": "Container Status",
       "type": "timeseries"
     },
     {
@@ -1401,7 +1401,7 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 16,
         "w": 12,
         "x": 12,
         "y": 18
@@ -1539,7 +1539,7 @@
           },
           "decimals": 0,
           "mappings": [],
-          "max": 100,
+          "max": 400,
           "min": 0,
           "thresholds": {
             "mode": "percentage",
@@ -1887,6 +1887,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 25,
+  "version": 27,
   "weekStart": ""
 }
