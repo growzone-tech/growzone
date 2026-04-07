@@ -3,21 +3,21 @@
         "${TS_CERT_DOMAIN}:80": {
             "Handlers": {
                 "/": {
-                    "Proxy": "http://127.0.0.1:80"
+                    "Proxy": "http://${APP_NAME_HOST}_traefik:80"
                 }
             }
         },
         "${TS_CERT_DOMAIN}:443": {
             "Handlers": {
                 "/": {
-                    "Proxy": "http://127.0.0.1:443"
+                    "Proxy": "http://${APP_NAME_HOST}_traefik:443"
                 }
             }
         },
         "${TS_CERT_DOMAIN}:8189": {
             "Handlers": {
                 "/": {
-                    "Proxy": "http://127.0.0.1:8189"
+                    "Proxy": "http://${APP_NAME_HOST}_traefik:8189"
                 }
             }
         }
