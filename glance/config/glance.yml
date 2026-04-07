@@ -21,6 +21,7 @@ theme:
   primary-color: 217 92 83
   positive-color: 115 54 76
   negative-color: 347 70 65
+  custom-css-file: /assets/css/main.css
 pages:
   - name: Apps
     slug: apps
@@ -113,7 +114,7 @@ pages:
           - type: iframe
             title: 'Video Stream #0'
             source: 'https://mediamtx-webrtc.${APP_HOST}/cam0'
-            height: 520
+            css-class: 'aspect-ratio-16-9'
 
 
       - size: small
