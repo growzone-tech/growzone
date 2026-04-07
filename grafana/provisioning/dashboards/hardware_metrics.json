@@ -836,8 +836,8 @@
             "barAlignment": 0,
             "barWidthFactor": 0.6,
             "drawStyle": "line",
-            "fillOpacity": 15,
-            "gradientMode": "none",
+            "fillOpacity": 85,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -845,7 +845,10 @@
             },
             "insertNulls": 3600000,
             "lineInterpolation": "stepAfter",
-            "lineWidth": 1,
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 0,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -861,7 +864,7 @@
               "mode": "off"
             }
           },
-          "decimals": 2,
+          "decimals": 1,
           "fieldMinMax": false,
           "mappings": [],
           "min": 0,
@@ -869,7 +872,7 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "#5795f233",
+                "color": "transparent",
                 "value": 0
               }
             ]
@@ -1062,7 +1065,7 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom",
+          "placement": "right",
           "showLegend": true
         },
         "tooltip": {
@@ -1082,7 +1085,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  SUM(\"created\") AS \"created\",\n  SUM(\"restarting\") AS \"restarting\",\n  SUM(\"running_healthy\") AS \"running_healthy\",\n  SUM(\"running_unhealthy\") AS \"running_unhealthy\",\n  SUM(\"removing\") AS \"removing\",\n  SUM(\"paused\") AS \"paused\",\n  SUM(\"exited\") AS \"exited\",\n  SUM(\"dead\") AS \"dead\",\n  SUM(\"unknown\") AS \"unknown\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      `com.docker.compose.service` AS \"service\",\n      AVG(CASE WHEN \"container_status\" = 'created' THEN 1.0 ELSE 0.0 END) AS \"created\",\n      AVG(CASE WHEN \"container_status\" = 'restarting' THEN 1.0 ELSE 0.0 END) AS \"restarting\",\n      AVG(CASE WHEN \"container_status\" = 'running' AND \"health_status\" = 'healthy' THEN 1.0 ELSE 0.0 END) AS \"running_healthy\",\n      AVG(CASE WHEN \"container_status\" = 'running' AND \"health_status\" != 'healthy' THEN 1.0 ELSE 0.0 END) AS \"running_unhealthy\",\n      AVG(CASE WHEN \"container_status\" = 'removing' THEN 1.0 ELSE 0.0 END) AS \"removing\",\n      AVG(CASE WHEN \"container_status\" = 'paused' THEN 1.0 ELSE 0.0 END) AS \"paused\",\n      AVG(CASE WHEN \"container_status\" = 'exited' THEN 1.0 ELSE 0.0 END) AS \"exited\",\n      AVG(CASE WHEN \"container_status\" = 'dead' THEN 1.0 ELSE 0.0 END) AS \"dead\",\n      AVG(CASE WHEN \"container_status\" NOT IN ('created', 'restarting', 'running', 'removing', 'paused', 'exited', 'dead') THEN 1.0 ELSE 0.0 END) AS \"unknown\"\n    FROM\n      \"docker_container_health\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"service\",\n      \"time_bin\"\n  )\nGROUP BY\n  \"time\"\nORDER BY\n  \"time\" ASC",
+          "rawSql": "SELECT\n  \"time\",\n  CASE WHEN \"created\" = 0 THEN NULL ELSE \"created\" END AS \"created\",\n  CASE WHEN \"restarting\" = 0 THEN NULL ELSE \"restarting\" END AS \"restarting\",\n  CASE WHEN \"running_healthy\" = 0 THEN NULL ELSE \"running_healthy\" END AS \"running_healthy\",\n  CASE WHEN \"running_unhealthy\" = 0 THEN NULL ELSE \"running_unhealthy\" END AS \"running_unhealthy\",\n  CASE WHEN \"removing\" = 0 THEN NULL ELSE \"removing\" END AS \"removing\",\n  CASE WHEN \"paused\" = 0 THEN NULL ELSE \"paused\" END AS \"paused\",\n  CASE WHEN \"exited\" = 0 THEN NULL ELSE \"exited\" END AS \"exited\",\n  CASE WHEN \"dead\" = 0 THEN NULL ELSE \"dead\" END AS \"dead\",\n  CASE WHEN \"unknown_status\" = 0 THEN NULL ELSE \"unknown_status\" END AS \"unknown_status\",\n  CASE WHEN \"total_health\" = 0 THEN NULL ELSE \"total_health\" END AS \"total_health\"\nFROM\n  (\n    SELECT\n      \"time_bin\" AS \"time\",\n      SUM(\"created\") AS \"created\",\n      SUM(\"restarting\") AS \"restarting\",\n      SUM(\"running_healthy\") AS \"running_healthy\",\n      SUM(\"running_unhealthy\") AS \"running_unhealthy\",\n      SUM(\"removing\") AS \"removing\",\n      SUM(\"paused\") AS \"paused\",\n      SUM(\"exited\") AS \"exited\",\n      SUM(\"dead\") AS \"dead\",\n      SUM(\"unknown_status\") AS \"unknown_status\",\n      SUM(\"created\" + \"restarting\" + \"running_healthy\" + \"running_unhealthy\" + \"removing\" + \"paused\" + \"exited\" + \"dead\") AS \"total_health\"\n    FROM\n      (\n        SELECT\n          date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n          `com.docker.compose.service` AS \"service\",\n          AVG(CASE WHEN \"container_status\" = 'created' THEN 1.0 ELSE 0.0 END) AS \"created\",\n          AVG(CASE WHEN \"container_status\" = 'restarting' THEN 1.0 ELSE 0.0 END) AS \"restarting\",\n          AVG(CASE WHEN \"container_status\" = 'running' AND \"health_status\" = 'healthy' THEN 1.0 ELSE 0.0 END) AS \"running_healthy\",\n          AVG(CASE WHEN \"container_status\" = 'running' AND \"health_status\" != 'healthy' THEN 1.0 ELSE 0.0 END) AS \"running_unhealthy\",\n          AVG(CASE WHEN \"container_status\" = 'removing' THEN 1.0 ELSE 0.0 END) AS \"removing\",\n          AVG(CASE WHEN \"container_status\" = 'paused' THEN 1.0 ELSE 0.0 END) AS \"paused\",\n          AVG(CASE WHEN \"container_status\" = 'exited' THEN 1.0 ELSE 0.0 END) AS \"exited\",\n          AVG(CASE WHEN \"container_status\" = 'dead' THEN 1.0 ELSE 0.0 END) AS \"dead\",\n          AVG(CASE WHEN \"container_status\" NOT IN ('created', 'restarting', 'running', 'removing', 'paused', 'exited', 'dead') THEN 1.0 ELSE 0.0 END) AS \"unknown_status\"\n        FROM\n          \"docker_container_health\"\n        WHERE\n          \"time\" >= $__timeFrom\n          AND \"time\" <= $__timeTo\n        GROUP BY\n          \"service\",\n          \"time_bin\"\n      )\n    GROUP BY\n      \"time\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1100,9 +1103,113 @@
               }
             ]
           }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"total_containers\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"n_containers\") AS \"total_containers\",\n    FROM\n      \"docker\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "refId": "T",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "n_containers",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          },
+          "table": "docker"
         }
       ],
       "title": "Container Status",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "total_mismatch",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "total_containers"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "total_health"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "unknown",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "total_mismatch"
+                }
+              },
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "unknown_status"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "time",
+                "created",
+                "restarting",
+                "running_healthy",
+                "running_unhealthy",
+                "removing",
+                "paused",
+                "exited",
+                "dead",
+                "unknown"
+              ]
+            }
+          }
+        }
+      ],
       "type": "timeseries"
     },
     {
@@ -1147,6 +1254,20 @@
             "matcher": {
               "id": "byName",
               "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.footer.reducers",
+                "value": [
+                  "uniqueValues"
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Health"
             },
             "properties": [
               {
@@ -1601,8 +1722,8 @@
     "list": [
       {
         "current": {
-          "text": "mmcblk0p2",
-          "value": "mmcblk0p2"
+          "text": "",
+          "value": ""
         },
         "datasource": {
           "type": "influxdb",
@@ -1646,6 +1767,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 29,
+  "version": 31,
   "weekStart": ""
 }
