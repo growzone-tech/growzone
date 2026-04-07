@@ -801,6 +801,11 @@ paths:
   # my_camera:
   #   source: rtsp://my_camera
 
+  # ls -la /dev/v4l/by-id/
+  cam0:
+    runOnInit: ffmpeg -f v4l2 -i /dev/v4l/by-id/usb-HD_Camera_Manufacturer_USB_2.0_Camera-video-index0 -c:v libx264 -pix_fmt yuv420p -preset ultrafast -b:v 600k -f rtsp rtsp://127.0.0.1:8554
+    runOnInitRestart: yes
+
   # Settings under path "all_others" are applied to all paths that
   # do not match another entry.
   all_others:

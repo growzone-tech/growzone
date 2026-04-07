@@ -570,6 +570,7 @@ services:
     volumes:
       - ./mediamtx/config/mediamtx.yml:/mediamtx.yml
       - /dev:/dev
+      - /run/udev:/run/udev:ro
     device_cgroup_rules:
       - 'c 81:* rmw'
     networks:

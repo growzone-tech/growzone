@@ -1,0 +1,20 @@
+# Documentation:
+# https://doc.traefik.io/traefik/reference/routing-configuration/dynamic-configuration-methods/
+# https://doc.traefik.io/traefik/reference/routing-configuration/http/tls/overview/
+
+http:
+  services:
+    svc_mediamtx-8889:
+      loadBalancer:
+        servers:
+          - url: "http://{{ env "APP_NAME_HOST" }}_mediamtx:8889"
+  routers:
+    mediamtx-8889:
+      rule: "Host(`mediamtx-webrtc.{{ env "APP_HOST" }}`)"
+      service: svc_mediamtx-8889
+      entryPoints: ["websecure"]
+      middlewares:
+        - "cors-policy"
+        - "auth-proxy"
+      tls:
+        certResolver: porkbun-api
