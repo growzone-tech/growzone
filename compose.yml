@@ -455,7 +455,7 @@ services:
       - /proc:/hostfs/proc:ro
       - /sys:/hostfs/sys:ro
       # - /etc:/hostfs/etc:ro
-      # - /var:/hostfs/var:ro
+      - /var:/hostfs/var:ro
       # - /run:/hostfs/run:ro
       - /run/udev:/hostfs/run/udev:ro
       - /dev:/hostfs/dev:ro
