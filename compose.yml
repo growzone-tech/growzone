@@ -440,24 +440,26 @@ services:
       - path: ${ENV_DIR}/telegraf.env
         required: false
     environment:
-      # HOST_ETC: '/hostfs/etc'
       HOST_PROC: '/hostfs/proc'
       HOST_SYS: '/hostfs/sys'
-      # HOST_VAR: '/hostfs/var'
+      HOST_ETC: '/hostfs/etc'
+      HOST_VAR: '/hostfs/var'
       HOST_RUN: '/hostfs/run'
+      HOST_DEV: '/hostfs/dev'
       HOST_MOUNT_PREFIX: '/hostfs'
+      HOST_ROOT: '/hostfs'
     secrets:
       - INFLUXDB_ADMIN_TOKEN
     volumes:
       - ./telegraf/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
-      # - /etc:/hostfs/etc:ro
       - /proc:/hostfs/proc:ro
       - /sys:/hostfs/sys:ro
+      # - /etc:/hostfs/etc:ro
       # - /var:/hostfs/var:ro
       # - /run:/hostfs/run:ro
       - /run/udev:/hostfs/run/udev:ro
       - /dev:/hostfs/dev:ro
-      # - /etc/os-release:/etc/os-release:ro
+      - /etc/os-release:/hostfs/etc/os-release:ro
     networks:
       internal:
         ipv4_address: '172.18.0.11'
