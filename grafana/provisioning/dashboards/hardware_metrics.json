@@ -422,372 +422,6 @@
         "defaults": {
           "color": {
             "fixedColor": "green",
-            "mode": "fixed"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": true,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "left",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 15,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": 3600000,
-            "lineInterpolation": "stepAfter",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "showValues": false,
-            "spanNulls": 3600000,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 2,
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              },
-              {
-                "color": "yellow",
-                "value": 75
-              },
-              {
-                "color": "orange",
-                "value": 85
-              },
-              {
-                "color": "red",
-                "value": 100
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Received (Total)"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "Total"
-              },
-              {
-                "id": "custom.transform",
-                "value": "negative-Y"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#73bf694d",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "custom.lineInterpolation",
-                "value": "smooth"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Sent (Total)"
-            },
-            "properties": [
-              {
-                "id": "custom.axisPlacement",
-                "value": "right"
-              },
-              {
-                "id": "custom.axisLabel",
-                "value": "Total"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#f2495c4d",
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "custom.lineInterpolation",
-                "value": "smooth"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Received"
-            },
-            "properties": [
-              {
-                "id": "custom.transform",
-                "value": "negative-Y"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Sent"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 9
-      },
-      "id": 12,
-      "interval": "15s",
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "12.4.2",
-      "targets": [
-        {
-          "dataset": "iox",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb_metrics"
-          },
-          "editorMode": "code",
-          "format": "time_series",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read\",\n  \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"bytes_recv\") AS \"read\",\n      AVG(\"bytes_sent\") AS \"write\"\n    FROM\n      \"net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"interface\" = 'eth0'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
-          "refId": "A",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ]
-          }
-        },
-        {
-          "dataset": "iox",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "influxdb_metrics"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read_shifted\",\n  \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      AVG(\"bytes_recv\") AS \"read_shifted\",\n      AVG(\"bytes_sent\") AS \"write_shifted\"\n    FROM\n      \"net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"interface\" = 'eth0'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
-          "refId": "B",
-          "sql": {
-            "columns": [
-              {
-                "parameters": [],
-                "type": "function"
-              }
-            ],
-            "groupBy": [
-              {
-                "property": {
-                  "type": "string"
-                },
-                "type": "groupBy"
-              }
-            ]
-          }
-        }
-      ],
-      "title": "Network I/O (eth0)",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "read_derivative",
-            "binary": {
-              "left": {
-                "matcher": {
-                  "id": "byName",
-                  "options": "read"
-                }
-              },
-              "operator": "-",
-              "right": {
-                "matcher": {
-                  "id": "byName",
-                  "options": "read_shifted"
-                }
-              }
-            },
-            "mode": "binary",
-            "reduce": {
-              "reducer": "sum"
-            }
-          }
-        },
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "write_derivative",
-            "binary": {
-              "left": {
-                "matcher": {
-                  "id": "byName",
-                  "options": "write"
-                }
-              },
-              "operator": "-",
-              "right": {
-                "matcher": {
-                  "id": "byName",
-                  "options": "write_shifted"
-                }
-              }
-            },
-            "cumulative": {
-              "field": "write",
-              "reducer": "mean"
-            },
-            "mode": "binary",
-            "reduce": {
-              "include": [
-                "write"
-              ],
-              "reducer": "variance"
-            },
-            "window": {
-              "field": "write",
-              "reducer": "mean",
-              "windowAlignment": "trailing",
-              "windowSize": 0.1,
-              "windowSizeMode": "percentage"
-            }
-          }
-        },
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": [
-                "time",
-                "read",
-                "write",
-                "write_derivative",
-                "read_derivative"
-              ]
-            }
-          }
-        },
-        {
-          "id": "filterByValue",
-          "options": {
-            "filters": [
-              {
-                "config": {
-                  "id": "lower",
-                  "options": {
-                    "value": 0
-                  }
-                },
-                "fieldName": "read_derivative"
-              }
-            ],
-            "match": "any",
-            "type": "exclude"
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {},
-            "includeByName": {},
-            "indexByName": {
-              "read": 3,
-              "read_derivative": 1,
-              "time": 0,
-              "write": 4,
-              "write_derivative": 2
-            },
-            "renameByName": {
-              "read": "Received (Total)",
-              "read_derivative": "Received",
-              "write": "Sent (Total)",
-              "write_derivative": "Sent"
-            }
-          }
-        }
-      ],
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "influxdb_metrics"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "green",
             "mode": "thresholds"
           },
           "custom": {
@@ -858,10 +492,6 @@
             },
             "properties": [
               {
-                "id": "displayName",
-                "value": "Total"
-              },
-              {
                 "id": "color",
                 "value": {
                   "fixedColor": "transparent",
@@ -891,7 +521,7 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
+        "x": 0,
         "y": 9
       },
       "id": 4,
@@ -990,7 +620,10 @@
               "total": 3,
               "used": 2
             },
-            "renameByName": {}
+            "renameByName": {
+              "total": "Total",
+              "used": "Used"
+            }
           }
         }
       ],
@@ -1116,8 +749,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 17
+        "x": 12,
+        "y": 9
       },
       "id": 2,
       "options": {
@@ -1144,7 +777,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"usage\",\n  \"total\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"used\") AS \"usage\",\n      AVG(\"total\") AS \"total\"\n    FROM\n      \"disk\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"device\" = '$mainDisk'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"usage\",\n  \"total\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"used\") AS \"usage\",\n      AVG(\"total\") AS \"total\"\n    FROM\n      \"disk\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"device\" = '$diskName'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1165,7 +798,7 @@
           "table": "disk"
         }
       ],
-      "title": "Disk Space ($mainDisk)",
+      "title": "Disk Space ($diskName)",
       "type": "timeseries"
     },
     {
@@ -1336,7 +969,7 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 12,
+        "x": 0,
         "y": 17
       },
       "id": 11,
@@ -1365,7 +998,7 @@
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read\",\n  \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"read_bytes\") AS \"read\",\n      AVG(\"write_bytes\") AS \"write\"\n    FROM\n      \"diskio\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"name\" = '$mainDisk'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read\",\n  \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"read_bytes\") AS \"read\",\n      AVG(\"write_bytes\") AS \"write\"\n    FROM\n      \"diskio\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"name\" = '$diskName'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -1393,7 +1026,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read_shifted\",\n  \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      AVG(\"read_bytes\") AS \"read_shifted\",\n      AVG(\"write_bytes\") AS \"write_shifted\"\n    FROM\n      \"diskio\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"name\" = '$mainDisk'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read_shifted\",\n  \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      AVG(\"read_bytes\") AS \"read_shifted\",\n      AVG(\"write_bytes\") AS \"write_shifted\"\n    FROM\n      \"diskio\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"name\" = '$diskName'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "B",
           "sql": {
             "columns": [
@@ -1413,7 +1046,7 @@
           }
         }
       ],
-      "title": "Disk I/O ($mainDisk)",
+      "title": "Disk I/O ($diskName)",
       "transformations": [
         {
           "id": "calculateField",
@@ -1528,6 +1161,372 @@
               "read_derivative": "Read",
               "write": "Write (Total)",
               "write_derivative": "Write"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": true,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": 3600000,
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "orange",
+                "value": 85
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received (Total)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Total"
+              },
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#73bf694d",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineInterpolation",
+                "value": "smooth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sent (Total)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Total"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#f2495c4d",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineInterpolation",
+                "value": "smooth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sent"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 17
+      },
+      "id": 12,
+      "interval": "15s",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read\",\n  \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"bytes_recv\") AS \"read\",\n      AVG(\"bytes_sent\") AS \"write\"\n    FROM\n      \"net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"interface\" = '$networkInterface'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read_shifted\",\n  \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      AVG(\"bytes_recv\") AS \"read_shifted\",\n      AVG(\"bytes_sent\") AS \"write_shifted\"\n    FROM\n      \"net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"interface\" = '$networkInterface'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Network I/O ($networkInterface)",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "read_derivative",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "read"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "read_shifted"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "write_derivative",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "write"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "write_shifted"
+                }
+              }
+            },
+            "cumulative": {
+              "field": "write",
+              "reducer": "mean"
+            },
+            "mode": "binary",
+            "reduce": {
+              "include": [
+                "write"
+              ],
+              "reducer": "variance"
+            },
+            "window": {
+              "field": "write",
+              "reducer": "mean",
+              "windowAlignment": "trailing",
+              "windowSize": 0.1,
+              "windowSizeMode": "percentage"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "time",
+                "read",
+                "write",
+                "write_derivative",
+                "read_derivative"
+              ]
+            }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "lower",
+                  "options": {
+                    "value": 0
+                  }
+                },
+                "fieldName": "read_derivative"
+              }
+            ],
+            "match": "any",
+            "type": "exclude"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "read": 3,
+              "read_derivative": 1,
+              "time": 0,
+              "write": 4,
+              "write_derivative": 2
+            },
+            "renameByName": {
+              "read": "Received (Total)",
+              "read_derivative": "Received",
+              "write": "Sent (Total)",
+              "write_derivative": "Sent"
             }
           }
         }
@@ -1786,7 +1785,7 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 12,
         "w": 12,
         "x": 0,
         "y": 26
@@ -2002,6 +2001,255 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "transparent",
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "center",
+            "cellOptions": {
+              "applyToRow": false,
+              "mode": "gradient",
+              "type": "color-background"
+            },
+            "filterable": false,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Service"
+            },
+            "properties": [
+              {
+                "id": "custom.footer.reducers",
+                "value": [
+                  "count"
+                ]
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#80808054",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "custom.align",
+                "value": "left"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.footer.reducers",
+                "value": [
+                  "uniqueValues"
+                ]
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "created": {
+                        "color": "#5795f254",
+                        "index": 0
+                      },
+                      "dead": {
+                        "color": "#f2495c54",
+                        "index": 6
+                      },
+                      "exited": {
+                        "color": "#f2495c54",
+                        "index": 5
+                      },
+                      "paused": {
+                        "color": "#fade2a54",
+                        "index": 4
+                      },
+                      "removing": {
+                        "color": "#5795f254",
+                        "index": 3
+                      },
+                      "restarting": {
+                        "color": "#b877d954",
+                        "index": 1
+                      },
+                      "running": {
+                        "color": "#73bf6954",
+                        "index": 2
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "#80808054",
+                        "index": 7
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Health"
+            },
+            "properties": [
+              {
+                "id": "custom.footer.reducers",
+                "value": [
+                  "uniqueValues"
+                ]
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "healthy": {
+                        "color": "#73bf6954",
+                        "index": 0
+                      },
+                      "unhealthy": {
+                        "color": "#ff983054",
+                        "index": 1
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "#80808054",
+                        "index": 2
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 12,
+        "y": 26
+      },
+      "id": 13,
+      "options": {
+        "cellHeight": "sm",
+        "enablePagination": true,
+        "frozenColumns": {
+          "left": 1
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  `com.docker.compose.service` AS \"Service\",\n  selector_last(\"container_status\", \"time\")['value'] AS \"Status\",\n  selector_last(\"health_status\", \"time\")['value'] AS \"Health\"\nFROM\n  \"docker_container_health\"\nWHERE\n  \"time\" >= $__timeFrom\n  AND \"time\" <= $__timeTo\nGROUP BY\n  \"Service\"\nORDER BY\n  \"Health\" DESC,\n  \"Service\" ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "\"com.docker.compose.service\"",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "container_status",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              },
+              {
+                "parameters": [
+                  {
+                    "name": "health_status",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          },
+          "table": "docker_container_health"
+        }
+      ],
+      "title": "Current Status",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "fixedColor": "green",
             "mode": "palette-classic",
             "seriesBy": "last"
@@ -2061,7 +2309,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 34
+        "y": 38
       },
       "id": 9,
       "interval": "5m",
@@ -2232,8 +2480,8 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
-        "y": 42
+        "x": 12,
+        "y": 38
       },
       "id": 10,
       "interval": "15s",
@@ -2335,6 +2583,738 @@
         }
       ],
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": true,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": 3600000,
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "orange",
+                "value": 85
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received (Total)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Total"
+              },
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#73bf694d",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineInterpolation",
+                "value": "smooth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sent (Total)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Total"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#f2495c4d",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineInterpolation",
+                "value": "smooth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sent"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 46
+      },
+      "id": 15,
+      "interval": "15s",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read\",\n  \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"rx_bytes\") AS \"read\",\n      AVG(\"tx_bytes\") AS \"write\"\n    FROM\n      \"docker_container_net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"com.docker.compose.service\" = '$dockerContainer'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read_shifted\",\n  \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      AVG(\"rx_bytes\") AS \"read_shifted\",\n      AVG(\"tx_bytes\") AS \"write_shifted\"\n    FROM\n      \"docker_container_net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"com.docker.compose.service\" = '$dockerContainer'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Network I/O ($dockerContainer)",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "read_derivative",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "read"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "read_shifted"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "write_derivative",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "write"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "write_shifted"
+                }
+              }
+            },
+            "cumulative": {
+              "field": "write",
+              "reducer": "mean"
+            },
+            "mode": "binary",
+            "reduce": {
+              "include": [
+                "write"
+              ],
+              "reducer": "variance"
+            },
+            "window": {
+              "field": "write",
+              "reducer": "mean",
+              "windowAlignment": "trailing",
+              "windowSize": 0.1,
+              "windowSizeMode": "percentage"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "time",
+                "read",
+                "write",
+                "write_derivative",
+                "read_derivative"
+              ]
+            }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "lower",
+                  "options": {
+                    "value": 0
+                  }
+                },
+                "fieldName": "read_derivative"
+              }
+            ],
+            "match": "any",
+            "type": "exclude"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "read": 3,
+              "read_derivative": 1,
+              "time": 0,
+              "write": 4,
+              "write_derivative": 2
+            },
+            "renameByName": {
+              "read": "Received (Total)",
+              "read_derivative": "Received",
+              "write": "Sent (Total)",
+              "write_derivative": "Sent"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": true,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": 3600000,
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": 3600000,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 75
+              },
+              {
+                "color": "orange",
+                "value": 85
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received (Total)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Total"
+              },
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#73bf694d",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineInterpolation",
+                "value": "smooth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sent (Total)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Total"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#f2495c4d",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineInterpolation",
+                "value": "smooth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Received"
+            },
+            "properties": [
+              {
+                "id": "custom.transform",
+                "value": "negative-Y"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sent"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 46
+      },
+      "id": 16,
+      "interval": "15s",
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  SUM(\"read\") AS \"read\",\n  SUM(\"write\") AS \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      \"com.docker.compose.service\" AS \"service\",\n      AVG(\"rx_bytes\") AS \"read\",\n      AVG(\"tx_bytes\") AS \"write\"\n    FROM\n      \"docker_container_net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"service\",\n      \"time_bin\"\n  )\nGROUP BY\n  \"time\"\nORDER BY\n  \"time\" ASC",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  SUM(\"read_shifted\") AS \"read_shifted\",\n  SUM(\"write_shifted\") AS \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      \"com.docker.compose.service\" AS \"service\",\n      AVG(\"rx_bytes\") AS \"read_shifted\",\n      AVG(\"tx_bytes\") AS \"write_shifted\"\n    FROM\n      \"docker_container_net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"service\",\n      \"time_bin\"\n  )\nGROUP BY\n  \"time\"\nORDER BY\n  \"time\" ASC",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Network I/O (Total)",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "read_derivative",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "read"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "read_shifted"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "write_derivative",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "write"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "write_shifted"
+                }
+              }
+            },
+            "cumulative": {
+              "field": "write",
+              "reducer": "mean"
+            },
+            "mode": "binary",
+            "reduce": {
+              "include": [
+                "write"
+              ],
+              "reducer": "variance"
+            },
+            "window": {
+              "field": "write",
+              "reducer": "mean",
+              "windowAlignment": "trailing",
+              "windowSize": 0.1,
+              "windowSizeMode": "percentage"
+            }
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "time",
+                "read",
+                "write",
+                "write_derivative",
+                "read_derivative"
+              ]
+            }
+          }
+        },
+        {
+          "id": "filterByValue",
+          "options": {
+            "filters": [
+              {
+                "config": {
+                  "id": "lower",
+                  "options": {
+                    "value": 0
+                  }
+                },
+                "fieldName": "read_derivative"
+              }
+            ],
+            "match": "any",
+            "type": "exclude"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "read": 3,
+              "read_derivative": 1,
+              "time": 0,
+              "write": 4,
+              "write_derivative": 2
+            },
+            "renameByName": {
+              "read": "Received (Total)",
+              "read_derivative": "Received",
+              "write": "Sent (Total)",
+              "write_derivative": "Sent"
+            }
+          }
+        }
+      ],
+      "type": "timeseries"
     }
   ],
   "preload": false,
@@ -2353,13 +3333,13 @@
           "type": "influxdb",
           "uid": "influxdb_metrics"
         },
-        "definition": "SELECT DISTINCT \"device\" FROM \"disk\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
+        "definition": "SELECT DISTINCT \"name\" FROM \"diskio\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
         "hide": 3,
-        "label": "Main Disk",
-        "name": "mainDisk",
+        "label": "Disk",
+        "name": "diskName",
         "options": [],
         "query": {
-          "query": "SELECT DISTINCT \"device\" FROM \"disk\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
+          "query": "SELECT DISTINCT \"name\" FROM \"diskio\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
           "refId": "InfluxVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -2380,6 +3360,54 @@
         "query": "Auto : NULL, 15s : '15 seconds', 30s : '30 seconds', 1m : '1 minutes', 5m : '5 minutes', 10m : '10 minutes', 30m : '30 minutes', 1h : '1 hours'",
         "type": "custom",
         "valuesFormat": "csv"
+      },
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "eth0",
+          "value": "eth0"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb_metrics"
+        },
+        "definition": "SELECT DISTINCT \"interface\" FROM \"net\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo",
+        "hide": 3,
+        "label": "Network Interface",
+        "name": "networkInterface",
+        "options": [],
+        "query": {
+          "query": "SELECT DISTINCT \"interface\" FROM \"net\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "regexApplyTo": "value",
+        "type": "query"
+      },
+      {
+        "allowCustomValue": false,
+        "current": {
+          "text": "hardware-controller",
+          "value": "hardware-controller"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb_metrics"
+        },
+        "definition": "SELECT DISTINCT \"com.docker.compose.service\" FROM \"docker_container_status\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo",
+        "label": "Docker Container",
+        "name": "dockerContainer",
+        "options": [],
+        "query": {
+          "query": "SELECT DISTINCT \"com.docker.compose.service\" FROM \"docker_container_status\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "regexApplyTo": "value",
+        "sort": 1,
+        "type": "query"
       }
     ]
   },
@@ -2391,6 +3419,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 38,
+  "version": 40,
   "weekStart": ""
 }
