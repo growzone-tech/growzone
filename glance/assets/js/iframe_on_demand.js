@@ -1,6 +1,6 @@
 console.log('[GlanceLib/LIOD] Library: "Load iFrame on demand".');
 
-window.document.onload = function(e) {
+document.addEventListener('DOMContentLoaded', () => {
     console.log('[GlanceLib/LIOD] Initializing...');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -32,4 +32,4 @@ window.document.onload = function(e) {
         observer.observe(elem);
     });
     console.log('[GlanceLib/LIOD] Initialized.');
-}
+});
