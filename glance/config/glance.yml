@@ -122,17 +122,17 @@ pages:
                 source: 'https://grafana.${APP_HOST}/d-solo/hardware-metrics/hardware-metrics?orgId=1&from=now-24h&to=now&timezone=browser&var-mainDisk=&var-interval=NULL&refresh=1m&tab=queries&showCategory=Legend&panelId=panel-5&__feature.dashboardScene=true'
                 height: 576 # 108 + 36 * services
               - type: iframe
-                title: 'Camera Feed'
+                title: 'Camera (Outside)'
                 source: 'https://mediamtx-webrtc.${APP_HOST}/cam0'
                 css-class: 'aspect-ratio-16-9'
-              # - type: iframe
-              #   title: 'Cam 1'
-              #   source: 'https://mediamtx-webrtc.${APP_HOST}/cam1'
-              #   css-class: 'aspect-ratio-16-9'
-              # - type: iframe
-              #   title: 'Cam 2'
-              #   source: 'https://mediamtx-webrtc.${APP_HOST}/cam2'
-              #   css-class: 'aspect-ratio-16-9'
+              - type: iframe
+                title: 'Camera (Inside 1)'
+                source: 'https://mediamtx-webrtc.${APP_HOST}/cam1'
+                css-class: 'aspect-ratio-16-9'
+              - type: iframe
+                title: 'Camera (Inside 2)'
+                source: 'https://mediamtx-webrtc.${APP_HOST}/cam2'
+                css-class: 'aspect-ratio-16-9'
       - size: small
         widgets:
           - type: weather
