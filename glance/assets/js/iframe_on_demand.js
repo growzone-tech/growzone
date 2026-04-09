@@ -26,12 +26,9 @@ const glanceLibAfterLoad = () => {
         threshold: 0.1
     });
     document.querySelectorAll('div[data-lib-liod]').forEach(elem => {
-        if (!observedElements.includes(elem)) {
-            console.log('[GlanceLib/LIOD] Observing: ', elem);
-            elem.classList.add('glance-lib-liod')
-            observer.observe(elem);
-            observedElements.push(elem);
-        }
+        console.log('[GlanceLib/LIOD] Observing: ', elem);
+        elem.classList.add('glance-lib-liod')
+        observer.observe(elem);
     });
 }
 
