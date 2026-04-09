@@ -1300,7 +1300,9 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "type": "linear"
+              "linearThreshold": 8388608,
+              "log": 2,
+              "type": "symlog"
             },
             "showPoints": "auto",
             "showValues": false,
@@ -1367,6 +1369,14 @@
               {
                 "id": "custom.lineInterpolation",
                 "value": "smooth"
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "linearThreshold": 67108864,
+                  "log": 2,
+                  "type": "symlog"
+                }
               }
             ]
           },
@@ -1394,6 +1404,14 @@
               {
                 "id": "custom.lineInterpolation",
                 "value": "smooth"
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "linearThreshold": 67108864,
+                  "log": 2,
+                  "type": "symlog"
+                }
               }
             ]
           },
@@ -1427,6 +1445,55 @@
                 "value": {
                   "fixedColor": "red",
                   "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Delta (Total)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Total"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineInterpolation",
+                "value": "smooth"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    2,
+                    2
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "linearThreshold": 67108864,
+                  "log": 2,
+                  "type": "symlog"
                 }
               }
             ]
@@ -1464,6 +1531,7 @@
           },
           "editorMode": "code",
           "format": "time_series",
+          "hide": true,
           "rawQuery": true,
           "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read\",\n  \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"bytes_recv\") AS \"read\",\n      AVG(\"bytes_sent\") AS \"write\"\n    FROM\n      \"net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"interface\" = '$networkInterface'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "A",
@@ -1492,6 +1560,7 @@
           },
           "editorMode": "code",
           "format": "table",
+          "hide": true,
           "rawQuery": true,
           "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read_shifted\",\n  \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      AVG(\"bytes_recv\") AS \"read_shifted\",\n      AVG(\"bytes_sent\") AS \"write_shifted\"\n    FROM\n      \"net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"interface\" = '$networkInterface'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "B",
@@ -1511,9 +1580,65 @@
               }
             ]
           }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  SUM(\"read\") AS \"read\",\n  SUM(\"write\") AS \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"rx_bytes\") AS \"read\",\n      AVG(\"tx_bytes\") AS \"write\"\n    FROM\n      \"docker_container_net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"com.docker.compose.service\",\n      \"time_bin\"\n  )\nGROUP BY\n  \"time\"\nORDER BY\n  \"time\" ASC",
+          "refId": "C",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  SUM(\"read_shifted\") AS \"read_shifted\",\n  SUM(\"write_shifted\") AS \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      AVG(\"rx_bytes\") AS \"read_shifted\",\n      AVG(\"tx_bytes\") AS \"write_shifted\"\n    FROM\n      \"docker_container_net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"com.docker.compose.service\",\n      \"time_bin\"\n  )\nGROUP BY\n  \"time\"\nORDER BY\n  \"time\" ASC",
+          "refId": "D",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
         }
       ],
-      "title": "Network I/O ($networkInterface) [BUGGED, Reports IO of telegraf container]",
+      "title": "Network I/O (Docker Total)",
       "transformations": [
         {
           "id": "calculateField",
@@ -1580,6 +1705,31 @@
           }
         },
         {
+          "id": "calculateField",
+          "options": {
+            "alias": "delta",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "write"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "read"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
           "id": "filterFieldsByName",
           "options": {
             "include": {
@@ -1587,8 +1737,9 @@
                 "time",
                 "read",
                 "write",
+                "read_derivative",
                 "write_derivative",
-                "read_derivative"
+                "delta"
               ]
             }
           }
@@ -1617,6 +1768,7 @@
             "excludeByName": {},
             "includeByName": {},
             "indexByName": {
+              "delta": 5,
               "read": 3,
               "read_derivative": 1,
               "time": 0,
@@ -1624,6 +1776,7 @@
               "write_derivative": 2
             },
             "renameByName": {
+              "delta": "Delta (Total)",
               "read": "Received (Total)",
               "read_derivative": "Received",
               "write": "Sent (Total)",
@@ -3083,7 +3236,9 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "type": "linear"
+              "linearThreshold": 8388608,
+              "log": 2,
+              "type": "symlog"
             },
             "showPoints": "auto",
             "showValues": false,
@@ -3150,6 +3305,14 @@
               {
                 "id": "custom.lineInterpolation",
                 "value": "smooth"
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "linearThreshold": 67108864,
+                  "log": 2,
+                  "type": "symlog"
+                }
               }
             ]
           },
@@ -3177,6 +3340,14 @@
               {
                 "id": "custom.lineInterpolation",
                 "value": "smooth"
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "linearThreshold": 67108864,
+                  "log": 2,
+                  "type": "symlog"
+                }
               }
             ]
           },
@@ -3213,6 +3384,55 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Delta (Total)"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              },
+              {
+                "id": "custom.axisLabel",
+                "value": "Total"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineInterpolation",
+                "value": "smooth"
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    2,
+                    2
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "linearThreshold": 67108864,
+                  "log": 2,
+                  "type": "symlog"
+                }
+              }
+            ]
           }
         ]
       },
@@ -3222,7 +3442,7 @@
         "x": 12,
         "y": 48
       },
-      "id": 16,
+      "id": 18,
       "interval": "15s",
       "options": {
         "legend": {
@@ -3247,8 +3467,9 @@
           },
           "editorMode": "code",
           "format": "time_series",
+          "hide": true,
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  SUM(\"read\") AS \"read\",\n  SUM(\"write\") AS \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      \"com.docker.compose.service\" AS \"service\",\n      AVG(\"rx_bytes\") AS \"read\",\n      AVG(\"tx_bytes\") AS \"write\"\n    FROM\n      \"docker_container_net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"service\",\n      \"time_bin\"\n  )\nGROUP BY\n  \"time\"\nORDER BY\n  \"time\" ASC",
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read\",\n  \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"bytes_recv\") AS \"read\",\n      AVG(\"bytes_sent\") AS \"write\"\n    FROM\n      \"net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"interface\" = '$networkInterface'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "A",
           "sql": {
             "columns": [
@@ -3275,9 +3496,66 @@
           },
           "editorMode": "code",
           "format": "table",
+          "hide": true,
           "rawQuery": true,
-          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  SUM(\"read_shifted\") AS \"read_shifted\",\n  SUM(\"write_shifted\") AS \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      \"com.docker.compose.service\" AS \"service\",\n      AVG(\"rx_bytes\") AS \"read_shifted\",\n      AVG(\"tx_bytes\") AS \"write_shifted\"\n    FROM\n      \"docker_container_net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"service\",\n      \"time_bin\"\n  )\nGROUP BY\n  \"time\"\nORDER BY\n  \"time\" ASC",
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"read_shifted\",\n  \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      AVG(\"bytes_recv\") AS \"read_shifted\",\n      AVG(\"bytes_sent\") AS \"write_shifted\"\n    FROM\n      \"net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n      AND \"interface\" = '$networkInterface'\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
           "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  SUM(\"read\") AS \"read\",\n  SUM(\"write\") AS \"write\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"rx_bytes\") AS \"read\",\n      AVG(\"tx_bytes\") AS \"write\"\n    FROM\n      \"docker_container_net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"com.docker.compose.service\",\n      \"time_bin\"\n  )\nGROUP BY\n  \"time\"\nORDER BY\n  \"time\" ASC",
+          "refId": "C",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  SUM(\"read_shifted\") AS \"read_shifted\",\n  SUM(\"write_shifted\") AS \"write_shifted\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\")+COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL AS \"time_bin\",\n      AVG(\"rx_bytes\") AS \"read_shifted\",\n      AVG(\"tx_bytes\") AS \"write_shifted\"\n    FROM\n      \"docker_container_net\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"com.docker.compose.service\",\n      \"time_bin\"\n  )\nGROUP BY\n  \"time\"\nORDER BY\n  \"time\" ASC",
+          "refId": "D",
           "sql": {
             "columns": [
               {
@@ -3363,6 +3641,31 @@
           }
         },
         {
+          "id": "calculateField",
+          "options": {
+            "alias": "delta",
+            "binary": {
+              "left": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "write"
+                }
+              },
+              "operator": "-",
+              "right": {
+                "matcher": {
+                  "id": "byName",
+                  "options": "read"
+                }
+              }
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
           "id": "filterFieldsByName",
           "options": {
             "include": {
@@ -3370,8 +3673,9 @@
                 "time",
                 "read",
                 "write",
+                "read_derivative",
                 "write_derivative",
-                "read_derivative"
+                "delta"
               ]
             }
           }
@@ -3400,6 +3704,7 @@
             "excludeByName": {},
             "includeByName": {},
             "indexByName": {
+              "delta": 5,
               "read": 3,
               "read_derivative": 1,
               "time": 0,
@@ -3407,6 +3712,7 @@
               "write_derivative": 2
             },
             "renameByName": {
+              "delta": "Delta (Total)",
               "read": "Received (Total)",
               "read_derivative": "Received",
               "write": "Sent (Total)",
@@ -3473,7 +3779,7 @@
           "uid": "influxdb_metrics"
         },
         "definition": "SELECT DISTINCT \"interface\" FROM \"net\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo",
-        "hide": 3,
+        "hide": 2,
         "label": "Network Interface",
         "name": "networkInterface",
         "options": [],
@@ -3520,6 +3826,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 47,
+  "version": 50,
   "weekStart": ""
 }
