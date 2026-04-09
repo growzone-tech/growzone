@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         root: null,
         threshold: 0.1
     });
-    document.querySelector('[data-lib-liod]').forEach(elem => {
+    document.querySelectorAll('[data-lib-liod]').forEach(elem => {
         console.log('[GlanceLib/LIOD] Observing: ', elem);
         elem.classList.add('glance-lib-liod')
         observer.observe(elem);
