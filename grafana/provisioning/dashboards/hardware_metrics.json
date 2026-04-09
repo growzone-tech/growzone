@@ -538,9 +538,17 @@
                 "value": 0
               },
               {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              {
                 "id": "thresholds",
                 "value": {
-                  "mode": "percentage",
+                  "mode": "absolute",
                   "steps": [
                     {
                       "color": "transparent",
@@ -706,6 +714,14 @@
                       "value": 0
                     }
                   ]
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
                 }
               }
             ]
@@ -935,6 +951,14 @@
                     }
                   ]
                 }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": false,
+                  "viz": false
+                }
               }
             ]
           }
@@ -952,7 +976,7 @@
           "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": false
+          "showLegend": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -1008,7 +1032,7 @@
           },
           "custom": {
             "axisBorderShow": false,
-            "axisCenteredZero": true,
+            "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "left",
@@ -1027,7 +1051,9 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "type": "linear"
+              "linearThreshold": 8388608,
+              "log": 2,
+              "type": "symlog"
             },
             "showPoints": "auto",
             "showValues": false,
@@ -1042,6 +1068,7 @@
           },
           "decimals": 2,
           "mappings": [],
+          "min": 0,
           "thresholds": {
             "mode": "percentage",
             "steps": [
@@ -1081,10 +1108,6 @@
                 "value": "Total"
               },
               {
-                "id": "custom.transform",
-                "value": "negative-Y"
-              },
-              {
                 "id": "color",
                 "value": {
                   "fixedColor": "#73bf694d",
@@ -1094,6 +1117,12 @@
               {
                 "id": "custom.lineInterpolation",
                 "value": "smooth"
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "type": "linear"
+                }
               }
             ]
           },
@@ -1121,6 +1150,12 @@
               {
                 "id": "custom.lineInterpolation",
                 "value": "smooth"
+              },
+              {
+                "id": "custom.scaleDistribution",
+                "value": {
+                  "type": "linear"
+                }
               }
             ]
           },
@@ -1130,10 +1165,6 @@
               "options": "Read"
             },
             "properties": [
-              {
-                "id": "custom.transform",
-                "value": "negative-Y"
-              },
               {
                 "id": "color",
                 "value": {
@@ -2822,7 +2853,31 @@
           },
           "unit": "bytes"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "total"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "transparent",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": false
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -2900,6 +2955,34 @@
             ]
           },
           "table": "docker_container_cpu"
+        },
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"time_bin\" AS \"time\",\n  \"total\"\nFROM\n  (\n    SELECT\n      date_bin(COALESCE($interval,'$__interval_ms milliseconds')::INTERVAL, \"time\") AS \"time_bin\",\n      AVG(\"total\") AS \"total\"\n    FROM\n      \"mem\"\n    WHERE\n      \"time\" >= $__timeFrom\n      AND \"time\" <= $__timeTo\n    GROUP BY\n      \"time_bin\"\n  )\nORDER BY\n  \"time\" ASC",
+          "refId": "B",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          }
         }
       ],
       "title": "Memory",
@@ -2918,6 +3001,10 @@
           }
         },
         {
+          "filter": {
+            "id": "byRefId",
+            "options": "/^(?:A)$/"
+          },
           "id": "calculateField",
           "options": {
             "mode": "reduceRow",
@@ -3919,6 +4006,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 51,
+  "version": 52,
   "weekStart": ""
 }
