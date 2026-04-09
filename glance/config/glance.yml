@@ -132,18 +132,22 @@ pages:
                     data-lib-liod-src="https://mediamtx-webrtc.${APP_HOST}/cam0"
                     data-lib-liod-classes="aspect-ratio-16-9"
                   ></div>
-              # - type: iframe
-              #   title: 'Camera (Outside)'
-              #   source: 'https://mediamtx-webrtc.${APP_HOST}/cam0'
-              #   css-class: 'aspect-ratio-16-9'
-              # - type: iframe
-              #   title: 'Camera (Inside 1)'
-              #   source: 'https://mediamtx-webrtc.${APP_HOST}/cam1'
-              #   css-class: 'aspect-ratio-16-9'
-              # - type: iframe
-              #   title: 'Camera (Inside 2)'
-              #   source: 'https://mediamtx-webrtc.${APP_HOST}/cam2'
-              #   css-class: 'aspect-ratio-16-9'
+              - type: html
+                title: 'Camera (Inside 1)'
+                source: |
+                  <div class="glance-lib"
+                    data-lib-liod
+                    data-lib-liod-src="https://mediamtx-webrtc.${APP_HOST}/cam1"
+                    data-lib-liod-classes="aspect-ratio-16-9"
+                  ></div>
+              - type: html
+                title: 'Camera (Inside 2)'
+                source: |
+                  <div class="glance-lib"
+                    data-lib-liod
+                    data-lib-liod-src="https://mediamtx-webrtc.${APP_HOST}/cam2"
+                    data-lib-liod-classes="aspect-ratio-16-9"
+                  ></div>
       - size: small
         widgets:
           - type: weather
