@@ -1,9 +1,11 @@
 console.log('[GlanceLib/LIOD] Library: "Load iFrame on demand".');
 
-// document.addEventListener('DOMContentLoaded', function() {
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', function() {
     console.log('[GlanceLib/LIOD] Initializing...');
-    const observer = new IntersectionObserver((entries) => {
+    const observedElements = [];
+    const glanceMainElement = document.querySelector("main#page");
+
+    const intersectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             const container = entry.target;
             if (entry.isIntersecting) {
@@ -27,11 +29,25 @@ window.onload = function() {
         root: null,
         threshold: 0.1
     });
-    document.querySelectorAll('div[data-lib-liod]').forEach(elem => {
-        console.log('[GlanceLib/LIOD] Observing: ', elem);
-        elem.classList.add('glance-lib-liod')
-        observer.observe(elem);
+    const mutationObserver = new MutationObserver((mutationList) => {
+        for (const mutation of mutationList) {
+            if (mutation.type !== "attributes") continue;
+            console.log("Mutation on main#page: ", mutation);
+            console.log(document.getElementsByTagName('body')[0].innerHTML);
+        }
+        /* document.querySelectorAll('div[data-lib-liod]').forEach(elem => {
+            if (!observedElements.includes(elem)) {
+                console.log('[GlanceLib/LIOD] Observing: ', elem);
+                elem.classList.add('glance-lib-liod')
+                intersectionObserver.observe(elem);
+                observedElements.push(elem);
+            }
+        });*/
+        console.log('[GlanceLib/LIOD] Initialized.');
     });
-    console.log(document.getElementsByTagName('body')[0].innerHTML);
-    console.log('[GlanceLib/LIOD] Initialized.');
-}//);
+
+    console.log("Waiting for Glance page to fully load...");
+    mutationObserver.observe(glanceMainElement, {
+        attributes: true
+    });
+});
