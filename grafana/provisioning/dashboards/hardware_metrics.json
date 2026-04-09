@@ -41,6 +41,110 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "displayName": "Uptime",
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 259200
+              },
+              {
+                "color": "red",
+                "value": 592200
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 16,
+        "x": 4,
+        "y": 1
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 80,
+          "valueSize": 80
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \"uptime\" FROM \"system\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "uptime",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          },
+          "table": "\"system\""
+        }
+      ],
+      "title": "",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "fixedColor": "green",
             "mode": "thresholds",
             "seriesBy": "last"
@@ -165,7 +269,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 1
+        "y": 4
       },
       "id": 1,
       "interval": "1m",
@@ -363,7 +467,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 1
+        "y": 4
       },
       "id": 3,
       "options": {
@@ -522,7 +626,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 12
       },
       "id": 4,
       "options": {
@@ -750,7 +854,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 12
       },
       "id": 2,
       "options": {
@@ -970,7 +1074,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 17
+        "y": 20
       },
       "id": 11,
       "interval": "15s",
@@ -1336,7 +1440,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 17
+        "y": 20
       },
       "id": 12,
       "interval": "15s",
@@ -1412,7 +1516,7 @@
           }
         }
       ],
-      "title": "Network I/O ($networkInterface)",
+      "title": "Network I/O ($networkInterface) [BUGGED, Reports IO of telegraf container]",
       "transformations": [
         {
           "id": "calculateField",
@@ -1539,7 +1643,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 28
       },
       "id": 7,
       "panels": [],
@@ -1788,7 +1892,7 @@
         "h": 12,
         "w": 12,
         "x": 0,
-        "y": 26
+        "y": 29
       },
       "id": 5,
       "interval": "15s",
@@ -2172,7 +2276,7 @@
         "h": 12,
         "w": 12,
         "x": 12,
-        "y": 26
+        "y": 29
       },
       "id": 13,
       "options": {
@@ -2309,7 +2413,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 38
+        "y": 41
       },
       "id": 9,
       "interval": "5m",
@@ -2481,7 +2585,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 38
+        "y": 41
       },
       "id": 10,
       "interval": "15s",
@@ -2753,7 +2857,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 46
+        "y": 49
       },
       "id": 15,
       "interval": "15s",
@@ -3119,7 +3223,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 46
+        "y": 49
       },
       "id": 16,
       "interval": "15s",
@@ -3419,6 +3523,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 40,
+  "version": 42,
   "weekStart": ""
 }
