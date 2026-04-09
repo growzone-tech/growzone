@@ -159,7 +159,11 @@ pages:
                       }, {
                         threshold: 0.1
                       });
+                      console.log(container);
+                      console.log(targetUrl);
+                      console.log("preObserve");
                       observer.observe(container);
+                      console.log("postObserve");
                     })();
                   </script>
               # - type: iframe
