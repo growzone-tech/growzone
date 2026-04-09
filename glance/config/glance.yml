@@ -4,6 +4,9 @@
 server:
   assets-path: /app/assets
   proxied: true
+document:
+  head: |
+    <script src="/assets/js/iframe_on_demand.js"></script>
 branding:
   custom-footer: |
     <p>Copyright (c) 2026 <a href="https://github.com/growzone-tech/growzone">${APP_OWNER}</a></p>
@@ -124,47 +127,9 @@ pages:
               - type: html
                 title: 'Camera (Outside)'
                 source: |
-                  <!--
-                  <script type="text/javascript" src="/assets/load_iframe_on_demand.js"></script>
-                  <script type="text/javascript">
-                    IFRAME_ONDEMAND.run({
-                      id: "cam0",
-                      iframeSrc: "https://mediamtx-webrtc.${APP_HOST}/cam0"
-                    });
-                  </script>
-                  -->
                   <div id="iframe-container-cam0" class="iframe-container"></div>
-                  <script>
-                    (function() {
-                      const container = document.getElementById('iframe-container-cam0');
-                      const targetUrl = "https://mediamtx-webrtc.${APP_HOST}/cam0";
-                      const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                          if (entry.isIntersecting) {
-                            if (!container.querySelector('iframe')) {
-                              const iframe = document.createElement('iframe');
-                              iframe.src = targetUrl;
-                              iframe.class = "aspect-ratio-16-9";
-                              container.appendChild(iframe);
-                              console.log("iframe loaded");
-                            }
-                          } else {
-                            const iframe = container.querySelector('iframe');
-                            if (iframe) {
-                              iframe.remove();
-                              console.log("iframe unloaded");
-                            }
-                          }
-                        });
-                      }, {
-                        threshold: 0.1
-                      });
-                      console.log(container);
-                      console.log(targetUrl);
-                      console.log("preObserve");
-                      observer.observe(container);
-                      console.log("postObserve");
-                    })();
+                  <script type="text/javascript">
+                    loadIframeOnDemand("iframe-container-cam0", "https://mediamtx-webrtc.${APP_HOST}/cam0", "aspect-ratio-16-9")
                   </script>
               # - type: iframe
               #   title: 'Camera (Outside)'
