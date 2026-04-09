@@ -43,6 +43,99 @@
           "color": {
             "mode": "thresholds"
           },
+          "decimals": 0,
+          "displayName": "Cores",
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.2",
+      "targets": [
+        {
+          "dataset": "iox",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb_metrics"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT \"n_cpus\" FROM \"system\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
+          "refId": "A",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "uptime",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ]
+          },
+          "table": "\"system\""
+        }
+      ],
+      "title": "",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb_metrics"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "decimals": 1,
           "displayName": "Uptime",
           "fieldMinMax": false,
@@ -71,14 +164,14 @@
       "gridPos": {
         "h": 2,
         "w": 12,
-        "x": 6,
+        "x": 12,
         "y": 1
       },
       "id": 17,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "percentChangeColorMode": "standard",
         "reduceOptions": {
@@ -3826,6 +3919,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 50,
+  "version": 51,
   "weekStart": ""
 }
