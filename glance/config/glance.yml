@@ -127,10 +127,11 @@ pages:
               - type: html
                 title: 'Camera (Outside)'
                 source: |
-                  <div id="iframe-container-cam0" class="iframe-container"></div>
-                  <script type="text/javascript">
-                    loadIframeOnDemand("iframe-container-cam0", "https://mediamtx-webrtc.${APP_HOST}/cam0", "aspect-ratio-16-9")
-                  </script>
+                  <div class="glance-lib"
+                    data-lib-liod
+                    data-lib-liod-src="https://mediamtx-webrtc.${APP_HOST}/cam0"
+                    data-lib-liod-classes="aspect-ratio-16-9"
+                  ></div>
               # - type: iframe
               #   title: 'Camera (Outside)'
               #   source: 'https://mediamtx-webrtc.${APP_HOST}/cam0'

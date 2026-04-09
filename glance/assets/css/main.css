@@ -3,11 +3,11 @@
     /* height: auto !important; */
 }
 
-.iframe-container {
+.glance-lib {
     width: 100%;
 }
 
-.iframe-container iframe {
+iframe.glance-lib-liod {
     width: 100%;
     border: 0;
 }
