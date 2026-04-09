@@ -32,5 +32,6 @@ window.onload = function() {
         elem.classList.add('glance-lib-liod')
         observer.observe(elem);
     });
+    console.log(document.getElementsByTagName('body')[0].innerHTML);
     console.log('[GlanceLib/LIOD] Initialized.');
 }//);
