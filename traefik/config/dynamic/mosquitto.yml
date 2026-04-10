@@ -18,20 +18,17 @@ http:
       tls:
         certResolver: porkbun-api
 
-tcp:
-  services:
-    svc_mosquitto-1883:
-      loadBalancer:
-        servers:
-          - address: "{{ env "APP_NAME_HOST" }}_mosquitto:1883"
-  routers:
-    mosquitto-1883:
-      rule: "HostSNI(`mosquitto.{{ env "APP_HOST" }}`)"
-      service: svc_mosquitto-1883
-      entryPoints: ["websecure"]
-      middlewares:
-        - "cors-policy"
-        - "auth-proxy"
-      tls:
-        passthrough: false
-        certResolver: porkbun-api
+# tcp:
+#   services:
+#     svc_mosquitto-1883:
+#       loadBalancer:
+#         servers:
+#           - address: "{{ env "APP_NAME_HOST" }}_mosquitto:1883"
+#   routers:
+#     mosquitto-1883:
+#       rule: "HostSNI(`mosquitto.{{ env "APP_HOST" }}`)"
+#       service: svc_mosquitto-1883
+#       entryPoints: ["websecure"]
+#       tls:
+#         passthrough: false
+#         certResolver: porkbun-api
