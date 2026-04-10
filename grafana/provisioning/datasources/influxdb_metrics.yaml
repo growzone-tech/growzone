@@ -12,7 +12,7 @@ datasources:
   - name: 'InfluxDB - Metrics'
     uid: 'influxdb_metrics'
     type: influxdb
-    version: 1
+    version: 2
     editable: false
     access: proxy
     url: http://${APP_NAME_HOST}_influxdb:8181

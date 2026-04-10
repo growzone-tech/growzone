@@ -12,7 +12,7 @@ datasources:
   - name: 'InfluxDB - Sensor Data'
     uid: 'influxdb_sensor-data'
     type: influxdb
-    version: 1
+    version: 2
     editable: false
     access: proxy
     url: http://${APP_NAME_HOST}_influxdb:8181
