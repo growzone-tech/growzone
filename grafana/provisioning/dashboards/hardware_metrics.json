@@ -362,7 +362,7 @@
         "y": 3
       },
       "id": 1,
-      "interval": "1m",
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -568,6 +568,7 @@
         "y": 3
       },
       "id": 3,
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -735,6 +736,7 @@
         "y": 11
       },
       "id": 4,
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -971,6 +973,7 @@
         "y": 11
       },
       "id": 2,
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -1198,7 +1201,7 @@
         "y": 19
       },
       "id": 11,
-      "interval": "15s",
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -1631,7 +1634,7 @@
         "y": 19
       },
       "id": 12,
-      "interval": "15s",
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -2169,7 +2172,7 @@
         "y": 28
       },
       "id": 5,
-      "interval": "15s",
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -2553,6 +2556,7 @@
         "y": 28
       },
       "id": 13,
+      "interval": "10s",
       "options": {
         "cellHeight": "sm",
         "enablePagination": true,
@@ -2690,7 +2694,7 @@
         "y": 40
       },
       "id": 9,
-      "interval": "5m",
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -2886,7 +2890,7 @@
         "y": 40
       },
       "id": 10,
-      "interval": "15s",
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -3190,7 +3194,7 @@
         "y": 48
       },
       "id": 15,
-      "interval": "15s",
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -3623,7 +3627,7 @@
         "y": 48
       },
       "id": 18,
-      "interval": "15s",
+      "interval": "10s",
       "options": {
         "legend": {
           "calcs": [],
@@ -4006,6 +4010,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 52,
+  "version": 54,
   "weekStart": ""
 }
