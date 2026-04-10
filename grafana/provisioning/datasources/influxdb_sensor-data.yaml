@@ -23,5 +23,6 @@ datasources:
       insecureGrpc: true
       httpMode: POST
       maxSeries: 1000
+      timeInterval: "10s"
     secureJsonData:
       token: '${GF_PROVISIONING_INFLUXDB_TOKEN}'
