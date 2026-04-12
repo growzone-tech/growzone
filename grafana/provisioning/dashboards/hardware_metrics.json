@@ -96,7 +96,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \"n_cpus\" FROM \"system\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
+          "rawSql": "SELECT selector_last(\"n_cpus\", \"time\")['value'] FROM \"system\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -197,7 +197,7 @@
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT \"uptime\" FROM \"system\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
+          "rawSql": "SELECT selector_last(\"uptime\", \"time\")['value'] FROM \"system\" WHERE \"time\" >= $__timeFrom AND \"time\" <= $__timeTo ",
           "refId": "A",
           "sql": {
             "columns": [
@@ -3998,6 +3998,6 @@
   "timezone": "browser",
   "title": "Hardware Metrics",
   "uid": "hardware-metrics",
-  "version": 55,
+  "version": 57,
   "weekStart": ""
 }
