@@ -511,6 +511,8 @@ services:
         required: false
       - path: ${ENV_DIR}/glance.env
         required: false
+    environment:
+      APP_OWNER_ATTRIBUTION: "Growzone"
     volumes:
       - ./glance/config:/app/config
       - ./glance/assets:/app/assets
