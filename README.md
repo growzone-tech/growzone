@@ -1,6 +1,6 @@
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue?style=flat)](./LICENSE)
 ![Development: Prototyping](https://img.shields.io/badge/Development-Prototyping-orange?style=flat)
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-yellow?style=flat)
+![Version](https://img.shields.io/badge/dynamic/toml?label=Version&color=yellow&style=flat&url=https%3A%2F%2Fraw.githubusercontent.com%2Fgrowzone-tech%2Fgrowzone%2Frefs%2Fheads%2Fmain%2Fhardware-controller%2Fpkg%2Fpyproject.toml&query=%24.project.version)
 
 # Growzone
 
