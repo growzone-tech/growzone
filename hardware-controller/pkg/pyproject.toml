@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hardware_controller"
+version = "0.1.0"
+authors = [
+  { name="GrowzoneTech", email="info@growzone.tech" },
+]
+description = "Reads sensor data via GPIO and pushes it to a MQTT broker."
+requires-python = ">=3.8"
+dependencies = [
+  "paho-mqtt",
+  "gpiod",
+  "RPi.GPIO",
+  "adafruit-circuitpython-dht",
+]
+[project.optional-dependencies]
+dev = [
+  "isort",
+  "circuitpython-stubs"
+]
+
+[project.scripts]
+hardware-controller = "hardware_controller.core:main"

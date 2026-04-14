@@ -1,0 +1,16 @@
+http:
+  services:
+    svc_lldap-17170:
+      loadBalancer:
+        servers:
+          - url: "http://{{ env "APP_NAME_HOST" }}_lldap:17170"
+  routers:
+    lldap-17170:
+      rule: "Host(`lldap.{{ env "APP_HOST" }}`)"
+      service: svc_lldap-17170
+      entryPoints: ["websecure"]
+      middlewares:
+        - "cors-policy"
+        - "auth-proxy"
+      tls:
+        certResolver: porkbun-api

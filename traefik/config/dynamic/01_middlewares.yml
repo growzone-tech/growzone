@@ -1,0 +1,26 @@
+http:
+  middlewares:
+    cors-policy:
+      headers:
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - POST
+        accessControlAllowOriginList:
+          - "https://{{ env "APP_HOST" }}"
+        accessControlMaxAge: 100
+        accessControlAllowHeaders:
+          - "Authorization"
+          - "Content-Type"
+        addVaryHeader: true
+        accessControlAllowCredentials: true
+    auth-proxy:
+      forwardAuth:
+        address: "http://{{ env "APP_NAME_HOST" }}_authelia:9091/api/authz/forward-auth"
+        trustForwardHeader: true
+        maxResponseBodySize: 1048576 # 1MiB
+        authResponseHeaders:
+          - "Remote-User"
+          - "Remote-Groups"
+          - "Remote-Name"
+          - "Remote-Email"

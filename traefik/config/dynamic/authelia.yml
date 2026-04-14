@@ -1,0 +1,19 @@
+# Documentation:
+# https://doc.traefik.io/traefik/reference/routing-configuration/dynamic-configuration-methods/
+# https://doc.traefik.io/traefik/reference/routing-configuration/http/tls/overview/
+
+http:
+  services:
+    svc_authelia-9091:
+      loadBalancer:
+        servers:
+          - url: "http://{{ env "APP_NAME_HOST" }}_authelia:9091"
+  routers:
+    authelia-9091:
+      rule: "Host(`authelia.{{ env "APP_HOST" }}`)"
+      service: svc_authelia-9091
+      entryPoints: ["websecure"]
+      middlewares:
+        - "cors-policy"
+      tls:
+        certResolver: porkbun-api

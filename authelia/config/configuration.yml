@@ -1,0 +1,83 @@
+server:
+  address: 'tcp://:9091/'
+  endpoints:
+    authz:
+      forward-auth:
+        implementation: 'ForwardAuth'
+
+log:
+  level: info
+
+session:
+  name: authelia_session
+  same_site: lax
+  expiration: 1h
+  inactivity: 5m
+  cookies:
+    - domain: '{{ env "APP_HOST" }}'
+      authelia_url: 'https://authelia.{{ env "APP_HOST" }}'
+
+authentication_backend:
+  ldap:
+    implementation: 'lldap'
+    address: 'ldap://{{ env "APP_NAME_HOST" }}_lldap:3890'
+    base_dn: '{{ env "LLDAP_LDAP_BASE_DN" }}'
+    user: 'UID=admin,OU=people,{{ env "LLDAP_LDAP_BASE_DN" }}'
+    password: '{{ secret "/run/secrets/LLDAP_ADMIN_PASSWORD" }}'
+#   file:
+#     path: /config/users.yml
+
+storage:
+  local:
+    path: /data/db.sqlite3
+
+notifier:
+  filesystem:
+    filename: /data/notification.txt
+
+access_control:
+  default_policy: deny
+  rules:
+    - domain: 'authelia.{{ env "APP_HOST" }}'
+      policy: bypass
+    - domain: 'lldap.{{ env "APP_HOST" }}'
+      policy: bypass
+    - domain: '*.{{ env "APP_HOST" }}'
+      policy: one_factor
+    - domain: '{{ env "APP_HOST" }}'
+      policy: one_factor
+
+identity_providers:
+  oidc: # https://www.authelia.com/integration/openid-connect/frequently-asked-questions/#how-do-i-generate-a-client-identifier-or-client-secret
+    hmac_secret: '{{ secret "/run/secrets/AUTHELIA_OIDC_HMAC_SECRET" }}' # docker run --rm authelia/authelia:latest authelia crypto rand --length 64 --charset alphanumeric
+    jwks: # docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd)":/keys authelia/authelia:latest authelia crypto pair rsa generate --directory /keys
+      - key: {{ secret "/run/secrets/AUTHELIA_OIDC_JWKS_KEY_PRIVATE" | mindent 10 "|" | msquote }}
+        algorithm: 'RS256'
+        use: 'sig'
+    claims_policies:
+      grafana:
+        id_token: ['email', 'name', 'groups', 'preferred_username']
+    clients:
+      - client_id: '{{ secret "/run/secrets/GRAFANA_OAUTH_CLIENT_ID" }}' # docker run --rm authelia/authelia:latest authelia crypto rand --length 72 --charset rfc3986
+        claims_policy: 'grafana'
+        client_name: 'Grafana'
+        client_secret: '{{ secret "/run/secrets/GRAFANA_OAUTH_CLIENT_SECRET_HASHED_PBKDF2" }}' # docker run --rm authelia/authelia:latest authelia crypto hash generate pbkdf2 --variant sha512 --random --random.length 72 --random.charset rfc3986
+        public: false
+        authorization_policy: 'one_factor'
+        require_pkce: true
+        pkce_challenge_method: 'S256'
+        redirect_uris:
+          - 'https://grafana.{{ env "APP_HOST" }}/login/generic_oauth'
+        scopes:
+          - 'openid'
+          - 'profile'
+          - 'groups'
+          - 'email'
+        response_types:
+          - 'code'
+        grant_types:
+          - 'authorization_code'
+        access_token_signed_response_alg: 'none'
+        userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_basic'
+        consent_mode: 'pre-configured'
