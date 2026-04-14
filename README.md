@@ -91,7 +91,7 @@ The application is designed to be controlled exclusively with environment variab
 
 All secrets are expected to be files within a single folder. This folder can be set via environment variable (`SECRETS_DIR`) itself and defaults to `./.secrets` (git-ignored folder).
 
- - [List of environment variables](#env-vars)
+ - [List of environment variables](#environment-variables)
  - [List of secrets](#secrets)
 
 #### Shell Exports
@@ -128,7 +128,7 @@ It is also possible to create a `.env` file in an unrelated directory ([Compose 
 > ℹ️ You do not need to instruct docker compose to use this file as long as you run `docker compose up` from the directory containing your `.env` file.
 
 *Example:*
-```sh title="/path/to/your/.env"
+```sh
 # /path/to/your/.env
 COMPOSE_FILE="/path/to/repository/compose.yml"
 APP_HOST="my-grow-box.example.com"
@@ -137,7 +137,7 @@ TIMEZONE="Europe/Amsterdam"
 SECRETS_DIR="/run/secrets"
 ```
 
-### Environment Variables {#env-vars}
+### Environment Variables
 
 At build-time Docker requires the following environment variables to be populated:
 
@@ -151,7 +151,7 @@ At build-time Docker requires the following environment variables to be populate
 | `ENV_DIR` | The directory in which .env files for containers can be placed to override the default config. | `/path/to/my/env` | `./env.d` |
 | `SECRETS_DIR` | The directory in which files containing secrets for containers are placed. | `/run/secret` | `./secrets` |
 
-### Secrets {#secrets}
+### Secrets
 
 The following secrets must exist within the `SECRETS_DIR` directory at build-time, otherwise running the stack will fail.
 They are expected to be files with the secret value being the content of the file.
