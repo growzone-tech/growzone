@@ -178,6 +178,9 @@ They are expected to be files with the secret value being the content of the fil
 
  - Run `docker compose up` from the root directory of the repository or from the directory containing your `.env` file
  - Run `docker compose logs` and wait for the application to finish first-time setup and settle
+ - Setup two DNS Records on Porkbun for the domain set up via `APP_HOST`
+  - `A` record for `${APP_HOST}` pointing to the IP of your new device on Tailscale
+  - `CNAME` record for `*.${APP_HOST}` pointing to `${APP_HOST}`
  - Visit the domain set up via `APP_HOST` and login with username `admin` and the password set up via `LLDAP_ADMIN_PASSWORD`
 
 ## Supported Hardware
