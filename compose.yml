@@ -287,9 +287,6 @@ services:
     networks:
       internal:
         ipv4_address: '172.18.0.7'
-    extra_hosts:
-      - "grafana.com:0.0.0.0"
-      - "stats.grafana.com:0.0.0.0"
     healthcheck:
       test: [ "CMD", "wget", "--spider", "-q", "http://127.0.0.1:3000/api/health" ]
       interval: 10s
@@ -511,6 +508,8 @@ services:
         required: false
       - path: ${ENV_DIR}/glance.env
         required: false
+    environment:
+      APP_OWNER_ATTRIBUTION: "Growzone"
     volumes:
       - ./glance/config:/app/config
       - ./glance/assets:/app/assets

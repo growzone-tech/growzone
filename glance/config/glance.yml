@@ -9,7 +9,7 @@ document:
     <script src="/assets/js/iframe_on_demand.js"></script>
 branding:
   custom-footer: |
-    <p>Copyright (c) 2026 <a href="https://github.com/growzone-tech/growzone">${APP_OWNER}</a></p>
+    <p>Copyright (c) 2026 <a href="https://github.com/growzone-tech/growzone">${APP_OWNER_ATTRIBUTION}</a></p>
     <p>Powered by <a href="https://github.com/glanceapp/glance">Glance</a></p>
   app-name: ${APP_NAME_LABEL}
   logo-url: /assets/logo/logo.svg
