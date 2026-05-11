@@ -1,7 +1,7 @@
 /.env.d
 /.volumes
 /.secrets
-/._env
+/_.env
 **/.direnv
 **/.venv
 **/.mypy_cache

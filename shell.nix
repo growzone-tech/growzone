@@ -9,5 +9,6 @@ mkShell {
   shellHook = ''
     python -m venv .venv
     source .venv/bin/activate
+    pip install -e "./hardware-controller/pkg[dev]"
   '';
 }
